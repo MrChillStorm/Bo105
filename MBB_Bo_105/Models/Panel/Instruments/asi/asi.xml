@@ -31,6 +31,24 @@
     </emission>
   </animation>
 
+  <animation>
+    <type>select</type>
+    <object-name>bezel-lamp-0</object-name>
+    <object-name>bezel-lamp-1</object-name>
+    <object-name>bezel-lamp-2</object-name>
+    <object-name>bezel-lamp-3</object-name>
+    <object-name>bezel-lamp-4</object-name>
+    <object-name>bezel-lamp-5</object-name>
+    <object-name>bezel-lamp-6</object-name>
+    <object-name>bezel-lamp-7</object-name>
+    <condition>
+      <greater-than>
+        <property>/instrumentation/bo105/lights/instruments</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
+
   <light>
     <name>bezel-lamp-0</name>
     <type>spot</type>

@@ -31,6 +31,16 @@
     <spot-cutoff> 35 </spot-cutoff>
     <range-m> 0.9 </range-m>
   </light>
+  <animation>
+    <type>select</type>
+    <object-name>whip-light</object-name>
+    <condition>
+      <greater-than>
+        <property>/instrumentation/bo105/lights/whip</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
 
   <light>
     <name>utility-light</name>
@@ -58,6 +68,16 @@
     <spot-cutoff> 32 </spot-cutoff>
     <range-m> 1.3 </range-m>
   </light>
+  <animation>
+    <type>select</type>
+    <object-name>utility-light</object-name>
+    <condition>
+      <greater-than>
+        <property>/instrumentation/bo105/lights/utility</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
 
   <light>
     <name>cabin-light</name>
@@ -85,5 +105,15 @@
     <spot-cutoff> 75 </spot-cutoff>
     <range-m> 1.5 </range-m>
   </light>
+  <animation>
+    <type>select</type>
+    <object-name>cabin-light</object-name>
+    <condition>
+      <greater-than>
+        <property>/instrumentation/bo105/lights/cabin</property>
+        <value>0</value>
+      </greater-than>
+    </condition>
+  </animation>
 
 </PropertyList>

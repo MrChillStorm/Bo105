@@ -225,7 +225,11 @@ def bezel_light_xml(face, R, glass, light='instruments'):
     """HDR pipeline: the instrument's lighted bezel, NVIS Green A, on circuit `light` (in LIGHTS): its dial's mean
     illuminance LIGHT_LUX at full INSTR LIGHT"""
     lamps, e, cut, rng, cd = bezel_lamps(face, R, glass)
-    return ''.join('\n  <light>\n    <name>bezel-lamp-%d</name>\n    <type>spot</type>\n    <position>\n      <x-m> %.4f </x-m>\n'
+    # off, the lamps leave the scene: the HDR renderer sorts every light in view into its light grid each frame, lit or not
+    sel = ('\n  <animation>\n    <type>select</type>\n%s    <condition>\n      <greater-than>\n        <property>%s%s</property>\n'
+           '        <value>0</value>\n      </greater-than>\n    </condition>\n  </animation>\n'
+           % (''.join('    <object-name>bezel-lamp-%d</object-name>\n' % k for k in range(len(lamps))), LIGHTS, light))
+    return sel + ''.join('\n  <light>\n    <name>bezel-lamp-%d</name>\n    <type>spot</type>\n    <position>\n      <x-m> %.4f </x-m>\n'
                    '      <y-m> %.4f </y-m>\n      <z-m> %.4f </z-m>\n    </position>\n    <direction>\n'
                    '      <lookat-x-m> %.4f </lookat-x-m>\n      <lookat-y-m> %.4f </lookat-y-m>\n      <lookat-z-m> %.4f </lookat-z-m>\n'
                    '    </direction>\n    <color>\n      <r> %.2f </r>\n      <g> %.2f </g>\n      <b> %.2f </b>\n    </color>\n'

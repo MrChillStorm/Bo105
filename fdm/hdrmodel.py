@@ -116,6 +116,10 @@ def interior_xml():
               '    </color>\n    <intensity>\n      <property>%s%s</property>\n      <scale> %.6g </scale>\n    </intensity>      <!-- %g cd at full -->\n'
               '    <spot-exponent> %g </spot-exponent>\n    <spot-cutoff> %g </spot-cutoff>\n    <range-m> %g </range-m>\n  </light>\n'
               % ((name,) + tuple(p) + tuple(a) + tuple(rgb) + (LT_INT, name, cd / HDR_CD, cd, e, cut, rng)))
+        # off, the light leaves the scene: the HDR renderer sorts every light in view into its light grid each frame
+        x += ('  <animation>\n    <type>select</type>\n    <object-name>%s-light</object-name>\n    <condition>\n      <greater-than>\n'
+              '        <property>%s%s</property>\n        <value>0</value>\n      </greater-than>\n    </condition>\n  </animation>\n'
+              % (name, LT_INT, name))
     return x + '\n</PropertyList>\n'
 
 
