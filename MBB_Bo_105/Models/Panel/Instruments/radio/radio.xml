@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- radio control head (COMM and NAV 1), after the Flying Bulls' Bo 105 C; written by fdm/cockpit/avionics.py -->
+
+<PropertyList>
+
+  <path>radio.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>case</object-name>
+    <object-name>face</object-name>
+    <object-name>com-use0</object-name>
+    <object-name>com-use1</object-name>
+    <object-name>com-use2</object-name>
+    <object-name>com-use3</object-name>
+    <object-name>com-use4</object-name>
+    <object-name>dots</object-name>
+    <object-name>com-stby0</object-name>
+    <object-name>com-stby1</object-name>
+    <object-name>com-stby2</object-name>
+    <object-name>com-stby3</object-name>
+    <object-name>com-stby4</object-name>
+    <object-name>nav-use0</object-name>
+    <object-name>nav-use1</object-name>
+    <object-name>nav-use2</object-name>
+    <object-name>nav-use3</object-name>
+    <object-name>nav-use4</object-name>
+    <object-name>nav-stby0</object-name>
+    <object-name>nav-stby1</object-name>
+    <object-name>nav-stby2</object-name>
+    <object-name>nav-stby3</object-name>
+    <object-name>nav-stby4</object-name>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/instrument-glass</inherits-from>
+  </effect>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-30.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>case</object-name>
+    <object-name>face</object-name>
+  </effect>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-use0</object-name>
+    <property>/instrumentation/comm[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.01 </step>
+    <factor> 10 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-use1</object-name>
+    <property>/instrumentation/comm[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.1 </step>
+    <factor> 1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-use2</object-name>
+    <property>/instrumentation/comm[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 1 </step>
+    <factor> 0.1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-use3</object-name>
+    <property>/instrumentation/comm[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 10 </step>
+    <factor> 0.01 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-use4</object-name>
+    <property>/instrumentation/comm[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 100 </step>
+    <factor> 0.001 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-stby0</object-name>
+    <property>/instrumentation/comm[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.01 </step>
+    <factor> 10 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-stby1</object-name>
+    <property>/instrumentation/comm[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.1 </step>
+    <factor> 1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-stby2</object-name>
+    <property>/instrumentation/comm[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 1 </step>
+    <factor> 0.1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-stby3</object-name>
+    <property>/instrumentation/comm[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 10 </step>
+    <factor> 0.01 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>com-stby4</object-name>
+    <property>/instrumentation/comm[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 100 </step>
+    <factor> 0.001 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-use0</object-name>
+    <property>/instrumentation/nav[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.01 </step>
+    <factor> 10 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-use1</object-name>
+    <property>/instrumentation/nav[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.1 </step>
+    <factor> 1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-use2</object-name>
+    <property>/instrumentation/nav[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 1 </step>
+    <factor> 0.1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-use3</object-name>
+    <property>/instrumentation/nav[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 10 </step>
+    <factor> 0.01 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-use4</object-name>
+    <property>/instrumentation/nav[0]/frequencies/selected-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 100 </step>
+    <factor> 0.001 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-stby0</object-name>
+    <property>/instrumentation/nav[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.01 </step>
+    <factor> 10 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-stby1</object-name>
+    <property>/instrumentation/nav[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 0.1 </step>
+    <factor> 1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-stby2</object-name>
+    <property>/instrumentation/nav[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 1 </step>
+    <factor> 0.1 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-stby3</object-name>
+    <property>/instrumentation/nav[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 10 </step>
+    <factor> 0.01 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>textranslate</type>
+    <object-name>nav-stby4</object-name>
+    <property>/instrumentation/nav[0]/frequencies/standby-mhz</property>
+    <bias> 0.005 </bias>
+    <step> 100 </step>
+    <factor> 0.001 </factor>
+    <min> 0 </min>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/displays</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>com-use0</object-name>
+    <object-name>com-use1</object-name>
+    <object-name>com-use2</object-name>
+    <object-name>com-use3</object-name>
+    <object-name>com-use4</object-name>
+    <object-name>com-stby0</object-name>
+    <object-name>com-stby1</object-name>
+    <object-name>com-stby2</object-name>
+    <object-name>com-stby3</object-name>
+    <object-name>com-stby4</object-name>
+    <object-name>nav-use0</object-name>
+    <object-name>nav-use1</object-name>
+    <object-name>nav-use2</object-name>
+    <object-name>nav-use3</object-name>
+    <object-name>nav-use4</object-name>
+    <object-name>nav-stby0</object-name>
+    <object-name>nav-stby1</object-name>
+    <object-name>nav-stby2</object-name>
+    <object-name>nav-stby3</object-name>
+    <object-name>nav-stby4</object-name>
+    <object-name>dots</object-name>
+  </effect>
+
+</PropertyList>

@@ -1,0 +1,2400 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+	<path>bo105.ac</path>
+
+	<nasal>
+		<load>
+			#print("LOAD bo105 ", cmdarg().getPath());
+			var self = cmdarg();
+
+			#--begin compat-- (load random variant for fg/plib)
+			var dir = getprop("/sim/aircraft-dir") ~ "/Models/Variants";
+			var files = [];
+			foreach (var file; directory(dir))
+				if (substr(file, -4) == ".xml")
+					append(files, file);
+
+			var filename = dir ~ "/" ~ files[rand() * size(files)];
+			var targetnode = self.getPath();
+			fgcommand("loadxml", props.Node.new({ filename: filename, targetnode: targetnode, }));
+			var mat = self.getNode("sim/model/bo105/material", 1);
+			mat.getNode("emblem/texture", 1).setValue("../../../Models/Fauna/cow.rgb");
+			#--end compat--
+
+			var emblem_in = self.getNode("sim/multiplay/generic/string[0]", 1);
+			var emblem_out = self.getNode("sim/model/bo105/material/emblem/texture", 1);
+
+			var livery_update = aircraft.livery_update.new("Aircraft/MBB_Bo_105/Models/Variants", 10.3, func {
+				var e = emblem_in.getValue();
+				if (e != nil)
+					emblem_out.setValue("Textures/Emblems/" ~ e ~ ".png");
+			});
+
+			var aliases = [];
+			for (var i = 0; i &lt; 6; i += 1) {
+				var door = self.getNode("sim/model/bo105/doors/door[" ~ i ~ "]/position-norm", 1);
+				var generic = self.getNode("sim/multiplay/generic/float[" ~ i ~ "]", 1);
+				door.alias(generic);
+				append(aliases, door);
+			}
+		</load>
+
+		<unload>
+			#print("UNLOAD bo105 ", cmdarg().getPath());
+			livery_update.stop();
+			foreach (var a; aliases)
+				a.unalias();
+		</unload>
+	</nasal>
+
+	<!-- the model's frame is the JSBSim model's: its origin is the VRP (fdm/bo105data.model_to_station) -->
+	<offsets>
+		<x-m>0</x-m>
+		<z-m>0</z-m>
+		<pitch-deg>0</pitch-deg>
+	</offsets>
+
+	<params>
+		<flapA>
+			<factor>0.5</factor>
+		</flapA>
+		<flapB>
+			<factor>0.4</factor>
+		</flapB>
+		<flapC>
+			<factor>0.3</factor>
+		</flapC>
+		<flapD>
+			<factor>0.3</factor>
+		</flapD>
+		<flapE>
+			<factor>0.2</factor>
+		</flapE>
+	</params>
+
+	<model>
+		<path>Aircraft/Generic/marker.xml</path>
+	</model>
+
+<!--== object groups ==-->
+
+	<animation>
+		<name>main_rotor_disc</name>
+		<object-name>disc1</object-name>
+		<object-name>disc1a</object-name>
+		<object-name>disc1b</object-name>
+		<object-name>disc1c</object-name>
+		<object-name>disc1d</object-name>
+		<object-name>disc1e</object-name>
+		<object-name>disc2</object-name>
+		<object-name>disc2a</object-name>
+		<object-name>disc2b</object-name>
+		<object-name>disc2c</object-name>
+		<object-name>disc2d</object-name>
+		<object-name>disc2e</object-name>
+		<object-name>disc3</object-name>
+		<object-name>disc3a</object-name>
+		<object-name>disc3b</object-name>
+		<object-name>disc3c</object-name>
+		<object-name>disc3d</object-name>
+		<object-name>disc3e</object-name>
+		<object-name>disc4</object-name>
+		<object-name>disc4a</object-name>
+		<object-name>disc4b</object-name>
+		<object-name>disc4c</object-name>
+		<object-name>disc4d</object-name>
+		<object-name>disc4e</object-name>
+	</animation>
+
+	<animation>
+		<name>main_rotor_blades</name>
+		<object-name>blade1</object-name>
+		<object-name>blade1a</object-name>
+		<object-name>blade1b</object-name>
+		<object-name>blade1c</object-name>
+		<object-name>blade1d</object-name>
+		<object-name>blade1e</object-name>
+		<object-name>blade2</object-name>
+		<object-name>blade2a</object-name>
+		<object-name>blade2b</object-name>
+		<object-name>blade2c</object-name>
+		<object-name>blade2d</object-name>
+		<object-name>blade2e</object-name>
+		<object-name>blade3</object-name>
+		<object-name>blade3a</object-name>
+		<object-name>blade3b</object-name>
+		<object-name>blade3c</object-name>
+		<object-name>blade3d</object-name>
+		<object-name>blade3e</object-name>
+		<object-name>blade4</object-name>
+		<object-name>blade4a</object-name>
+		<object-name>blade4b</object-name>
+		<object-name>blade4c</object-name>
+		<object-name>blade4d</object-name>
+		<object-name>blade4e</object-name>
+	</animation>
+
+<!--== crash handling ==-->
+
+	<animation>
+		<type>rotate</type>
+		<object-name>tail</object-name>
+		<object-name>tailstab_L</object-name>
+		<object-name>tailstab_R</object-name>
+		<object-name>tailrotorshaft</object-name>
+		<object-name>antenna_L</object-name>
+		<object-name>antenna_R</object-name>
+		<object-name>beacon_sock_T</object-name>
+		<object-name>beacon_off_T</object-name>
+		<object-name>strobe_sock_T</object-name>
+		<object-name>strobe_off_T</object-name>
+		<object-name>tail_skid</object-name>
+		<object-name>tailrotorgearbox</object-name>
+		<object-name>tailsleevefix</object-name>
+		<object-name>tailsleeverot</object-name>
+		<object-name>tailrotorshaft</object-name>
+		<object-name>fake_axis</object-name>
+		<property>sim/model/bo105/tail-angle-deg</property>
+		<center>
+			<x-m>2.134</x-m>
+			<y-m>0</y-m>
+			<z-m>0.958</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>tailrotor_blade1</object-name>
+		<object-name>tailrotor_blade2</object-name>
+		<property>sim/model/bo105/tail-angle-deg</property>
+		<center>
+			<x-m>2.134</x-m>
+			<y-m>0</y-m>
+			<z-m>0.958</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+<!--== shadows ==-->
+
+	<animation>
+		<type>noshadow</type>
+		<object-name>glass_fixed</object-name>
+		<object-name>glass_back_L</object-name>
+		<object-name>glass_back_R</object-name>
+		<object-name>glass_front_L</object-name>
+		<object-name>glass_front_R</object-name>
+		<object-name>strobe_halo_Bf</object-name>
+		<object-name>strobe_halo_B</object-name>
+		<object-name>beacon_halo_B</object-name>
+		<object-name>beacon_halo_Bf</object-name>
+		<object-name>strobe_halo_T</object-name>
+		<object-name>beacon_halo_T</object-name>
+	</animation>
+
+	<animation>
+		<type>noshadow</type>
+		<object-name>emblem</object-name>
+		<nopreview/>
+	</animation>
+
+	<!-- the fake shadow: not with the pipelines' own shadows, nor in HDR (which has them; its textured plane under
+	     the skids looked like ground) -->
+	<animation>
+		<type>select</type>
+		<object-name>shadow_fuselage</object-name>
+		<condition>
+			<not>
+				<property>/sim/rendering/shadows-ac</property>
+			</not>
+			<not>
+				<property>/sim/rendering/hdr/hdr-enabled</property>
+			</not>
+		</condition>
+	</animation>
+
+	<!-- the fake shadow: not with the pipelines' own shadows, nor in HDR (which has them; its textured plane under
+	     the skids looked like ground) -->
+	<animation>
+		<type>select</type>
+		<object-name>shadow_rotor</object-name>
+		<condition>
+			<not>
+				<property>/sim/rendering/shadows-ac</property>
+			</not>
+			<not>
+				<property>/sim/rendering/hdr/hdr-enabled</property>
+			</not>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>texrotate</type>
+		<object-name>shadow_rotor</object-name>
+		<property>rotors/main/blade[0]/position-deg</property>
+		<center>
+			<x>0.818</x>
+			<y>0.168</y>
+			<z>0</z>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>-1</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>shadow_rotor</object-name>
+		<property>orientation/pitch-deg</property>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>shadow_rotor</object-name>
+		<property>orientation/roll-deg</property>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>shadow_rotor</object-name>
+		<property>position/gear-agl-m</property>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>-1</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>shadow_rotor</object-name>
+		<transparency>
+			<alpha-prop>rotors/main/rpm</alpha-prop>
+			<factor>-0.0045</factor>
+			<offset>1</offset>
+		</transparency>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<name>fu_pitch</name>
+		<object-name>shadow_fuselage</object-name>
+		<property>orientation/pitch-deg</property>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<name>fu_roll</name>
+		<object-name>shadow_fuselage</object-name>
+		<property>orientation/roll-deg</property>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<name>fu_trans</name>
+		<object-name>shadow_fuselage</object-name>
+		<property>position/gear-agl-m</property>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>-1</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<name>fu_select</name>
+		<object-name>shadow_fuselage</object-name>
+		<condition>
+			<property>sim/model/bo105/shadow</property>
+		</condition>
+	</animation>
+
+<!--== rotors ==-->
+
+	<!-- tail rotor: written by fdm/rotorvis.py -->
+	<!-- the blades: Models/Rotor/tail-blade.xml about the hub, blade k on blade[k]'s pitch -->
+	<model>
+		<name>TailBlade1</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/tail-blade.xml</path>
+		<overlay>
+			<params>
+				<pitch>rotors/tail/blade[0]/incidence-deg</pitch>
+			</params>
+		</overlay>
+		<offsets>
+			<x-m>5.890</x-m>
+			<y-m>-0.410</y-m>
+			<z-m>1.910</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>TailBlade2</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/tail-blade.xml</path>
+		<overlay>
+			<params>
+				<pitch>rotors/tail/blade[1]/incidence-deg</pitch>
+			</params>
+		</overlay>
+		<offsets>
+			<x-m>5.890</x-m>
+			<y-m>-0.410</y-m>
+			<z-m>1.910</z-m>
+			<pitch-deg>180</pitch-deg>
+		</offsets>
+	</model>
+	<!-- bo105.ac's own blades and disc: not shown -->
+	<animation>
+		<type>select</type>
+		<object-name>tailrotor_blade1</object-name>
+		<object-name>tailrotor_blade2</object-name>
+		<object-name>rotor_disc_T</object-name>
+		<condition>
+			<property>sim/model/bo105/old-rotor</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<name>tail_rotor_head</name>
+		<object-name>tailsleeverot</object-name>
+		<object-name>tailrotorshaft</object-name>
+		<object-name>tailpitchlink_1</object-name>
+		<object-name>tailpitchlink_2</object-name>
+		<object-name>fake_axis</object-name>
+		<object-name>TailBlade1</object-name>
+		<object-name>TailBlade2</object-name>
+	</animation>
+	<!-- the shaft's toe -->
+	<animation>
+		<type>rotate</type>
+		<object-name>tail_rotor_head</object-name>
+		<object-name>tailrotorgearbox</object-name>
+		<object-name>tailsleevefix</object-name>
+		<offset-deg> 4.6 </offset-deg>
+		<center>
+			<x-m> 5.89000 </x-m>
+			<y-m> 0.00000 </y-m>
+			<z-m> 1.91000 </z-m>
+		</center>
+		<axis>
+			<x> 0 </x>
+			<y> 0 </y>
+			<z> 1 </z>
+		</axis>
+	</animation>
+	<!-- the hub at blade 0's azimuth -->
+	<animation>
+		<type>rotate</type>
+		<object-name>tail_rotor_head</object-name>
+		<property>rotors/tail/blade[0]/position-deg</property>
+		<center>
+			<x-m> 5.89000 </x-m>
+			<y-m> -0.23200 </y-m>
+			<z-m> 1.91000 </z-m>
+		</center>
+		<axis>
+			<x> 0 </x>
+			<y> 1 </y>
+			<z> 0 </z>
+		</axis>
+	</animation>
+	<!-- end of fdm/rotorvis.py's tail rotor -->
+
+	<!-- main rotor: written by fdm/rotorvis.py -->
+	<!-- the blades: Models/Rotor/blade.xml on blade[k]'s properties, k anticlockwise from the tail -->
+	<model>
+		<name>Blade1</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/blade.xml</path>
+		<overlay>
+			<params>
+				<lag>rotors/main/blade[0]/lag-deg</lag>
+				<flap>rotors/main/blade[0]/flap-deg</flap>
+				<pitch>rotors/main/blade[0]/incidence-deg</pitch>
+			</params>
+		</overlay>
+	</model>
+	<model>
+		<name>Blade2</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/blade.xml</path>
+		<overlay>
+			<params>
+				<lag>rotors/main/blade[1]/lag-deg</lag>
+				<flap>rotors/main/blade[1]/flap-deg</flap>
+				<pitch>rotors/main/blade[1]/incidence-deg</pitch>
+			</params>
+		</overlay>
+		<offsets>
+			<heading-deg>90</heading-deg>
+		</offsets>
+	</model>
+	<model>
+		<name>Blade3</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/blade.xml</path>
+		<overlay>
+			<params>
+				<lag>rotors/main/blade[2]/lag-deg</lag>
+				<flap>rotors/main/blade[2]/flap-deg</flap>
+				<pitch>rotors/main/blade[2]/incidence-deg</pitch>
+			</params>
+		</overlay>
+		<offsets>
+			<heading-deg>180</heading-deg>
+		</offsets>
+	</model>
+	<model>
+		<name>Blade4</name>
+		<path>Aircraft/MBB_Bo_105/Models/Rotor/blade.xml</path>
+		<overlay>
+			<params>
+				<lag>rotors/main/blade[3]/lag-deg</lag>
+				<flap>rotors/main/blade[3]/flap-deg</flap>
+				<pitch>rotors/main/blade[3]/incidence-deg</pitch>
+			</params>
+		</overlay>
+		<offsets>
+			<heading-deg>270</heading-deg>
+		</offsets>
+	</model>
+	<!-- bo105.ac's own blades and discs: not shown -->
+	<animation>
+		<type>select</type>
+		<object-name>blade1</object-name>
+		<object-name>blade1a</object-name>
+		<object-name>blade1b</object-name>
+		<object-name>blade1c</object-name>
+		<object-name>blade1d</object-name>
+		<object-name>blade1e</object-name>
+		<object-name>blade_fitting1</object-name>
+		<object-name>blade_mounting_fork1</object-name>
+		<object-name>pitch_horn1</object-name>
+		<object-name>absorber1</object-name>
+		<object-name>pendulum1</object-name>
+		<object-name>disc1</object-name>
+		<object-name>disc1a</object-name>
+		<object-name>disc1b</object-name>
+		<object-name>disc1c</object-name>
+		<object-name>disc1d</object-name>
+		<object-name>disc1e</object-name>
+		<object-name>blade2</object-name>
+		<object-name>blade2a</object-name>
+		<object-name>blade2b</object-name>
+		<object-name>blade2c</object-name>
+		<object-name>blade2d</object-name>
+		<object-name>blade2e</object-name>
+		<object-name>blade_fitting2</object-name>
+		<object-name>blade_mounting_fork2</object-name>
+		<object-name>pitch_horn2</object-name>
+		<object-name>absorber2</object-name>
+		<object-name>pendulum2</object-name>
+		<object-name>disc2</object-name>
+		<object-name>disc2a</object-name>
+		<object-name>disc2b</object-name>
+		<object-name>disc2c</object-name>
+		<object-name>disc2d</object-name>
+		<object-name>disc2e</object-name>
+		<object-name>blade3</object-name>
+		<object-name>blade3a</object-name>
+		<object-name>blade3b</object-name>
+		<object-name>blade3c</object-name>
+		<object-name>blade3d</object-name>
+		<object-name>blade3e</object-name>
+		<object-name>blade_fitting3</object-name>
+		<object-name>blade_mounting_fork3</object-name>
+		<object-name>pitch_horn3</object-name>
+		<object-name>absorber3</object-name>
+		<object-name>pendulum3</object-name>
+		<object-name>disc3</object-name>
+		<object-name>disc3a</object-name>
+		<object-name>disc3b</object-name>
+		<object-name>disc3c</object-name>
+		<object-name>disc3d</object-name>
+		<object-name>disc3e</object-name>
+		<object-name>blade4</object-name>
+		<object-name>blade4a</object-name>
+		<object-name>blade4b</object-name>
+		<object-name>blade4c</object-name>
+		<object-name>blade4d</object-name>
+		<object-name>blade4e</object-name>
+		<object-name>blade_fitting4</object-name>
+		<object-name>blade_mounting_fork4</object-name>
+		<object-name>pitch_horn4</object-name>
+		<object-name>absorber4</object-name>
+		<object-name>pendulum4</object-name>
+		<object-name>disc4</object-name>
+		<object-name>disc4a</object-name>
+		<object-name>disc4b</object-name>
+		<object-name>disc4c</object-name>
+		<object-name>disc4d</object-name>
+		<object-name>disc4e</object-name>
+		<condition>
+			<property>sim/model/bo105/old-rotor</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<name>main_rotor_head</name>
+		<object-name>star_hub</object-name>
+		<object-name>star_cap1</object-name>
+		<object-name>star_cap2</object-name>
+		<object-name>star_cap3</object-name>
+		<object-name>star_cap4</object-name>
+		<object-name>rotoraxis</object-name>
+		<object-name>swashplate_rotor</object-name>
+		<object-name>swashplate_cap</object-name>
+		<object-name>pitch_link1</object-name>
+		<object-name>pitch_link2</object-name>
+		<object-name>pitch_link3</object-name>
+		<object-name>pitch_link4</object-name>
+		<object-name>Blade1</object-name>
+		<object-name>Blade2</object-name>
+		<object-name>Blade3</object-name>
+		<object-name>Blade4</object-name>
+	</animation>
+	<!-- the shaft tilted 3 deg forward -->
+	<animation>
+		<type>rotate</type>
+		<object-name>main_rotor_head</object-name>
+		<offset-deg> -3 </offset-deg>
+		<center>
+			<x-m> 0.00000 </x-m>
+			<y-m> 0.00000 </y-m>
+			<z-m> 1.80000 </z-m>
+		</center>
+		<axis>
+			<x> 0 </x>
+			<y> 1 </y>
+			<z> 0 </z>
+		</axis>
+	</animation>
+	<!-- the head at blade 0's azimuth: anticlockwise from above, from the tail -->
+	<animation>
+		<type>rotate</type>
+		<object-name>main_rotor_head</object-name>
+		<property>rotors/main/blade[0]/position-deg</property>
+		<center>
+			<x-m> 0.00000 </x-m>
+			<y-m> 0.00000 </y-m>
+			<z-m> 0.00000 </z-m>
+		</center>
+		<axis>
+			<x> 0 </x>
+			<y> 0 </y>
+			<z> 1 </z>
+		</axis>
+	</animation>
+	<!-- end of fdm/rotorvis.py's main rotor -->
+
+
+<!--== rotor material ==-->
+
+	<animation>
+		<type>material</type>
+		<object-name>absorber1</object-name>
+		<object-name>absorber2</object-name>
+		<object-name>absorber3</object-name>
+		<object-name>absorber4</object-name>
+		<object-name>pendulum1</object-name>
+		<object-name>pendulum2</object-name>
+		<object-name>pendulum3</object-name>
+		<object-name>pendulum4</object-name>
+		<transparency>
+			<alpha-prop>rotors/main/rpm</alpha-prop>
+			<factor>-0.0045</factor>
+			<offset>1</offset>
+		</transparency>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>blade1</object-name>
+		<object-name>blade1a</object-name>
+		<object-name>blade1b</object-name>
+		<object-name>blade1c</object-name>
+		<object-name>blade1d</object-name>
+		<object-name>blade1e</object-name>
+		<object-name>blade2</object-name>
+		<object-name>blade2a</object-name>
+		<object-name>blade2b</object-name>
+		<object-name>blade2c</object-name>
+		<object-name>blade2d</object-name>
+		<object-name>blade2e</object-name>
+		<object-name>blade3</object-name>
+		<object-name>blade3a</object-name>
+		<object-name>blade3b</object-name>
+		<object-name>blade3c</object-name>
+		<object-name>blade3d</object-name>
+		<object-name>blade3e</object-name>
+		<object-name>blade4</object-name>
+		<object-name>blade4a</object-name>
+		<object-name>blade4b</object-name>
+		<object-name>blade4c</object-name>
+		<object-name>blade4d</object-name>
+		<object-name>blade4e</object-name>
+		<transparency>
+			<alpha-prop>rotors/main/rpm</alpha-prop>
+			<factor>-0.0045</factor>
+			<offset>1</offset>
+		</transparency>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>blade_fitting1</object-name>
+		<object-name>blade_fitting2</object-name>
+		<object-name>blade_fitting3</object-name>
+		<object-name>blade_fitting4</object-name>
+		<transparency>
+			<alpha-prop>rotors/main/rpm</alpha-prop>
+			<factor>-0.0045</factor>
+			<offset>1</offset>
+		</transparency>
+	</animation>
+
+	<!-- the glass (fdm/hdrmodel.py): tinted, its alpha its opacity, through the UH-60 model's glass effect -->
+	<effect>
+		<inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/glass</inherits-from>
+		<object-name>glass_fixed</object-name>
+		<object-name>windshield_L</object-name>
+		<object-name>windshield_R</object-name>
+		<object-name>glass_front_L</object-name>
+		<object-name>glass_front_R</object-name>
+		<object-name>glass_back_L</object-name>
+		<object-name>glass_back_R</object-name>
+	</effect>
+
+<!--== doors ==-->
+
+	<animation>
+		<type>pick</type>
+		<object-name>door_front_R</object-name>
+		<object-name>door_front_Ri</object-name>
+		<object-name>door_grip_FR</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[0].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>pick</type>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_Li</object-name>
+		<object-name>door_grip_FL</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[1].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>pick</type>
+		<object-name>door_back_R</object-name>
+		<object-name>door_back_Ri</object-name>
+		<object-name>door_grip_BR</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[2].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>pick</type>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_Li</object-name>
+		<object-name>door_grip_BL</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[3].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>pick</type>
+		<object-name>reardoor_R</object-name>
+		<object-name>reardoor_Ri</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[4].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>pick</type>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_Li</object-name>
+		<action>
+			<button>0</button>
+			<binding>
+				<command>nasal</command>
+				<script>bo105.doors.list[5].toggle()</script>
+			</binding>
+		</action>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>door_front_R</object-name>
+		<object-name>door_front_Ri</object-name>
+		<object-name>door_grip_FR</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[0]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>glass_front_R</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[0]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_Li</object-name>
+		<object-name>door_grip_FL</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[1]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>glass_front_L</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[1]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>door_back_R</object-name>
+		<object-name>door_back_Ri</object-name>
+		<object-name>door_grip_BR</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[2]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>glass_back_R</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[2]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_Li</object-name>
+		<object-name>door_grip_BL</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[3]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>glass_back_L</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[3]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>reardoor_R</object-name>
+		<object-name>reardoor_Ri</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[4]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_Li</object-name>
+		<condition>
+			<or>
+				<property>sim/model/bo105/doors/door[5]/enabled</property>
+				<not>
+					<equals>
+						<property>sim/aircraft</property>
+						<value>bo105</value>
+					</equals>
+				</not>
+			</or>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>door_front_R</object-name>
+		<object-name>door_front_Ri</object-name>
+		<object-name>door_grip_FR</object-name>
+		<object-name>glass_front_R</object-name>
+		<property>sim/model/bo105/doors/door[0]/position-norm</property>
+		<min-deg>-170</min-deg>
+		<factor>-170</factor>
+		<center>
+			<x-m>-1.858</x-m>
+			<y-m>0.785</y-m>
+			<z-m>0.533</z-m>
+		</center>
+		<axis>
+			<x>-0.124</x>
+			<y>0.0092</y>
+			<z>-0.319</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_Li</object-name>
+		<object-name>door_grip_FL</object-name>
+		<object-name>glass_front_L</object-name>
+		<property>sim/model/bo105/doors/door[1]/position-norm</property>
+		<max-deg>170</max-deg>
+		<factor>170</factor>
+		<center>
+			<x-m>-1.858</x-m>
+			<y-m>-0.785</y-m>
+			<z-m>0.533</z-m>
+		</center>
+		<axis>
+			<x>-0.124</x>
+			<y>-0.0092</y>
+			<z>-0.319</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>door_back_R</object-name>
+		<object-name>door_back_Ri</object-name>
+		<object-name>door_grip_BR</object-name>
+		<object-name>glass_back_R</object-name>
+		<property>sim/model/bo105/doors/door[2]/position-norm</property>
+		<interpolation>
+			<entry>
+				<ind>0</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>.1</ind>
+				<dep>.03</dep>
+			</entry>
+			<entry>
+				<ind>1</ind>
+				<dep>.03</dep>
+			</entry>
+		</interpolation>
+		<axis>
+			<x>0</x>
+			<y>1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>door_back_R</object-name>
+		<object-name>door_back_Ri</object-name>
+		<object-name>door_grip_BR</object-name>
+		<object-name>glass_back_R</object-name>
+		<property>sim/model/bo105/doors/door[2]/position-norm</property>
+		<interpolation>
+			<entry>
+				<ind>0</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>.1</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>1</ind>
+				<dep>.6</dep>
+			</entry>
+		</interpolation>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_Li</object-name>
+		<object-name>door_grip_BL</object-name>
+		<object-name>glass_back_L</object-name>
+		<property>sim/model/bo105/doors/door[3]/position-norm</property>
+		<interpolation>
+			<entry>
+				<ind>0</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>.1</ind>
+				<dep>.03</dep>
+			</entry>
+			<entry>
+				<ind>1</ind>
+				<dep>.03</dep>
+			</entry>
+		</interpolation>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_Li</object-name>
+		<object-name>door_grip_BL</object-name>
+		<object-name>glass_back_L</object-name>
+		<property>sim/model/bo105/doors/door[3]/position-norm</property>
+		<interpolation>
+			<entry>
+				<ind>0</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>.1</ind>
+				<dep>0</dep>
+			</entry>
+			<entry>
+				<ind>1</ind>
+				<dep>.6</dep>
+			</entry>
+		</interpolation>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>reardoor_R</object-name>
+		<object-name>reardoor_Ri</object-name>
+		<property>sim/model/bo105/doors/door[4]/position-norm</property>
+		<max-deg>170</max-deg>
+		<factor>170</factor>
+		<center>
+			<x-m>1.000</x-m>
+			<y-m>0.785</y-m>
+			<z-m>-0.032</z-m>
+		</center>
+		<axis>
+			<x>0.141</x>
+			<y>-0.019</y>
+			<z>0.238</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_Li</object-name>
+		<property>sim/model/bo105/doors/door[5]/position-norm</property>
+		<min-deg>-170</min-deg>
+		<factor>-170</factor>
+		<center>
+			<x-m>1.000</x-m>
+			<y-m>-0.785</y-m>
+			<z-m>-0.032</z-m>
+		</center>
+		<axis>
+			<x>0.141</x>
+			<y>0.019</y>
+			<z>0.238</z>
+		</axis>
+	</animation>
+
+<!--== instruments ==-->
+
+	<!-- the standby compass (fdm/cockpit/gauges.py; HDR glass and lit card) in place of the model's static one and
+	     Instruments-3d/comp: its window where theirs was -->
+	<model>
+		<name>COMPASS</name>
+		<path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/compass/compass.xml</path>
+		<offsets>
+			<x-m>-2.145</x-m>
+			<y-m>0</y-m>
+			<z-m>0.7085</z-m>
+		</offsets>
+	</model>
+	<animation>
+		<type>select</type>
+		<object-name>compass_housing</object-name>
+		<object-name>compass_marker</object-name>
+		<condition>
+			<property>/sim/model/bo105/old-compass</property>
+		</condition>
+	</animation>
+
+	<!-- the instrument panel of the flight manual's fig. 7-3 (fdm/cockpit/panel.py) on the model's own console, under
+	     its glareshield: the plate 5 mm proud of the console's face, leaning back 6 deg with it -->
+	<model>
+		<name>PANEL</name>
+		<path>Aircraft/MBB_Bo_105/Models/Panel/panel.xml</path>
+		<offsets>
+			<x-m>-2.235</x-m>
+			<y-m>0</y-m>
+			<z-m>0.35</z-m>
+			<pitch-deg>-6</pitch-deg>
+		</offsets>
+	</model>
+
+	<!-- seen through the windows from outside too -->
+	<animation>
+		<type>range</type>
+		<object-name>PANEL</object-name>
+		<object-name>COMPASS</object-name>
+		<min-m>0</min-m>
+		<max-m>300</max-m>
+	</animation>
+
+
+
+<!--== lights: written by fdm/hdrmodel.py ==-->
+
+	<model>
+		<name>light-nav-red</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/nav-red.xml</path>
+		<offsets>
+			<x-m>0.68</x-m>
+			<y-m>-0.814</y-m>
+			<z-m>0.15</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>light-nav-green</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/nav-green.xml</path>
+		<offsets>
+			<x-m>0.68</x-m>
+			<y-m>0.814</y-m>
+			<z-m>0.15</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>light-beacon-top</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/beacon-top.xml</path>
+		<offsets>
+			<x-m>5.883</x-m>
+			<y-m>0</y-m>
+			<z-m>2.008</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>light-beacon-bottom</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/beacon-bottom.xml</path>
+		<offsets>
+			<x-m>-1.313</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.734</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>light-strobe-top</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/strobe-top.xml</path>
+		<offsets>
+			<x-m>5.992</x-m>
+			<y-m>0</y-m>
+			<z-m>1.784</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>light-strobe-bottom</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/strobe-bottom.xml</path>
+		<offsets>
+			<x-m>-1.787</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.683</z-m>
+		</offsets>
+	</model>
+	<model>
+		<name>interior-lights</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/interior.xml</path>
+	</model>
+
+	<!-- the old halos: not shown (their lenses always are) -->
+	<animation>
+		<type>select</type>
+		<object-name>strobe_halo_T</object-name>
+		<object-name>strobe_halo_B</object-name>
+		<object-name>strobe_halo_Bf</object-name>
+		<object-name>beacon_halo_T</object-name>
+		<object-name>beacon_halo_B</object-name>
+		<object-name>beacon_halo_Bf</object-name>
+		<object-name>nav_halo_L</object-name>
+		<object-name>nav_halo_Lf</object-name>
+		<object-name>nav_halo_R</object-name>
+		<object-name>nav_halo_Rf</object-name>
+		<condition>
+			<property>sim/model/bo105/old-lights</property>
+		</condition>
+	</animation>
+
+
+<!--== LOD ==-->
+
+	<animation>
+		<type>select</type>
+		<name>high-resolution-LOD</name>
+		<object-name>Hspider_i</object-name>
+		<condition>
+			<not>
+				<property>sim/current-view/view-number</property>
+			</not>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<name>low-resolution-LOD</name>
+		<object-name>Lspider_i</object-name>
+		<condition>
+			<property>sim/current-view/view-number</property>
+		</condition>
+	</animation>
+
+<!--== variant addons ==-->
+
+	<animation>
+		<type>select</type>
+		<object-name>wiper_L</object-name>
+		<object-name>wiper_R</object-name>
+		<condition>
+			<property>sim/model/bo105/wiper</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>wire_cutter</object-name>
+		<nopreview/>
+		<condition>
+			<property>sim/model/bo105/wire-cutter</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>gatling</object-name>
+		<object-name>barrel_L</object-name>
+		<object-name>barrel_R</object-name>
+		<nopreview/>
+		<condition>
+			<property>sim/model/bo105/miniguns</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>hot</object-name>
+		<nopreview/>
+		<condition>
+			<property>sim/model/bo105/missiles</property>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>spin</type>
+		<object-name>barrel_R</object-name>
+		<property>/sim/time/elapsed-sec</property>
+		<factor>5.55555</factor>
+		<condition>
+			<property>sim/model/bo105/weapons/MG[0]/trigger</property>
+		</condition>
+		<center>
+			<x-m>-0.1878</x-m>
+			<y-m>0.8792</y-m>
+			<z-m>-0.1944</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>spin</type>
+		<object-name>barrel_L</object-name>
+		<property>/sim/time/elapsed-sec</property>
+		<factor>5.55555</factor>
+		<condition>
+			<property>sim/model/bo105/weapons/MG[1]/trigger</property>
+		</condition>
+		<center>
+			<x-m>-0.1878</x-m>
+			<y-m>-0.8792</y-m>
+			<z-m>-0.1944</z-m>
+		</center>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+
+<!--== controls ==-->
+
+	<!-- Stick: right: 4.23 deg, left: -5.65 deg, push: 5.5 deg, pull: -10.5 deg -->
+
+	<animation>
+		<type>rotate</type>
+		<object-name>stick_R</object-name>
+		<object-name>stick_grip_R</object-name>
+		<object-name>stick_ring_R</object-name>
+		<object-name>stick_button_R</object-name>
+		<property>controls/flight/elevator</property>
+		<factor>8</factor>
+		<offset-deg>-2.5</offset-deg>
+		<center>
+			<x-m>-2.20</x-m>
+			<y-m>0.4</y-m>
+			<z-m>-0.25</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>stick_R</object-name>
+		<object-name>stick_grip_R</object-name>
+		<object-name>stick_ring_R</object-name>
+		<object-name>stick_button_R</object-name>
+		<property>controls/flight/aileron</property>
+		<factor>4.94</factor>
+		<offset>-0.71</offset>
+		<center>
+			<x-m>-2.20</x-m>
+			<y-m>0.4</y-m>
+			<z-m>-0.25</z-m>
+		</center>
+		<axis>
+			<x>-1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>stick_L</object-name>
+		<object-name>stick_grip_L</object-name>
+		<object-name>stick_ring_L</object-name>
+		<object-name>stick_button_L</object-name>
+		<property>controls/flight/elevator</property>
+		<factor>8</factor>
+		<offset-deg>-2.5</offset-deg>
+		<center>
+			<x-m>-2.20</x-m>
+			<y-m>-0.4</y-m>
+			<z-m>-0.25</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>stick_L</object-name>
+		<object-name>stick_grip_L</object-name>
+		<object-name>stick_ring_L</object-name>
+		<object-name>stick_button_L</object-name>
+		<property>controls/flight/aileron</property>
+		<factor>4.94</factor>
+		<offset>-0.71</offset>
+		<center>
+			<x-m>-2.20</x-m>
+			<y-m>-0.4</y-m>
+			<z-m>-0.25</z-m>
+		</center>
+		<axis>
+			<x>-1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<!--animation>
+		<type>select</type>
+		<object-name>stick_L</object-name>
+		<object-name>stick_R</object-name>
+	</animation-->
+
+	<animation>
+		<type>rotate</type>
+		<object-name>l_pedal_L</object-name>
+		<object-name>l_pedal_R</object-name>
+		<property>controls/flight/rudder</property>
+		<factor>20</factor>
+		<offset>0</offset>
+		<center>
+			<x-m>-2.47</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.26</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>r_pedal_L</object-name>
+		<object-name>r_pedal_R</object-name>
+		<property>controls/flight/rudder</property>
+		<factor>20</factor>
+		<offset>0</offset>
+		<center>
+			<x-m>-2.47</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.26</z-m>
+		</center>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+
+	<!-- the untextured parts in the HDR pipeline: written by fdm/materials.py -->
+	<!-- each its kind's detail texture (Textures/Detail) and the PBR shader, its material's colour made linear; the
+	     pilots' suits and helmets the livery's (the pbr animation first) -->
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.5397 0.5392 0.5392 1.0</base-color-factor>      <!-- aluminum, brushed -->
+			<metallic-factor type="float">1</metallic-factor>
+			<roughness-factor type="float">0.35</roughness-factor>
+		</parameters>
+		<object-name>Lspider_i</object-name>
+		<object-name>fuselage_i</object-name>
+		<object-name>stick_ring_L</object-name>
+		<object-name>stick_ring_R</object-name>
+		<object-name>eye</object-name>
+		<object-name>rotoraxis</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.2420 0.2195 0.1754 1.0</base-color-factor>      <!-- exhaust, cast -->
+			<metallic-factor type="float">0.8</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>exhaust</object-name>
+		<object-name>exhaust_plate</object-name>
+		<object-name>gatling_axes</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.2472 0.2472 0.1971 1.0</base-color-factor>      <!-- mil_metal_fade, cast -->
+			<metallic-factor type="float">0.8</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>pendulum1</object-name>
+		<object-name>pendulum2</object-name>
+		<object-name>pendulum3</object-name>
+		<object-name>pendulum4</object-name>
+		<object-name>absorber1</object-name>
+		<object-name>absorber2</object-name>
+		<object-name>absorber3</object-name>
+		<object-name>absorber4</object-name>
+		<object-name>blade_fitting1</object-name>
+		<object-name>blade_fitting2</object-name>
+		<object-name>blade_fitting3</object-name>
+		<object-name>blade_fitting4</object-name>
+		<object-name>pitch_horn1</object-name>
+		<object-name>pitch_horn2</object-name>
+		<object-name>pitch_horn3</object-name>
+		<object-name>pitch_horn4</object-name>
+		<object-name>blade_mounting_fork1</object-name>
+		<object-name>blade_mounting_fork2</object-name>
+		<object-name>blade_mounting_fork3</object-name>
+		<object-name>blade_mounting_fork4</object-name>
+		<object-name>star_hub</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.2472 0.2472 0.2472 1.0</base-color-factor>      <!-- mil_metal_nofade, cast -->
+			<metallic-factor type="float">0.8</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>coll_ctrl_fork</object-name>
+		<object-name>door_grip_BL</object-name>
+		<object-name>door_grip_BR</object-name>
+		<object-name>door_grip_FL</object-name>
+		<object-name>door_grip_FR</object-name>
+		<object-name>filler_cap</object-name>
+		<object-name>lat_ctrl_lever</object-name>
+		<object-name>long_ctrl_lever</object-name>
+		<object-name>mixlever_U1</object-name>
+		<object-name>mixlever_U2</object-name>
+		<object-name>mixleverrod_C</object-name>
+		<object-name>mixleverrod_L</object-name>
+		<object-name>mixleverrod_R</object-name>
+		<object-name>swashplate_L</object-name>
+		<object-name>tailpitchlink_1</object-name>
+		<object-name>tailpitchlink_2</object-name>
+		<object-name>tailrotorgearbox</object-name>
+		<object-name>tailrotorshaft</object-name>
+		<object-name>tailsleevefix</object-name>
+		<object-name>tailsleeverot</object-name>
+		<object-name>pitch_link1</object-name>
+		<object-name>pitch_link2</object-name>
+		<object-name>pitch_link3</object-name>
+		<object-name>pitch_link4</object-name>
+		<object-name>swashplate_rotor</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0303 0.0293 0.0293 1.0</base-color-factor>      <!-- shoes, cast -->
+			<metallic-factor type="float">0.8</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>swashplate_cap</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0233 0.0233 0.0233 1.0</base-color-factor>      <!-- black, crinkle -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.8</roughness-factor>
+			<cull-face>none</cull-face>
+		</parameters>
+		<object-name>Hspider_i</object-name>
+		<object-name>cockpit</object-name>
+		<object-name>compass_mounting</object-name>
+		<object-name>shield</object-name>
+		<object-name>sock_back_L</object-name>
+		<object-name>sock_back_M</object-name>
+		<object-name>sock_back_R</object-name>
+		<object-name>sock_front_L</object-name>
+		<object-name>sock_front_R</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1391 0.1575 0.1391 1.0</base-color-factor>      <!-- grey_seat, fabric -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.9</roughness-factor>
+		</parameters>
+		<object-name>seat_back_L</object-name>
+		<object-name>seat_back_M</object-name>
+		<object-name>seat_back_R</object-name>
+		<object-name>seat_front_L</object-name>
+		<object-name>seat_front_R</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1592 0.1811 0.1610 1.0</base-color-factor>      <!-- grey, floor -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.85</roughness-factor>
+		</parameters>
+		<object-name>floor</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0233 0.0233 0.0233 1.0</base-color-factor>      <!-- black, leather -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.6</roughness-factor>
+		</parameters>
+		<object-name>stick_grip_L</object-name>
+		<object-name>stick_grip_R</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1322 0.1497 0.1322 1.0</base-color-factor>      <!-- grey_seat, leather -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.6</roughness-factor>
+		</parameters>
+		<object-name>copilot_hand_L</object-name>
+		<object-name>copilot_hand_R</object-name>
+		<object-name>pilot_hand_L</object-name>
+		<object-name>pilot_hand_R</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0311 0.0301 0.0301 1.0</base-color-factor>      <!-- shoes, leather -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.6</roughness-factor>
+		</parameters>
+		<object-name>copilot_shoe_L</object-name>
+		<object-name>copilot_shoe_R</object-name>
+		<object-name>pilot_shoe_L</object-name>
+		<object-name>pilot_shoe_R</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0215 0.0215 0.0215 1.0</base-color-factor>      <!-- black, paint -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>antenna_L</object-name>
+		<object-name>antenna_R</object-name>
+		<object-name>compass_housing</object-name>
+		<object-name>fake_axis</object-name>
+		<object-name>barrel_L</object-name>
+		<object-name>barrel_R</object-name>
+		<object-name>inlet</object-name>
+		<object-name>skid_L</object-name>
+		<object-name>skid_R</object-name>
+		<object-name>tail_skid</object-name>
+		<object-name>wiper_L</object-name>
+		<object-name>wiper_R</object-name>
+		<object-name>star_cap1</object-name>
+		<object-name>star_cap2</object-name>
+		<object-name>star_cap3</object-name>
+		<object-name>star_cap4</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0152 0.0110 0.0178 1.0</base-color-factor>      <!-- earphone.001, paint -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>hp_earphone.001</object-name>
+		<object-name>hp_earphone</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.2099 0.2435 0.2048 1.0</base-color-factor>      <!-- glossy_grey, paint -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>l_pedal_L</object-name>
+		<object-name>l_pedal_R</object-name>
+		<object-name>r_pedal_L</object-name>
+		<object-name>r_pedal_R</object-name>
+		<object-name>stick_L</object-name>
+		<object-name>stick_R</object-name>
+	</effect>
+	<animation>
+		<type>pbr</type>
+		<object-name>hc_cover</object-name>
+		<object-name>hc_inside</object-name>
+		<object-name>hc_outside</object-name>
+		<object-name>hp_cover</object-name>
+		<object-name>hp_inside</object-name>
+		<object-name>hp_outside</object-name>
+		<property-base>sim/model/bo105/material/helmet/pbr</property-base>
+		<base-color-factor>
+			<red><property>red</property><scale>1.0894</scale></red>
+			<green><property>green</property><scale>1.0894</scale></green>
+			<blue><property>blue</property><scale>1.0894</scale></blue>
+			<alpha>1</alpha>
+		</base-color-factor>
+	</animation>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1095 0.1161 0.0853 1.0</base-color-factor>      <!-- helmet, paint -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>hc_cover</object-name>
+		<object-name>hc_inside</object-name>
+		<object-name>hc_outside</object-name>
+		<object-name>hp_cover</object-name>
+		<object-name>hp_inside</object-name>
+		<object-name>hp_outside</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0361 0.0361 0.0361 1.0</base-color-factor>      <!-- tail_rotor, paint -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.45</roughness-factor>
+		</parameters>
+		<object-name>tailrotor_blade1</object-name>
+		<object-name>tailrotor_blade2</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0000 0.0000 0.0000 1.0</base-color-factor>      <!-- dull_black, rubber -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.85</roughness-factor>
+		</parameters>
+		<object-name>ear_hole_L</object-name>
+		<object-name>ear_hole_R</object-name>
+		<object-name>exhaust_I</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.0511 0.0511 0.0511 1.0</base-color-factor>      <!-- rubber.001, rubber -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.85</roughness-factor>
+		</parameters>
+		<object-name>hp_edge.001</object-name>
+		<object-name>hp_micro.001</object-name>
+		<object-name>hp_screw.001</object-name>
+		<object-name>hp_edge</object-name>
+		<object-name>hp_micro</object-name>
+		<object-name>hp_screw</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.7967 0.5437 0.4346 1.0</base-color-factor>      <!-- human_skin, skin -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.55</roughness-factor>
+		</parameters>
+		<object-name>copilot_head</object-name>
+		<object-name>pilot_head</object-name>
+	</effect>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1462 0.1663 0.1478 1.0</base-color-factor>      <!-- grey, trim -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.7</roughness-factor>
+		</parameters>
+		<object-name>beacon_sock_B</object-name>
+		<object-name>beacon_sock_T</object-name>
+		<object-name>ceiling</object-name>
+		<object-name>door_back_Li</object-name>
+		<object-name>door_back_Ri</object-name>
+		<object-name>door_front_Li</object-name>
+		<object-name>door_front_Ri</object-name>
+		<object-name>hires_interior2</object-name>
+		<object-name>reardoor_Li</object-name>
+		<object-name>reardoor_Ri</object-name>
+		<object-name>strobe_sock_T</object-name>
+	</effect>
+	<animation>
+		<type>pbr</type>
+		<object-name>copilot_arm_L</object-name>
+		<object-name>copilot_arm_R</object-name>
+		<object-name>copilot_leg_LL</object-name>
+		<object-name>copilot_leg_LR</object-name>
+		<object-name>copilot_leg_UL</object-name>
+		<object-name>copilot_leg_UR</object-name>
+		<object-name>copilot_torso</object-name>
+		<object-name>pilot_arm_L</object-name>
+		<object-name>pilot_arm_R</object-name>
+		<object-name>pilot_leg_LL</object-name>
+		<object-name>pilot_leg_LR</object-name>
+		<object-name>pilot_leg_UL</object-name>
+		<object-name>pilot_leg_UR</object-name>
+		<object-name>pilot_torso</object-name>
+		<property-base>sim/model/bo105/material/flightsuit/pbr</property-base>
+		<base-color-factor>
+			<red><property>red</property><scale>1.1881</scale></red>
+			<green><property>green</property><scale>1.1881</scale></green>
+			<blue><property>blue</property><scale>1.1881</scale></blue>
+			<alpha>1</alpha>
+		</base-color-factor>
+	</animation>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<base-color-factor type="vec4d">0.1194 0.1266 0.0930 1.0</base-color-factor>      <!-- flightsuit, twill -->
+			<metallic-factor type="float">0</metallic-factor>
+			<roughness-factor type="float">0.95</roughness-factor>
+		</parameters>
+		<object-name>copilot_arm_L</object-name>
+		<object-name>copilot_arm_R</object-name>
+		<object-name>copilot_leg_LL</object-name>
+		<object-name>copilot_leg_LR</object-name>
+		<object-name>copilot_leg_UL</object-name>
+		<object-name>copilot_leg_UR</object-name>
+		<object-name>copilot_torso</object-name>
+		<object-name>pilot_arm_L</object-name>
+		<object-name>pilot_arm_R</object-name>
+		<object-name>pilot_leg_LL</object-name>
+		<object-name>pilot_leg_LR</object-name>
+		<object-name>pilot_leg_UL</object-name>
+		<object-name>pilot_leg_UR</object-name>
+		<object-name>pilot_torso</object-name>
+	</effect>
+	<!-- end of fdm/materials.py's parts -->
+
+
+<!--== material ==-->
+
+	<!-- the livery's emblem in the HDR pipeline, which the material animation below doesn't reach: its texture through
+	     the pbr animation (first), blended by its alpha (without, the empty one showed as a black box) -->
+	<animation>
+		<type>pbr</type>
+		<object-name>emblem</object-name>
+		<property-base>sim/model/bo105/material/emblem</property-base>
+		<base-color-texture-prop>texture</base-color-texture-prop>
+	</animation>
+	<effect>
+		<inherits-from>Effects/model-transparent</inherits-from>
+		<object-name>emblem</object-name>
+	</effect>
+
+	<animation>
+		<type>material</type>
+		<object-name>emblem</object-name>
+		<property-base>sim/model/bo105/material/emblem</property-base>
+		<texture-prop>texture</texture-prop>
+		<transparency>
+			<alpha-prop>transparency/alpha</alpha-prop>
+		</transparency>
+		<threshold-prop>threshold</threshold-prop>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>glass_fixed</object-name>
+		<object-name>glass_front_L</object-name>
+		<object-name>glass_front_R</object-name>
+		<object-name>glass_back_L</object-name>
+		<object-name>glass_back_R</object-name>
+		<property-base>sim/model/bo105/material/glass</property-base>
+		<diffuse>
+			<red-prop>diffuse/red</red-prop>
+			<green-prop>diffuse/green</green-prop>
+			<blue-prop>diffuse/blue</blue-prop>
+		</diffuse>
+		<ambient>
+			<red-prop>ambient/red</red-prop>
+			<green-prop>ambient/green</green-prop>
+			<blue-prop>ambient/blue</blue-prop>
+		</ambient>
+		<specular>
+			<red-prop>specular/red</red-prop>
+			<green-prop>specular/green</green-prop>
+			<blue-prop>specular/blue</blue-prop>
+		</specular>
+		<emission>
+			<red-prop>emission/red</red-prop>
+			<green-prop>emission/green</green-prop>
+			<blue-prop>emission/blue</blue-prop>
+		</emission>
+		<transparency>
+			<alpha-prop>transparency/alpha</alpha-prop>
+		</transparency>
+		<shininess-prop>shininess</shininess-prop>
+	</animation>
+
+	<!-- the livery in the HDR pipeline: written by fdm/hdrmodel.py -->
+	<!-- the material animation below doesn't reach it: the PBR shader, its base colour and roughness the
+	     livery's (Models/Variants: material/fuselage/pbr) through the pbr animation (first) -->
+	<animation>
+		<type>pbr</type>
+		<object-name>fuselage</object-name>
+		<object-name>filler</object-name>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_R</object-name>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_R</object-name>
+		<object-name>door_stop_L</object-name>
+		<object-name>door_stop_R</object-name>
+		<object-name>rail_L</object-name>
+		<object-name>rail_R</object-name>
+		<object-name>ear_L</object-name>
+		<object-name>ear_R</object-name>
+		<object-name>funny_box</object-name>
+		<object-name>wire_cutter</object-name>
+		<object-name>hot</object-name>
+		<object-name>gatling</object-name>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_R</object-name>
+		<object-name>tail</object-name>
+		<object-name>tailplate</object-name>
+		<object-name>tailstab_L</object-name>
+		<object-name>tailstab_R</object-name>
+		<object-name>skirt</object-name>
+		<property-base>sim/model/bo105/material/fuselage/pbr</property-base>
+		<base-color-factor>
+			<red>red</red>
+			<green>green</green>
+			<blue>blue</blue>
+			<alpha>1</alpha>
+		</base-color-factor>
+		<roughness-factor>roughness</roughness-factor>
+	</animation>
+	<effect>
+		<inherits-from>Effects/model-pbr</inherits-from>
+		<parameters>
+			<metallic-factor type="float">0.0</metallic-factor>
+			<roughness-factor type="float">0.35</roughness-factor>
+		</parameters>
+		<object-name>fuselage</object-name>
+		<object-name>filler</object-name>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_R</object-name>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_R</object-name>
+		<object-name>door_stop_L</object-name>
+		<object-name>door_stop_R</object-name>
+		<object-name>rail_L</object-name>
+		<object-name>rail_R</object-name>
+		<object-name>ear_L</object-name>
+		<object-name>ear_R</object-name>
+		<object-name>funny_box</object-name>
+		<object-name>wire_cutter</object-name>
+		<object-name>hot</object-name>
+		<object-name>gatling</object-name>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_R</object-name>
+		<object-name>tail</object-name>
+		<object-name>tailplate</object-name>
+		<object-name>tailstab_L</object-name>
+		<object-name>tailstab_R</object-name>
+		<object-name>skirt</object-name>
+	</effect>
+	<!-- end of fdm/hdrmodel.py's livery -->
+
+	<animation>
+		<type>material</type>
+		<object-name>fuselage</object-name>
+		<object-name>filler</object-name>
+		<object-name>door_front_L</object-name>
+		<object-name>door_front_R</object-name>
+		<object-name>door_back_L</object-name>
+		<object-name>door_back_R</object-name>
+		<object-name>door_stop_L</object-name>
+		<object-name>door_stop_R</object-name>
+		<object-name>rail_L</object-name>
+		<object-name>rail_R</object-name>
+		<object-name>ear_L</object-name>
+		<object-name>ear_R</object-name>
+		<object-name>funny_box</object-name>
+		<object-name>wire_cutter</object-name>
+		<object-name>hot</object-name>
+		<object-name>gatling</object-name>
+		<object-name>reardoor_L</object-name>
+		<object-name>reardoor_R</object-name>
+		<object-name>tail</object-name>
+		<object-name>tailplate</object-name>
+		<object-name>tailstab_L</object-name>
+		<object-name>tailstab_R</object-name>
+		<object-name>skirt</object-name>
+		<property-base>sim/model/bo105/material/fuselage</property-base>
+		<diffuse>
+			<red-prop>diffuse/red</red-prop>
+			<green-prop>diffuse/green</green-prop>
+			<blue-prop>diffuse/blue</blue-prop>
+		</diffuse>
+		<ambient>
+			<red-prop>ambient/red</red-prop>
+			<green-prop>ambient/green</green-prop>
+			<blue-prop>ambient/blue</blue-prop>
+		</ambient>
+		<specular>
+			<red-prop>specular/red</red-prop>
+			<green-prop>specular/green</green-prop>
+			<blue-prop>specular/blue</blue-prop>
+		</specular>
+		<emission>
+			<red-prop>emission/red</red-prop>
+			<green-prop>emission/green</green-prop>
+			<blue-prop>emission/blue</blue-prop>
+		</emission>
+		<transparency>
+			<alpha-prop>transparency/alpha</alpha-prop>
+		</transparency>
+		<shininess-prop>shininess</shininess-prop>
+		<texture-prop>texture</texture-prop>
+	</animation>
+
+<!--== pilot ==-->
+
+	<animation>
+		<name>pilot</name>
+		<nopreview/>
+		<object-name>pilot_head</object-name>
+		<object-name>pilot_torso</object-name>
+		<object-name>pilot_arm_L</object-name>
+		<object-name>pilot_arm_R</object-name>
+		<object-name>pilot_hand_L</object-name>
+		<object-name>pilot_hand_R</object-name>
+		<object-name>pilot_leg_UL</object-name>
+		<object-name>pilot_leg_UR</object-name>
+		<object-name>pilot_leg_LL</object-name>
+		<object-name>pilot_leg_LR</object-name>
+		<object-name>pilot_shoe_L</object-name>
+		<object-name>pilot_shoe_R</object-name>
+		<object-name>pilot_helmet</object-name>
+	</animation>
+
+	<animation>
+		<name>copilot</name>
+		<nopreview/>
+		<object-name>copilot_head</object-name>
+		<object-name>copilot_torso</object-name>
+		<object-name>copilot_arm_L</object-name>
+		<object-name>copilot_arm_R</object-name>
+		<object-name>copilot_hand_L</object-name>
+		<object-name>copilot_hand_R</object-name>
+		<object-name>copilot_leg_UL</object-name>
+		<object-name>copilot_leg_UR</object-name>
+		<object-name>copilot_leg_LL</object-name>
+		<object-name>copilot_leg_LR</object-name>
+		<object-name>copilot_shoe_L</object-name>
+		<object-name>copilot_shoe_R</object-name>
+		<object-name>copilot_helmet</object-name>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>pilot</object-name>
+		<!-- hidden from his own seat (right, the front seats ahead of z -1.15 m): the Cockpit View, or an FGCamera cockpit camera (FGCamera1) there -->
+		<condition>
+			<not>
+				<property>sim/crashed</property>
+			</not>
+			<not>
+				<or>
+					<equals>
+						<property>sim/current-view/name</property>
+						<value>Cockpit View</value>
+					</equals>
+					<and>
+						<equals>
+							<property>sim/current-view/name</property>
+							<value>FGCamera1</value>
+						</equals>
+						<greater-than>
+							<property>sim/current-view/x-offset-m</property>
+							<value>0.15</value>
+						</greater-than>
+						<less-than>
+							<property>sim/current-view/z-offset-m</property>
+							<value>-1.15</value>
+						</less-than>
+					</and>
+				</or>
+			</not>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>range</type>
+		<object-name>pilot</object-name>
+		<min-m>0</min-m>
+		<max-m>150</max-m>
+	</animation>
+
+	<animation>
+		<type>select</type>
+		<object-name>copilot</object-name>
+		<!-- hidden from his own seat (left): an FGCamera cockpit camera (FGCamera1) there -->
+		<condition>
+			<not>
+				<property>sim/crashed</property>
+			</not>
+			<not>
+				<or>
+					<and>
+						<equals>
+							<property>sim/current-view/name</property>
+							<value>FGCamera1</value>
+						</equals>
+						<less-than>
+							<property>sim/current-view/x-offset-m</property>
+							<value>-0.15</value>
+						</less-than>
+						<less-than>
+							<property>sim/current-view/z-offset-m</property>
+							<value>-1.15</value>
+						</less-than>
+					</and>
+				</or>
+			</not>
+		</condition>
+	</animation>
+
+	<animation>
+		<type>range</type>
+		<object-name>copilot</object-name>
+		<min-m>0</min-m>
+		<max-m>150</max-m>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>hp_cover</object-name>
+		<object-name>hp_outside</object-name>
+		<object-name>hp_inside</object-name>
+		<object-name>hc_cover</object-name>
+		<object-name>hc_outside</object-name>
+		<object-name>hc_inside</object-name>
+		<property-base>sim/model/bo105/material/helmet</property-base>
+		<diffuse>
+			<red-prop>diffuse/red</red-prop>
+			<green-prop>diffuse/green</green-prop>
+			<blue-prop>diffuse/blue</blue-prop>
+		</diffuse>
+		<ambient>
+			<red-prop>ambient/red</red-prop>
+			<green-prop>ambient/green</green-prop>
+			<blue-prop>ambient/blue</blue-prop>
+		</ambient>
+		<specular>
+			<red-prop>specular/red</red-prop>
+			<green-prop>specular/green</green-prop>
+			<blue-prop>specular/blue</blue-prop>
+		</specular>
+		<emission>
+			<red-prop>emission/red</red-prop>
+			<green-prop>emission/green</green-prop>
+			<blue-prop>emission/blue</blue-prop>
+		</emission>
+		<shininess-prop>shininess</shininess-prop>
+	</animation>
+
+	<animation>
+		<type>material</type>
+		<object-name>pilot_torso</object-name>
+		<object-name>pilot_arm_L</object-name>
+		<object-name>pilot_arm_R</object-name>
+		<object-name>pilot_leg_LL</object-name>
+		<object-name>pilot_leg_UL</object-name>
+		<object-name>pilot_leg_LR</object-name>
+		<object-name>pilot_leg_UR</object-name>
+		<object-name>copilot_torso</object-name>
+		<object-name>copilot_arm_L</object-name>
+		<object-name>copilot_arm_R</object-name>
+		<object-name>copilot_leg_LL</object-name>
+		<object-name>copilot_leg_UL</object-name>
+		<object-name>copilot_leg_LR</object-name>
+		<object-name>copilot_leg_UR</object-name>
+		<property-base>sim/model/bo105/material/flightsuit</property-base>
+		<diffuse>
+			<red-prop>diffuse/red</red-prop>
+			<green-prop>diffuse/green</green-prop>
+			<blue-prop>diffuse/blue</blue-prop>
+		</diffuse>
+		<ambient>
+			<red-prop>ambient/red</red-prop>
+			<green-prop>ambient/green</green-prop>
+			<blue-prop>ambient/blue</blue-prop>
+		</ambient>
+		<specular>
+			<red-prop>specular/red</red-prop>
+			<green-prop>specular/green</green-prop>
+			<blue-prop>specular/blue</blue-prop>
+		</specular>
+		<emission>
+			<red-prop>emission/red</red-prop>
+			<green-prop>emission/green</green-prop>
+			<blue-prop>emission/blue</blue-prop>
+		</emission>
+		<shininess-prop>shininess</shininess-prop>
+	</animation>
+
+<!--== particles ==-->
+
+	<animation>
+		<type>rotate</type>
+		<object-name>dirt</object-name>
+		<property>orientation/pitch-deg</property>
+		<axis>
+			<x>0</x>
+			<y>-1</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>rotate</type>
+		<object-name>dirt</object-name>
+		<property>orientation/roll-deg</property>
+		<axis>
+			<x>1</x>
+			<y>0</y>
+			<z>0</z>
+		</axis>
+	</animation>
+
+	<animation>
+		<type>translate</type>
+		<object-name>dirt</object-name>
+		<property>position/gear-agl-m</property>
+		<axis>
+			<x>0</x>
+			<y>0</y>
+			<z>-1</z>
+		</axis>
+	</animation>
+
+	<particlesystem>
+		<name>dirt</name>
+		<texture>dirt.rgb</texture>
+		<emissive>false</emissive>
+		<lighting>false</lighting>
+
+		<offsets>
+			<x-m>0</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.7</z-m>
+			<roll-deg>90</roll-deg>
+		</offsets>
+
+		<attach>world</attach>
+
+		<placer>
+			<type>point</type>
+		</placer>
+
+		<condition>
+			<property>sim/model/bo105/particles/enabled</property>
+			<not>
+				<property>sim/paused</property>
+			</not>
+			<not>
+				<property>sim/crashed</property>
+			</not>
+			<less-than>
+				<property>position/altitude-agl-ft</property>
+				<value>70</value>
+			</less-than>
+			<greater-than>
+				<property>rotors/main/rpm</property>
+				<value>200</value>
+			</greater-than>
+		</condition>
+
+		<shooter>
+			<theta-min-deg>0</theta-min-deg>
+			<theta-max-deg>360</theta-max-deg>
+			<phi-min-deg>-0.1</phi-min-deg>
+			<phi-max-deg>0.1</phi-max-deg>
+			<speed-mps>
+				<property>rotors/main/rpm</property>
+				<factor>0.1</factor>
+				<spread>2</spread>
+			</speed-mps>
+			<rotation-speed>
+				<x-min-deg-sec>0</x-min-deg-sec>
+				<y-min-deg-sec>0</y-min-deg-sec>
+				<z-min-deg-sec>0</z-min-deg-sec>
+				<x-max-deg-sec>0</x-max-deg-sec>
+				<y-max-deg-sec>0</y-max-deg-sec>
+				<z-max-deg-sec>0</z-max-deg-sec>
+			</rotation-speed>
+		</shooter>
+
+		<counter>
+			<particles-per-sec>
+				<property>position/altitude-agl-ft</property>
+				<factor>-40</factor>
+				<offset-m>2000</offset-m>
+			</particles-per-sec>
+		</counter>
+
+		<align>billboard</align>
+
+		<particle>
+			<start>
+				<color>
+					<red>
+						<value>0.6</value>
+					</red>
+					<green>
+						<value>0.6</value>
+					</green>
+					<blue>
+						<value>0.6</value>
+					</blue>
+					<alpha>
+						<property>rotors/main/rpm</property>
+						<factor>0.00004</factor>
+						<max>0.02</max>
+					</alpha>
+				</color>
+				<size>
+					<value>0.8</value>
+				</size>
+			</start>
+
+			<end>
+				<color>
+					<red>
+						<value>0.6</value>
+					</red>
+					<green>
+						<value>0.6</value>
+					</green>
+					<blue>
+						<value>0.6</value>
+					</blue>
+					<alpha>
+						<property>rotors/main/rpm</property>
+						<factor>0.0002</factor>
+						<max>0.04</max>
+					</alpha>
+				</color>
+				<size>
+					<value>0.8</value>
+				</size>
+			</end>
+
+			<life-sec>
+				<value>0.27</value>
+			</life-sec>
+			<mass-kg>0.01</mass-kg>
+			<radius-m>0.01</radius-m>
+		</particle>
+
+		<program>
+			<fluid>water</fluid>
+			<gravity>true</gravity>
+			<wind>false</wind>
+		</program>
+	</particlesystem>
+</PropertyList>
+
+
+<!-- z=0 at approximately 30cm above ground plate -->

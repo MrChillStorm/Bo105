@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- GPS (its screen dark), after the Flying Bulls' Bo 105 C; written by fdm/cockpit/avionics.py -->
+
+<PropertyList>
+
+  <path>gps.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>case</object-name>
+    <object-name>face</object-name>
+    <object-name>screen</object-name>
+    <object-name>glass</object-name>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/instrument-glass</inherits-from>
+    <object-name>glass</object-name>
+  </effect>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-30.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>case</object-name>
+    <object-name>face</object-name>
+  </effect>
+
+</PropertyList>

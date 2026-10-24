@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<system name="Bo 105 controls">
+<property value="0">/controls/engines/engine[0]/throttle</property>
+<property value="0">ctl/init</property>
+<channel name="pilot">
+<fcs_function name="ctl/init-fast"><function><ifthen><lt><property>simulation/sim-time-sec</property><value>1</value></lt><value>1</value><min><value>1</value><max><value>0</value><property>ctl/init</property></max></min></ifthen></function></fcs_function>
+<fcs_function name="ctl/coll-norm"><description>collective lever, 0 down .. 1 up (FlightGear: the throttle axis)</description><function><property>/controls/engines/engine[0]/throttle</property></function><clipto><min>0</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/coll-in"><function><product><property>ctl/coll-norm</property><value>9</value></product></function></fcs_function>
+<fcs_function name="ctl/lon-norm"><description>+ forward</description><function><sum><property>fcs/elevator-cmd-norm</property><property>fcs/pitch-trim-cmd-norm</property></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/lat-norm"><description>+ right</description><function><sum><property>fcs/aileron-cmd-norm</property><property>fcs/roll-trim-cmd-norm</property></sum></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/ped-norm"><description>+ right</description><function><product><value>-1</value><sum><property>fcs/rudder-cmd-norm</property><property>fcs/yaw-trim-cmd-norm</property></sum></product></function><clipto><min>-1</min><max>1</max></clipto></fcs_function>
+<fcs_function name="ctl/lon-in"><description>cyclic, inches forward of centre</description><function><product><property>ctl/lon-norm</property><value>6.06</value></product></function></fcs_function>
+<fcs_function name="ctl/lat-in"><description>cyclic, inches right of centre</description><function><product><property>ctl/lat-norm</property><value>4.325</value></product></function></fcs_function>
+<fcs_function name="ctl/ped-in"><description>pedals, inches right of centre</description><function><product><property>ctl/ped-norm</property><value>2.17</value></product></function></fcs_function>
+</channel>
+<channel name="rigging">
+<fcs_function name="ctl/theta0-cmd-deg"><description>blade pitch at the shaft (the twist is zero there), deg</description><function><sum><value>6</value><product><value>16</value><property>ctl/coll-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/B1s-cmd-deg"><description>longitudinal cyclic, + forward</description><function><sum><value>2.3</value><product><value>7</value><property>ctl/lon-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/A1s-cmd-deg"><description>lateral cyclic, + right</description><function><sum><value>-0.7</value><product><value>5</value><property>ctl/lat-norm</property></product></sum></function></fcs_function>
+<fcs_function name="ctl/thetaTR-cmd-deg"><description>tail rotor blade pitch, + pushing the tail right (anti-torque)</description><function><difference><value>8</value><product><value>14</value><property>ctl/ped-norm</property></product></difference></function></fcs_function>
+</channel>
+<channel name="servos">
+<second_order_filter name="ctl/B1s-deg"><input>ctl/B1s-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/A1s-deg"><input>ctl/A1s-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/theta0-deg"><input>ctl/theta0-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+<second_order_filter name="ctl/thetaTR-deg"><input>ctl/thetaTR-cmd-deg</input><c1>0</c1><c2>0</c2><c3>1</c3><c4>0.0002081</c4><c5>0.02</c5><c6>1</c6></second_order_filter>
+</channel>
+<channel name="sensors">
+<fcs_function name="sens/coll-pct"><function><product><value>100</value><property>ctl/coll-norm</property></product></function></fcs_function>
+</channel>
+</system>

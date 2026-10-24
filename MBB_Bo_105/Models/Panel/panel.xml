@@ -1,0 +1,1032 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- the Bo 105 instrument panel: the flight manual's fig. 7-3 instruments laid out as the Flying Bulls' Bo 105 C's on the console; written by fdm/cockpit/panel.py -->
+
+<PropertyList>
+
+  <path>panel.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>face</object-name>
+    <object-name>wl-low-fuel</object-name>
+    <object-name>wl-low-fuel-on</object-name>
+    <object-name>wl-hy-block</object-name>
+    <object-name>wl-hy-block-on</object-name>
+    <object-name>wl-rpm</object-name>
+    <object-name>wl-rpm-on</object-name>
+    <object-name>wl-t-oil</object-name>
+    <object-name>wl-t-oil-on</object-name>
+    <object-name>wl-gen-1</object-name>
+    <object-name>wl-gen-1-on</object-name>
+    <object-name>wl-gen-2</object-name>
+    <object-name>wl-gen-2-on</object-name>
+    <object-name>wl-filt-1</object-name>
+    <object-name>wl-filt-1-on</object-name>
+    <object-name>wl-filt-2</object-name>
+    <object-name>wl-filt-2-on</object-name>
+    <object-name>wl-hyd-1</object-name>
+    <object-name>wl-hyd-1-on</object-name>
+    <object-name>wl-hyd-2</object-name>
+    <object-name>wl-hyd-2-on</object-name>
+    <object-name>wl-mag-plug-1</object-name>
+    <object-name>wl-mag-plug-1-on</object-name>
+    <object-name>wl-mag-plug-2</object-name>
+    <object-name>wl-mag-plug-2-on</object-name>
+    <object-name>wl-bat-60</object-name>
+    <object-name>wl-bat-60-on</object-name>
+    <object-name>wl-bat-70</object-name>
+    <object-name>wl-bat-70-on</object-name>
+    <object-name>wl-oil-cool</object-name>
+    <object-name>wl-oil-cool-on</object-name>
+    <object-name>wl-blank-1-4</object-name>
+    <object-name>wl-frame</object-name>
+    <object-name>fire1-body</object-name>
+    <object-name>fire1</object-name>
+    <object-name>fire1-on</object-name>
+    <object-name>test-fire1</object-name>
+    <object-name>fire2-body</object-name>
+    <object-name>fire2</object-name>
+    <object-name>fire2-on</object-name>
+    <object-name>test-fire2</object-name>
+    <object-name>pitot-body</object-name>
+    <object-name>pitot</object-name>
+    <object-name>pitot-on</object-name>
+    <object-name>instr-light</object-name>
+    <object-name>lamp-test</object-name>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-low-fuel-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/low-fuel</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-low-fuel-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/low-fuel</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-low-fuel-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-hy-block-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hy-block</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-hy-block-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hy-block</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-hy-block-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-rpm-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/rpm</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-rpm-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/rpm</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-rpm-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-t-oil-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/t-oil</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-t-oil-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/t-oil</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-t-oil-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-gen-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/gen-1</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-gen-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/gen-1</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-gen-1-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-gen-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/gen-2</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-gen-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/gen-2</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-gen-2-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-filt-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/filt-1</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-filt-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/filt-1</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-filt-1-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-filt-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/filt-2</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-filt-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/filt-2</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-filt-2-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-hyd-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hyd-1</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-hyd-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hyd-1</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-hyd-1-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-hyd-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hyd-2</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-hyd-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/hyd-2</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-hyd-2-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-mag-plug-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/mag-plug-1</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-mag-plug-1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/mag-plug-1</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-mag-plug-1-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-mag-plug-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/mag-plug-2</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-mag-plug-2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/mag-plug-2</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-mag-plug-2-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-bat-60-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/bat-60</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-bat-60-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/bat-60</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-bat-60-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-bat-70-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/bat-70</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-bat-70-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/bat-70</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-bat-70-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>wl-oil-cool-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/oil-cool</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>wl-oil-cool-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/oil-cool</property>
+    </condition>
+    <emission>
+      <red> 0.65 </red>
+      <green> 0.12 </green>
+      <blue> 0.08 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>wl-oil-cool-on</object-name>
+  </effect>
+
+  <animation>
+    <type>select</type>
+    <object-name>fire1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/fire1</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>fire1-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/fire1</property>
+    </condition>
+    <emission>
+      <red> 0.70 </red>
+      <green> 0.10 </green>
+      <blue> 0.06 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>fire1-on</object-name>
+  </effect>
+
+  <animation>
+    <type>pick</type>
+    <object-name>test-fire1</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>/instrumentation/bo105/test-fire[0]</property>
+        <value type="bool">true</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>/instrumentation/bo105/test-fire[0]</property>
+          <value type="bool">false</value>
+        </binding>
+      </mod-up>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>test-fire1</tooltip-id>
+        <label>TEST FIRE, engine 1</label>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>translate</type>
+    <object-name>test-fire1</object-name>
+    <property>/instrumentation/bo105/test-fire[0]</property>
+    <factor> -0.002 </factor>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>fire2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/fire2</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>fire2-on</object-name>
+    <condition>
+      <property>/instrumentation/bo105/warning/fire2</property>
+    </condition>
+    <emission>
+      <red> 0.70 </red>
+      <green> 0.10 </green>
+      <blue> 0.06 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/warn</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.05 </lit-reflectance>
+    </parameters>
+    <object-name>fire2-on</object-name>
+  </effect>
+
+  <animation>
+    <type>pick</type>
+    <object-name>test-fire2</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>/instrumentation/bo105/test-fire[1]</property>
+        <value type="bool">true</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>/instrumentation/bo105/test-fire[1]</property>
+          <value type="bool">false</value>
+        </binding>
+      </mod-up>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>test-fire2</tooltip-id>
+        <label>TEST FIRE, engine 2</label>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>translate</type>
+    <object-name>test-fire2</object-name>
+    <property>/instrumentation/bo105/test-fire[1]</property>
+    <factor> -0.002 </factor>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>select</type>
+    <object-name>pitot-on</object-name>
+    <condition>
+      <property>/controls/anti-ice/pitot-heat</property>
+    </condition>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>instr-light</object-name>
+    <property>/controls/lighting/instruments-norm</property>
+    <factor> 270 </factor>
+    <offset-deg> -135 </offset-deg>
+    <center>
+      <x-m> 0 </x-m>
+      <y-m> -0.02150 </y-m>
+      <z-m> 0.04725 </z-m>
+    </center>
+    <axis>
+      <x> -1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>instr-light</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>true</repeatable>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/instruments-norm</property>
+        <step>-0.1</step>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <action>
+      <button>2</button>
+      <repeatable>true</repeatable>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/instruments-norm</property>
+        <step>0.1</step>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <action>
+      <button>3</button>
+      <repeatable>true</repeatable>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/instruments-norm</property>
+        <step>0.1</step>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <action>
+      <button>4</button>
+      <repeatable>true</repeatable>
+      <binding>
+        <command>property-adjust</command>
+        <property>/controls/lighting/instruments-norm</property>
+        <step>-0.1</step>
+        <min>0</min>
+        <max>1</max>
+        <wrap>false</wrap>
+      </binding>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>instr-light</tooltip-id>
+        <label>INSTR. LIGHT: %s</label>
+        <property>/controls/lighting/instruments-norm</property>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>lamp-test</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>/instrumentation/bo105/lamp-test</property>
+        <value type="bool">true</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>/instrumentation/bo105/lamp-test</property>
+          <value type="bool">false</value>
+        </binding>
+      </mod-up>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>lamp-test</tooltip-id>
+        <label>Warning lights TEST LAMP</label>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>translate</type>
+    <object-name>lamp-test</object-name>
+    <property>/instrumentation/bo105/lamp-test</property>
+    <factor> -0.002 </factor>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <effect>
+    <inherits-from>Effects/model-default</inherits-from>
+    <parameters>
+      <pbr-roughness type="float"> 0.85 </pbr-roughness>
+    </parameters>
+    <object-name>wl-frame</object-name>
+    <object-name>fire1-body</object-name>
+    <object-name>test-fire1</object-name>
+    <object-name>fire2-body</object-name>
+    <object-name>test-fire2</object-name>
+    <object-name>pitot-body</object-name>
+    <object-name>instr-light</object-name>
+    <object-name>lamp-test</object-name>
+  </effect>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-30.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>face</object-name>
+  </effect>
+
+  <model>
+    <name>Airspeed indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/asi/asi.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> 0.2011 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Altimeter</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/alt/alt.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.3180 </y-m>
+      <z-m> 0.2011 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Vertical speed indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/vsi/vsi.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.3180 </y-m>
+      <z-m> 0.1086 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Triple tachometer</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/tach/tach.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> 0.0402 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Triple oil temperature indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/oilt/oilt.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0970 </y-m>
+      <z-m> -0.0603 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Triple oil pressure indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/oilp/oilp.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0970 </y-m>
+      <z-m> -0.1910 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Dual torque indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/tq/tq.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> 0.1227 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Clock</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/clock/clock.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0970 </y-m>
+      <z-m> 0.1659 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>TOT indicator, engine 1</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/tot/tot1.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0100 </y-m>
+      <z-m> -0.0603 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>TOT indicator, engine 2</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/tot/tot2.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> -0.0603 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>N1 indicator, engine 1</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/n1/n1-1.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0100 </y-m>
+      <z-m> -0.1508 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>N1 indicator, engine 2</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/n1/n1-2.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> -0.1508 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Fuel quantity indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/fq/fq.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0100 </y-m>
+      <z-m> -0.2413 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Fuel pressure indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/fp/fp.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.0830 </y-m>
+      <z-m> -0.2413 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Mast moment indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/mmi/mmi.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> -0.0970 </y-m>
+      <z-m> 0.0704 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Attitude indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/ai/ai.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.2050 </y-m>
+      <z-m> 0.2011 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Horizontal situation indicator</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/hsi/hsi.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.2050 </y-m>
+      <z-m> 0.1086 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>Radio control head</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/radio/radio.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.2620 </y-m>
+      <z-m> 0.0352 </z-m>
+    </offsets>
+  </model>
+
+  <model>
+    <name>GPS</name>
+    <path>Aircraft/MBB_Bo_105/Models/Panel/Instruments/gps/gps.xml</path>
+    <offsets>
+      <x-m> 0.0 </x-m>
+      <y-m> 0.2620 </y-m>
+      <z-m> -0.0362 </z-m>
+    </offsets>
+  </model>
+
+</PropertyList>

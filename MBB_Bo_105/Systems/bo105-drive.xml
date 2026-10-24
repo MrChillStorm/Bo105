@@ -1,0 +1,427 @@
+<?xml version="1.0"?>
+<system name="Bo 105 drive">
+<property value="1">/controls/engines/engine[0]/power</property>
+<property value="0">/controls/engines/engine[0]/ignition</property>
+<property value="0">/controls/engines/engine[0]/starter</property>
+<property value="0">eng[0]/ng-pct</property>
+<property value="0">eng[0]/np-rad_sec</property>
+<property value="0">eng[0]/lit</property>
+<property value="0">eng[0]/engaged</property>
+<property value="0">eng[0]/starter-on</property>
+<property value="15">eng[0]/tgt-degc</property>
+<property value="90">eng[0]/ng-gov</property>
+<property value="0">eng[0]/gov-int</property>
+<property value="1">/controls/engines/engine[1]/power</property>
+<property value="0">/controls/engines/engine[1]/ignition</property>
+<property value="0">/controls/engines/engine[1]/starter</property>
+<property value="0">eng[1]/ng-pct</property>
+<property value="0">eng[1]/np-rad_sec</property>
+<property value="0">eng[1]/lit</property>
+<property value="0">eng[1]/engaged</property>
+<property value="0">eng[1]/starter-on</property>
+<property value="15">eng[1]/tgt-degc</property>
+<property value="90">eng[1]/ng-gov</property>
+<property value="0">eng[1]/gov-int</property>
+<property value="0">/controls/engines/power-trim</property>
+<property value="0">/controls/engines/power-balance</property>
+<property value="1000">/consumables/fuel/tank[0]/level-lbs</property>
+<property value="100">/consumables/fuel/tank[1]/level-lbs</property>
+<property value="0">/controls/rotor/brake</property>
+<property value="1">eng/init-running</property>
+<property value="1">eng/gov-k</property>
+<property value="0.1">eng/gov-tau</property>
+<property value="0.1">eng/coll-ff</property>
+<property value="0">eng/ng-loop-flight</property>
+<property value="1">eng/tau-scale</property>
+<property value="100">eng/gov-rate</property>
+<property value="20">eng/gov-ti</property>
+<property value="0">/sim/freeze/fuel</property>
+<property value="0">drive/hold-rpm</property>
+<channel name="start state">
+<fcs_function name="eng/running-at-start"><function><max><property>eng/init-running</property><gt><property>position/h-agl-ft</property><value>50</value></gt></max></function></fcs_function>
+<fcs_function name="eng[0]/pl-init"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><value>0</value></ifthen><property>/controls/engines/engine[0]/power</property></ifthen></function><output>/controls/engines/engine[0]/power</output></fcs_function>
+<fcs_function name="eng[1]/pl-init"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>1</value><value>0</value></ifthen><property>/controls/engines/engine[1]/power</property></ifthen></function><output>/controls/engines/engine[1]/power</output></fcs_function>
+<fcs_function name="drive/brake-init"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><ifthen><property>eng/running-at-start</property><value>0</value><value>1</value></ifthen><property>/controls/rotor/brake</property></ifthen></function><output>/controls/rotor/brake</output></fcs_function>
+</channel>
+<channel name="ambient">
+<fcs_function name="eng/theta"><function><quotient><property>atmosphere/T-R</property><value>518.67</value></quotient></function></fcs_function>
+<fcs_function name="eng/delta"><function><quotient><property>atmosphere/P-psf</property><value>2116.22</value></quotient></function></fcs_function>
+<fcs_function name="eng/sqrt-theta"><function><sqrt><property>eng/theta</property></sqrt></function></fcs_function>
+<fcs_function name="eng/delta-sqrt-theta"><function><product><property>eng/delta</property><property>eng/sqrt-theta</property></product></function></fcs_function>
+<fcs_function name="eng/tamb-k"><function><quotient><property>atmosphere/T-R</property><value>1.8</value></quotient></function></fcs_function>
+</channel>
+<channel name="rotor load">
+<fcs_function name="drive/loss-ftlb"><description>accessories and gearbox losses</description><function><sum><product><value>132.89405</value><product><quotient><property>rotor/omega-rad_sec</property><value>44.4</value></quotient><quotient><property>rotor/omega-rad_sec</property><value>44.4</value></quotient></product></product><product><value>0.025</value><abs><property>aero/rotor/torque-ftlb</property></abs></product></sum></function></fcs_function>
+<fcs_function name="drive/brake-ftlb"><description>rotor brake, smooth at standstill</description><function><product><property>/controls/rotor/brake</property><value>4000</value><quotient><property>rotor/omega-rad_sec</property><sum><abs><property>rotor/omega-rad_sec</property></abs><value>0.3</value></sum></quotient></product></function></fcs_function>
+<fcs_function name="drive/load-ftlb"><function><sum><property>aero/rotor/torque-ftlb</property><product><value>5.25</value><property>aero/rotor/tr/torque-ftlb</property></product><property>drive/loss-ftlb</property><property>drive/brake-ftlb</property></sum></function></fcs_function>
+<fcs_function name="drive/nr-pct"><function><product><value>2.2522523</value><property>rotor/omega-rad_sec</property></product></function></fcs_function>
+</channel>
+<channel name="engine 1">
+<fcs_function name="eng[0]/ngc-pct"><function><quotient><property>eng[0]/ng-pct</property><property>eng/sqrt-theta</property></quotient></function></fcs_function>
+<fcs_function name="eng[0]/np-pct"><function><product><value>2.2522523</value><property>eng[0]/np-rad_sec</property></product></function></fcs_function>
+<fcs_function name="eng[0]/starter-next"><function><ifthen><gt><sum><property>/controls/engines/engine[0]/starter</property><property>eng[0]/starter-on</property></sum><value>0.5</value></gt><ifthen><gt><property>eng[0]/ng-pct</property><value>58</value></gt><value>0</value><value>1</value></ifthen><value>0</value></ifthen></function><output>eng[0]/starter-on</output></fcs_function>
+<fcs_function name="eng[0]/fuel-ok"><function><gt><sum><property>/consumables/fuel/tank[0]/level-lbs</property><property>/consumables/fuel/tank[1]/level-lbs</property></sum><value>0.5</value></gt></function></fcs_function>
+<fcs_function name="eng[0]/lit-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property><product><product><gt><property>/controls/engines/engine[0]/power</property><value>0.05</value></gt><gt><property>eng[0]/ng-pct</property><value>8</value></gt><lt><property>eng[0]/np-pct</property><value>120</value></lt><property>eng[0]/fuel-ok</property></product><max><property>eng[0]/lit</property><product><gt><property>/controls/engines/engine[0]/ignition</property><value>0.5</value></gt><gt><property>/controls/engines/engine[0]/power</property><value>0.1</value></gt><gt><property>eng[0]/ng-pct</property><value>8</value></gt><property>eng[0]/fuel-ok</property></product></max></product></ifthen></function><output>eng[0]/lit</output></fcs_function>
+<fcs_function name="eng[0]/ng-pl"><function><product><property>eng/sqrt-theta</property><ifthen><lt><property>/controls/engines/engine[0]/power</property><value>0.63</value></lt><sum><value>22</value><product><value>71.698113</value><max><value>0</value><min><value>0.53</value><difference><property>/controls/engines/engine[0]/power</property><value>0.1</value></difference></min></max></product></sum><sum><value>60</value><product><value>121.62162</value><max><value>0</value><min><value>0.37</value><difference><property>/controls/engines/engine[0]/power</property><value>0.63</value></difference></min></max></product></sum></ifthen></product></function></fcs_function>
+<fcs_function name="eng/coll-anticipation"><description>the governor's collective anticipation, % gas generator speed</description><function><ifthen><lt><property>sens/coll-pct</property><value>35</value></lt><sum><value>-16.5</value><product><quotient><difference><product><property>eng/coll-ff</property><value>-15</value></product><value>-16.5</value></difference><value>35</value></quotient><max><value>0</value><property>sens/coll-pct</property></max></product></sum><product><property>eng/coll-ff</property><difference><property>sens/coll-pct</property><value>50</value></difference></product></ifthen></function></fcs_function>
+<fcs_function name="eng[0]/gov-int-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><difference><difference><quotient><property>eng[0]/ng-for-load</property><property>eng/sqrt-theta</property></quotient><product><property>eng/gov-k</property><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>-10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product></difference><sum><value>95</value><property>eng/coll-anticipation</property></sum></difference></product><max><value>-15</value><min><value>15</value><sum><property>eng[0]/gov-int</property><product><gt><property>eng/gov-ti</property><value>0</value></gt><product><property>eng[0]/lit</property><gt><property>/controls/engines/engine[0]/power</property><value>0.9</value></gt><gt><property>drive/nr-pct</property><value>90</value></gt></product><property>simulation/dt</property><quotient><property>eng/gov-k</property><max><property>eng/gov-ti</property><value>1</value></max></quotient><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>-10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product></sum></min></max></ifthen></function><output>eng[0]/gov-int</output></fcs_function>
+<fcs_function name="eng[0]/ng-gov-ss"><description>power turbine governor and collective anticipation, steady</description><function><product><property>eng/sqrt-theta</property><sum><value>95</value><property>eng[0]/gov-int</property><product><property>eng/gov-k</property><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>-10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product><property>eng/coll-anticipation</property></sum></product></function></fcs_function>
+<fcs_function name="eng[0]/ng-gov-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng[0]/ng-gov-ss</property><sum><property>eng[0]/ng-gov</property><max><product><value>-1</value><product><property>eng/gov-rate</property><property>eng/sqrt-theta</property><property>simulation/dt</property></product></product><min><product><property>eng/gov-rate</property><property>eng/sqrt-theta</property><property>simulation/dt</property></product><product><quotient><property>simulation/dt</property><max><property>eng/gov-tau</property><property>simulation/dt</property></max></quotient><difference><property>eng[0]/ng-gov-ss</property><property>eng[0]/ng-gov</property></difference></product></min></max></sum></ifthen></function><output>eng[0]/ng-gov</output></fcs_function>
+<fcs_function name="eng[0]/ng-ref"><function><ifthen><gt><property>/controls/engines/engine[0]/power</property><value>0.9</value></gt><max><product><value>60</value><property>eng/sqrt-theta</property></product><min><property>eng[0]/ng-pl</property><property>eng[0]/ng-gov-next</property></min></max><property>eng[0]/ng-pl</property></ifthen></function></fcs_function>
+<fcs_function name="eng[0]/ngref-c"><function><quotient><difference><property>eng[0]/ng-ref</property><product><value>0.5</value><max><value>0</value><difference><property>eng[0]/tgt-degc</property><value>825</value></difference></max></product></difference><property>eng/sqrt-theta</property></quotient></function></fcs_function>
+<fcs_function name="eng[0]/wf-cmd-c"><function><sum><table><independentVar lookup="row">eng[0]/ngref-c</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table><product><ifthen><gt><property>/controls/engines/engine[0]/power</property><value>0.9</value></gt><property>eng/ng-loop-flight</property><value>25</value></ifthen><difference><property>eng[0]/ngref-c</property><property>eng[0]/ngc-pct</property></difference></product></sum></function></fcs_function>
+<fcs_function name="eng[0]/fuel-flow-pph"><description>lb/h</description><function><product><property>eng[0]/lit</property><gt><property>/controls/engines/engine[0]/power</property><value>0.05</value></gt><property>eng/delta-sqrt-theta</property><max><product><value>0.55</value><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table></product><min><sum><product><value>1.35</value><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table></product><value>30</value></sum><property>eng[0]/wf-cmd-c</property></min></max></product></function></fcs_function>
+<fcs_function name="eng[0]/wf-c"><function><quotient><property>eng[0]/fuel-flow-pph</property><max><property>eng/delta-sqrt-theta</property><value>0.05</value></max></quotient></function></fcs_function>
+<fcs_function name="eng[0]/ng-for-load"><function><product><property>eng/sqrt-theta</property><table><independentVar lookup="row">eng[0]/q-share-pct</independentVar><tableData>
+-60 0
+-35 40
+-12 55
+-4 60
+2 65
+8 70
+15 75
+23 80
+33 85
+46 90
+62 95
+83 100
+93 102
+110 105
+127 108
+</tableData></table></product></function></fcs_function>
+<fcs_function name="eng[0]/q-share-pct"><function><quotient><product><value>0.010073348</value><property>drive/load-ftlb</property></product><max><property>eng/delta-sqrt-theta</property><value>0.05</value></max></quotient></function></fcs_function>
+<fcs_function name="eng[0]/ng-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><max><product><value>60</value><property>eng/sqrt-theta</property></product><property>eng[0]/ng-for-load</property></max></product><max><value>0</value><sum><property>eng[0]/ng-pct</property><product><property>simulation/dt</property><sum><quotient><difference><ifthen><property>eng[0]/lit</property><product><property>eng/sqrt-theta</property><table><independentVar lookup="row">eng[0]/wf-c</independentVar><tableData>
+0 0
+15 20
+35 40
+58 55
+68 60
+78 65
+90 70
+104 75
+120 80
+140 85
+163 90
+192 95
+228 100
+274 105
+305 108
+</tableData></table></product><product><property>eng[0]/starter-on</property><value>22</value></product></ifthen><property>eng[0]/ng-pct</property></difference><ifthen><property>eng[0]/lit</property><product><property>eng/tau-scale</property><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 5
+20 5
+40 4
+55 2.5
+60 1.6
+70 1
+80 0.7
+90 0.5
+100 0.4
+108 0.4
+</tableData></table></product><ifthen><property>eng[0]/starter-on</property><value>3</value><value>8</value></ifthen></ifthen></quotient><product><property>eng[0]/starter-on</property><property>eng[0]/lit</property><value>1.5</value><max><value>0</value><difference><value>1</value><quotient><property>eng[0]/ng-pct</property><value>60</value></quotient></difference></max></product></sum></product></sum></max></ifthen></function><output>eng[0]/ng-pct</output></fcs_function>
+<fcs_function name="eng[0]/torque-ftlb"><description>at the rotor shaft</description><function><product><property>eng[0]/lit</property><property>eng/delta-sqrt-theta</property><sum><product><value>49.635929</value><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 -60
+40 -35
+55 -12
+60 -4
+65 2
+70 8
+75 15
+80 23
+85 33
+90 46
+95 62
+100 83
+102 93
+105 110
+108 127
+</tableData></table></product><product><product><value>0.012</value><max><value>0</value><sum><product><value>49.635929</value><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 -60
+40 -35
+55 -12
+60 -4
+65 2
+70 8
+75 15
+80 23
+85 33
+90 46
+95 62
+100 83
+102 93
+105 110
+108 127
+</tableData></table></product><value>1985.4372</value></sum></max></product><difference><value>100</value><property>eng[0]/np-pct</property></difference></product></sum></product></function></fcs_function>
+<fcs_function name="eng[0]/torque-pct"><function><quotient><product><value>100</value><max><value>0</value><product><property>eng[0]/torque-ftlb</property><property>eng[0]/engaged</property></product></max></product><value>4963.5929</value></quotient></function></fcs_function>
+<fcs_function name="eng[0]/tgt-ss"><function><ifthen><property>eng[0]/lit</property><max><difference><property>eng/tamb-k</property><value>273.15</value></difference><difference><product><property>eng/tamb-k</property><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 1
+20 1.8
+50 2.3
+60 2.5
+70 2.6
+80 2.75
+90 2.95
+95 3.1
+100 3.3
+105 3.75
+108 3.95
+</tableData></table><sqrt><max><value>0.3</value><min><value>2.5</value><quotient><sum><property>eng[0]/wf-c</property><value>5</value></sum><sum><table><independentVar lookup="row">eng[0]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table><value>5</value></sum></quotient></min></max></sqrt></product><value>273.15</value></difference></max><difference><property>eng/tamb-k</property><value>273.15</value></difference></ifthen></function></fcs_function>
+<fcs_function name="eng[0]/tgt-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng[0]/tgt-ss</property><sum><property>eng[0]/tgt-degc</property><product><property>simulation/dt</property><quotient><difference><property>eng[0]/tgt-ss</property><property>eng[0]/tgt-degc</property></difference><ifthen><property>eng[0]/lit</property><value>1.5</value><value>20</value></ifthen></quotient></product></sum></ifthen></function><output>eng[0]/tgt-degc</output></fcs_function>
+</channel>
+<channel name="engine 2">
+<fcs_function name="eng[1]/ngc-pct"><function><quotient><property>eng[1]/ng-pct</property><property>eng/sqrt-theta</property></quotient></function></fcs_function>
+<fcs_function name="eng[1]/np-pct"><function><product><value>2.2522523</value><property>eng[1]/np-rad_sec</property></product></function></fcs_function>
+<fcs_function name="eng[1]/starter-next"><function><ifthen><gt><sum><property>/controls/engines/engine[1]/starter</property><property>eng[1]/starter-on</property></sum><value>0.5</value></gt><ifthen><gt><property>eng[1]/ng-pct</property><value>58</value></gt><value>0</value><value>1</value></ifthen><value>0</value></ifthen></function><output>eng[1]/starter-on</output></fcs_function>
+<fcs_function name="eng[1]/fuel-ok"><function><gt><sum><property>/consumables/fuel/tank[0]/level-lbs</property><property>/consumables/fuel/tank[1]/level-lbs</property></sum><value>0.5</value></gt></function></fcs_function>
+<fcs_function name="eng[1]/lit-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property><product><product><gt><property>/controls/engines/engine[1]/power</property><value>0.05</value></gt><gt><property>eng[1]/ng-pct</property><value>8</value></gt><lt><property>eng[1]/np-pct</property><value>120</value></lt><property>eng[1]/fuel-ok</property></product><max><property>eng[1]/lit</property><product><gt><property>/controls/engines/engine[1]/ignition</property><value>0.5</value></gt><gt><property>/controls/engines/engine[1]/power</property><value>0.1</value></gt><gt><property>eng[1]/ng-pct</property><value>8</value></gt><property>eng[1]/fuel-ok</property></product></max></product></ifthen></function><output>eng[1]/lit</output></fcs_function>
+<fcs_function name="eng[1]/ng-pl"><function><product><property>eng/sqrt-theta</property><ifthen><lt><property>/controls/engines/engine[1]/power</property><value>0.63</value></lt><sum><value>22</value><product><value>71.698113</value><max><value>0</value><min><value>0.53</value><difference><property>/controls/engines/engine[1]/power</property><value>0.1</value></difference></min></max></product></sum><sum><value>60</value><product><value>121.62162</value><max><value>0</value><min><value>0.37</value><difference><property>/controls/engines/engine[1]/power</property><value>0.63</value></difference></min></max></product></sum></ifthen></product></function></fcs_function>
+<fcs_function name="eng[1]/gov-int-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><difference><difference><quotient><property>eng[1]/ng-for-load</property><property>eng/sqrt-theta</property></quotient><product><property>eng/gov-k</property><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product></difference><sum><value>95</value><property>eng/coll-anticipation</property></sum></difference></product><max><value>-15</value><min><value>15</value><sum><property>eng[1]/gov-int</property><product><gt><property>eng/gov-ti</property><value>0</value></gt><product><property>eng[1]/lit</property><gt><property>/controls/engines/engine[1]/power</property><value>0.9</value></gt><gt><property>drive/nr-pct</property><value>90</value></gt></product><property>simulation/dt</property><quotient><property>eng/gov-k</property><max><property>eng/gov-ti</property><value>1</value></max></quotient><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product></sum></min></max></ifthen></function><output>eng[1]/gov-int</output></fcs_function>
+<fcs_function name="eng[1]/ng-gov-ss"><description>power turbine governor and collective anticipation, steady</description><function><product><property>eng/sqrt-theta</property><sum><value>95</value><property>eng[1]/gov-int</property><product><property>eng/gov-k</property><difference><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product><product><value>10</value><property>/controls/engines/power-balance</property></product></sum><property>drive/nr-pct</property></difference></product><property>eng/coll-anticipation</property></sum></product></function></fcs_function>
+<fcs_function name="eng[1]/ng-gov-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng[1]/ng-gov-ss</property><sum><property>eng[1]/ng-gov</property><max><product><value>-1</value><product><property>eng/gov-rate</property><property>eng/sqrt-theta</property><property>simulation/dt</property></product></product><min><product><property>eng/gov-rate</property><property>eng/sqrt-theta</property><property>simulation/dt</property></product><product><quotient><property>simulation/dt</property><max><property>eng/gov-tau</property><property>simulation/dt</property></max></quotient><difference><property>eng[1]/ng-gov-ss</property><property>eng[1]/ng-gov</property></difference></product></min></max></sum></ifthen></function><output>eng[1]/ng-gov</output></fcs_function>
+<fcs_function name="eng[1]/ng-ref"><function><ifthen><gt><property>/controls/engines/engine[1]/power</property><value>0.9</value></gt><max><product><value>60</value><property>eng/sqrt-theta</property></product><min><property>eng[1]/ng-pl</property><property>eng[1]/ng-gov-next</property></min></max><property>eng[1]/ng-pl</property></ifthen></function></fcs_function>
+<fcs_function name="eng[1]/ngref-c"><function><quotient><difference><property>eng[1]/ng-ref</property><product><value>0.5</value><max><value>0</value><difference><property>eng[1]/tgt-degc</property><value>825</value></difference></max></product></difference><property>eng/sqrt-theta</property></quotient></function></fcs_function>
+<fcs_function name="eng[1]/wf-cmd-c"><function><sum><table><independentVar lookup="row">eng[1]/ngref-c</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table><product><ifthen><gt><property>/controls/engines/engine[1]/power</property><value>0.9</value></gt><property>eng/ng-loop-flight</property><value>25</value></ifthen><difference><property>eng[1]/ngref-c</property><property>eng[1]/ngc-pct</property></difference></product></sum></function></fcs_function>
+<fcs_function name="eng[1]/fuel-flow-pph"><description>lb/h</description><function><product><property>eng[1]/lit</property><gt><property>/controls/engines/engine[1]/power</property><value>0.05</value></gt><property>eng/delta-sqrt-theta</property><max><product><value>0.55</value><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table></product><min><sum><product><value>1.35</value><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table></product><value>30</value></sum><property>eng[1]/wf-cmd-c</property></min></max></product></function></fcs_function>
+<fcs_function name="eng[1]/wf-c"><function><quotient><property>eng[1]/fuel-flow-pph</property><max><property>eng/delta-sqrt-theta</property><value>0.05</value></max></quotient></function></fcs_function>
+<fcs_function name="eng[1]/ng-for-load"><function><product><property>eng/sqrt-theta</property><table><independentVar lookup="row">eng[1]/q-share-pct</independentVar><tableData>
+-60 0
+-35 40
+-12 55
+-4 60
+2 65
+8 70
+15 75
+23 80
+33 85
+46 90
+62 95
+83 100
+93 102
+110 105
+127 108
+</tableData></table></product></function></fcs_function>
+<fcs_function name="eng[1]/q-share-pct"><function><quotient><product><value>0.010073348</value><property>drive/load-ftlb</property></product><max><property>eng/delta-sqrt-theta</property><value>0.05</value></max></quotient></function></fcs_function>
+<fcs_function name="eng[1]/ng-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><max><product><value>60</value><property>eng/sqrt-theta</property></product><property>eng[1]/ng-for-load</property></max></product><max><value>0</value><sum><property>eng[1]/ng-pct</property><product><property>simulation/dt</property><sum><quotient><difference><ifthen><property>eng[1]/lit</property><product><property>eng/sqrt-theta</property><table><independentVar lookup="row">eng[1]/wf-c</independentVar><tableData>
+0 0
+15 20
+35 40
+58 55
+68 60
+78 65
+90 70
+104 75
+120 80
+140 85
+163 90
+192 95
+228 100
+274 105
+305 108
+</tableData></table></product><product><property>eng[1]/starter-on</property><value>22</value></product></ifthen><property>eng[1]/ng-pct</property></difference><ifthen><property>eng[1]/lit</property><product><property>eng/tau-scale</property><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 5
+20 5
+40 4
+55 2.5
+60 1.6
+70 1
+80 0.7
+90 0.5
+100 0.4
+108 0.4
+</tableData></table></product><ifthen><property>eng[1]/starter-on</property><value>3</value><value>8</value></ifthen></ifthen></quotient><product><property>eng[1]/starter-on</property><property>eng[1]/lit</property><value>1.5</value><max><value>0</value><difference><value>1</value><quotient><property>eng[1]/ng-pct</property><value>60</value></quotient></difference></max></product></sum></product></sum></max></ifthen></function><output>eng[1]/ng-pct</output></fcs_function>
+<fcs_function name="eng[1]/torque-ftlb"><description>at the rotor shaft</description><function><product><property>eng[1]/lit</property><property>eng/delta-sqrt-theta</property><sum><product><value>49.635929</value><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 -60
+40 -35
+55 -12
+60 -4
+65 2
+70 8
+75 15
+80 23
+85 33
+90 46
+95 62
+100 83
+102 93
+105 110
+108 127
+</tableData></table></product><product><product><value>0.012</value><max><value>0</value><sum><product><value>49.635929</value><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 -60
+40 -35
+55 -12
+60 -4
+65 2
+70 8
+75 15
+80 23
+85 33
+90 46
+95 62
+100 83
+102 93
+105 110
+108 127
+</tableData></table></product><value>1985.4372</value></sum></max></product><difference><value>100</value><property>eng[1]/np-pct</property></difference></product></sum></product></function></fcs_function>
+<fcs_function name="eng[1]/torque-pct"><function><quotient><product><value>100</value><max><value>0</value><product><property>eng[1]/torque-ftlb</property><property>eng[1]/engaged</property></product></max></product><value>4963.5929</value></quotient></function></fcs_function>
+<fcs_function name="eng[1]/tgt-ss"><function><ifthen><property>eng[1]/lit</property><max><difference><property>eng/tamb-k</property><value>273.15</value></difference><difference><product><property>eng/tamb-k</property><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 1
+20 1.8
+50 2.3
+60 2.5
+70 2.6
+80 2.75
+90 2.95
+95 3.1
+100 3.3
+105 3.75
+108 3.95
+</tableData></table><sqrt><max><value>0.3</value><min><value>2.5</value><quotient><sum><property>eng[1]/wf-c</property><value>5</value></sum><sum><table><independentVar lookup="row">eng[1]/ngc-pct</independentVar><tableData>
+0 0
+20 15
+40 35
+55 58
+60 68
+65 78
+70 90
+75 104
+80 120
+85 140
+90 163
+95 192
+100 228
+105 274
+108 305
+</tableData></table><value>5</value></sum></quotient></min></max></sqrt></product><value>273.15</value></difference></max><difference><property>eng/tamb-k</property><value>273.15</value></difference></ifthen></function></fcs_function>
+<fcs_function name="eng[1]/tgt-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng[1]/tgt-ss</property><sum><property>eng[1]/tgt-degc</property><product><property>simulation/dt</property><quotient><difference><property>eng[1]/tgt-ss</property><property>eng[1]/tgt-degc</property></difference><ifthen><property>eng[1]/lit</property><value>1.5</value><value>20</value></ifthen></quotient></product></sum></ifthen></function><output>eng[1]/tgt-degc</output></fcs_function>
+</channel>
+<channel name="fuel">
+<fcs_function name="fuel/burn-supply"><function><ifthen><gt><property>/sim/freeze/fuel</property><value>0.5</value></gt><property>/consumables/fuel/tank[1]/level-lbs</property><max><value>0</value><difference><property>/consumables/fuel/tank[1]/level-lbs</property><product><sum><property>eng[0]/fuel-flow-pph</property><property>eng[1]/fuel-flow-pph</property></sum><property>simulation/dt</property><value>0.00027777778</value></product></difference></max></ifthen></function><output>/consumables/fuel/tank[1]/level-lbs</output></fcs_function>
+<fcs_function name="fuel/transfer"><function><ifthen><gt><property>/sim/freeze/fuel</property><value>0.5</value></gt><property>/consumables/fuel/tank[0]/level-lbs</property><max><value>0</value><difference><property>/consumables/fuel/tank[0]/level-lbs</property><min><max><value>0</value><difference><value>163.7</value><property>/consumables/fuel/tank[1]/level-lbs</property></difference></max><product><value>1.2</value><property>simulation/dt</property></product></min></difference></max></ifthen></function><output>/consumables/fuel/tank[0]/level-lbs</output></fcs_function>
+<fcs_function name="fuel/fill-supply"><function><ifthen><gt><property>/sim/freeze/fuel</property><value>0.5</value></gt><property>/consumables/fuel/tank[1]/level-lbs</property><min><value>163.7</value><sum><property>/consumables/fuel/tank[1]/level-lbs</property><ifthen><gt><property>/consumables/fuel/tank[0]/level-lbs</property><value>0.5</value></gt><min><max><value>0</value><difference><value>163.7</value><property>/consumables/fuel/tank[1]/level-lbs</property></difference></max><product><value>1.2</value><property>simulation/dt</property></product></min><value>0</value></ifthen></sum></min></ifthen></function><output>/consumables/fuel/tank[1]/level-lbs</output></fcs_function>
+<fcs_function name="fuel/mass-main"><function><property>/consumables/fuel/tank[0]/level-lbs</property></function><output>inertia/pointmass-weight-lbs[6]</output></fcs_function>
+<fcs_function name="fuel/mass-supply"><function><property>/consumables/fuel/tank[1]/level-lbs</property></function><output>inertia/pointmass-weight-lbs[7]</output></fcs_function>
+</channel>
+<channel name="drive train">
+<fcs_function name="drive/net-torque-ftlb"><description>engines less the rotors and losses</description><function><difference><sum><product><property>eng[0]/engaged</property><property>eng[0]/torque-ftlb</property></product><product><property>eng[1]/engaged</property><property>eng[1]/torque-ftlb</property></product></sum><property>drive/load-ftlb</property></difference></function></fcs_function>
+<fcs_function name="drive/omega-new"><function><ifthen><gt><property>drive/hold-rpm</property><value>0.5</value></gt><property>rotor/omega-rad_sec</property><max><value>0</value><sum><property>rotor/omega-rad_sec</property><product><property>simulation/dt</property><property>drive/omega-dot</property></product></sum></max></ifthen></function></fcs_function>
+<fcs_function name="eng[0]/np-free"><function><max><value>0</value><sum><property>eng[0]/np-rad_sec</property><product><property>simulation/dt</property><quotient><difference><property>eng[0]/torque-ftlb</property><product><value>60</value><product><quotient><property>eng[0]/np-rad_sec</property><value>44.4</value></quotient><quotient><property>eng[0]/np-rad_sec</property><value>44.4</value></quotient></product></product></difference><value>4</value></quotient></product></sum></max></function></fcs_function>
+<fcs_function name="eng[0]/engaged-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property><ifthen><property>eng[0]/engaged</property><gt><property>eng[0]/torque-ftlb</property><value>0</value></gt><gt><property>eng[0]/np-free</property><property>drive/omega-new</property></gt></ifthen></ifthen></function><output>eng[0]/engaged</output></fcs_function>
+<fcs_function name="eng[0]/np-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><product><value>0.444</value><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product></sum></product></product><ifthen><property>eng[0]/engaged</property><property>drive/omega-new</property><property>eng[0]/np-free</property></ifthen></ifthen></function><output>eng[0]/np-rad_sec</output></fcs_function>
+<fcs_function name="eng[1]/np-free"><function><max><value>0</value><sum><property>eng[1]/np-rad_sec</property><product><property>simulation/dt</property><quotient><difference><property>eng[1]/torque-ftlb</property><product><value>60</value><product><quotient><property>eng[1]/np-rad_sec</property><value>44.4</value></quotient><quotient><property>eng[1]/np-rad_sec</property><value>44.4</value></quotient></product></product></difference><value>4</value></quotient></product></sum></max></function></fcs_function>
+<fcs_function name="eng[1]/engaged-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><property>eng/running-at-start</property><ifthen><property>eng[1]/engaged</property><gt><property>eng[1]/torque-ftlb</property><value>0</value></gt><gt><property>eng[1]/np-free</property><property>drive/omega-new</property></gt></ifthen></ifthen></function><output>eng[1]/engaged</output></fcs_function>
+<fcs_function name="eng[1]/np-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><product><value>0.444</value><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product></sum></product></product><ifthen><property>eng[1]/engaged</property><property>drive/omega-new</property><property>eng[1]/np-free</property></ifthen></ifthen></function><output>eng[1]/np-rad_sec</output></fcs_function>
+<fcs_function name="drive/omega-next"><function><ifthen><gt><property>ctl/init-fast</property><value>0.5</value></gt><product><property>eng/running-at-start</property><product><value>0.444</value><sum><value>100</value><product><value>10</value><property>/controls/engines/power-trim</property></product></sum></product></product><property>drive/omega-new</property></ifthen></function><output>rotor/omega-rad_sec</output></fcs_function>
+<fcs_function name="drive/mr-torque-ftlb"><description>torque into the main rotor shaft; its reaction acts on the airframe</description><function><ifthen><gt><sum><property>ctl/init-fast</property><property>drive/hold-rpm</property></sum><value>0.5</value></gt><difference><property>aero/rotor/torque-ftlb</property><property>aero/rotor/torque-inertial-ftlb</property></difference><difference><sum><product><property>eng[0]/engaged</property><property>eng[0]/torque-ftlb</property></product><product><property>eng[1]/engaged</property><property>eng[1]/torque-ftlb</property></product></sum><sum><product><value>5.25</value><property>aero/rotor/tr/torque-ftlb</property></product><property>drive/loss-ftlb</property><property>drive/brake-ftlb</property></sum></difference></ifthen></function></fcs_function>
+</channel>
+</system>

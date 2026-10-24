@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- mast moment indicator, flight manual fig. 7-3, 2.17.3 and 7.7.5: % of the hub moment limit; written by fdm/cockpit/gauges.py -->
+
+<PropertyList>
+
+  <path>mmi.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>case</object-name>
+    <object-name>dial</object-name>
+    <object-name>needle</object-name>
+    <object-name>glass</object-name>
+    <object-name>face</object-name>
+    <object-name>cal</object-name>
+    <object-name>test</object-name>
+    <object-name>limit</object-name>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/instrument-glass</inherits-from>
+    <object-name>glass</object-name>
+  </effect>
+
+  <animation>
+    <type>material</type>
+    <object-name>dial</object-name>
+    <object-name>needle</object-name>
+    <object-name>face</object-name>
+    <emission>
+      <factor-prop>/instrumentation/bo105/lights/instruments</factor-prop>
+      <red> 0.10 </red>
+      <green> 1.00 </green>
+      <blue> 0.45 </blue>
+    </emission>
+  </animation>
+
+  <light>
+    <name>bezel-lamp-0</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> 0.0266 </y-m>
+      <z-m> 0.0170 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-1</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> 0.0110 </y-m>
+      <z-m> 0.0326 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-2</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> -0.0110 </y-m>
+      <z-m> 0.0326 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-3</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> -0.0266 </y-m>
+      <z-m> 0.0170 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-4</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> -0.0266 </y-m>
+      <z-m> -0.0050 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-5</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> -0.0110 </y-m>
+      <z-m> -0.0206 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-6</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> 0.0110 </y-m>
+      <z-m> -0.0206 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-7</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0123 </x-m>
+      <y-m> 0.0266 </y-m>
+      <z-m> -0.0050 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0085 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0060 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.58265e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 59.2 </spot-cutoff>
+    <range-m> 0.062 </range-m>
+  </light>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-30.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>case</object-name>
+  </effect>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>needle</object-name>
+    <property>/instrumentation/mmi/indicated-pct</property>
+    <interpolation>
+      <entry><ind> -1e+06 </ind><dep> -140.85 </dep></entry>
+      <entry><ind> 0 </ind><dep> -135 </dep></entry>
+      <entry><ind> 130 </ind><dep> 118.5 </dep></entry>
+      <entry><ind> 1e+06 </ind><dep> 124.35 </dep></entry>
+    </interpolation>
+    <center>
+      <x-m> 0 </x-m>
+      <y-m> 0.00000 </y-m>
+      <z-m> 0.00600 </z-m>
+    </center>
+    <axis>
+      <x> -1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>pick</type>
+    <object-name>test</object-name>
+    <action>
+      <button>0</button>
+      <repeatable>false</repeatable>
+      <binding>
+        <command>property-assign</command>
+        <property>/instrumentation/mmi/test</property>
+        <value type="bool">true</value>
+      </binding>
+      <mod-up>
+        <binding>
+          <command>property-assign</command>
+          <property>/instrumentation/mmi/test</property>
+          <value type="bool">false</value>
+        </binding>
+      </mod-up>
+    </action>
+    <hovered>
+      <binding>
+        <command>set-tooltip</command>
+        <tooltip-id>test</tooltip-id>
+        <label>Mast moment indicator TEST</label>
+      </binding>
+    </hovered>
+  </animation>
+
+  <animation>
+    <type>translate</type>
+    <object-name>test</object-name>
+    <property>/instrumentation/mmi/test</property>
+    <factor> -0.002 </factor>
+    <axis>
+      <x> 1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>material</type>
+    <object-name>limit</object-name>
+    <condition>
+      <property>/instrumentation/mmi/limit-light</property>
+    </condition>
+    <emission>
+      <red> 1.00 </red>
+      <green> 0.10 </green>
+      <blue> 0.06 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 1.00 1.00 1.00 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/hdr/mmi-limit</use></lit-level>
+      <lit-gain type="float"> 1 </lit-gain>
+      <lit-reflectance type="float"> 0.3 </lit-reflectance>
+    </parameters>
+    <object-name>limit</object-name>
+  </effect>
+
+</PropertyList>

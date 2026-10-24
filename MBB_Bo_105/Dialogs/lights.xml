@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- Bo 105 cockpit lights (flight manual 7.12.3-7.12.6, NVG compatible instrument lighting of supplement 10-52): the INSTR
+     LIGHT switch and rheostat, the warning lights' dimming, the whip light, the utility light's rheostat and the cabin's
+     INTERNAL LIGHT; Nasal/panel.nas lights the cockpit from them -->
+<PropertyList>
+
+  <name>bo105-lights</name>
+  <modal>false</modal>
+  <layout>vbox</layout>
+
+  <group>
+    <layout>hbox</layout>
+    <empty><stretch>1</stretch></empty>
+    <text>
+      <label>Cockpit lights</label>
+    </text>
+    <empty><stretch>1</stretch></empty>
+    <button>
+      <pref-width>16</pref-width>
+      <pref-height>16</pref-height>
+      <legend></legend>
+      <keynum>27</keynum>
+      <border>2</border>
+      <binding>
+        <command>dialog-close</command>
+      </binding>
+    </button>
+  </group>
+
+  <hrule/>
+
+  <group>
+    <layout>table</layout>
+
+    <text>
+      <row>0</row><col>0</col>
+      <halign>left</halign>
+      <label>INSTR LIGHT switch</label>
+    </text>
+    <checkbox>
+      <row>0</row><col>2</col>
+      <halign>left</halign>
+      <name>instr-light</name>
+      <label>ON</label>
+      <live>true</live>
+      <property>/controls/lighting/instr-light</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>instr-light</object-name>
+      </binding>
+    </checkbox>
+
+    <text>
+      <row>1</row><col>0</col>
+      <halign>left</halign>
+      <label>INSTR LIGHT</label>
+    </text>
+    <text><row>1</row><col>1</col><label>OFF</label></text>
+    <slider>
+      <row>1</row><col>2</col>
+      <name>instruments</name>
+      <pref-width>160</pref-width>
+      <min>0</min>
+      <max>1</max>
+      <step>0.05</step>
+      <live>true</live>
+      <property>/controls/lighting/instruments-norm</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>instruments</object-name>
+      </binding>
+    </slider>
+    <text><row>1</row><col>3</col><label>BRT</label></text>
+
+    <text>
+      <row>2</row><col>0</col>
+      <halign>left</halign>
+      <label>WARNING LIGHTS</label>
+    </text>
+    <checkbox>
+      <row>2</row><col>2</col>
+      <halign>left</halign>
+      <name>warn-dim</name>
+      <label>DIM</label>
+      <live>true</live>
+      <property>/controls/lighting/warn-dim</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>warn-dim</object-name>
+      </binding>
+    </checkbox>
+
+    <text>
+      <row>3</row><col>0</col>
+      <halign>left</halign>
+      <label>WARNING LIGHTS DIM</label>
+    </text>
+    <text><row>3</row><col>1</col><label>LOW</label></text>
+    <slider>
+      <row>3</row><col>2</col>
+      <name>warn-dim-norm</name>
+      <pref-width>160</pref-width>
+      <min>0</min>
+      <max>1</max>
+      <step>0.05</step>
+      <live>true</live>
+      <property>/controls/lighting/warn-dim-norm</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>warn-dim-norm</object-name>
+      </binding>
+    </slider>
+    <text><row>3</row><col>3</col><label>HIGH</label></text>
+
+    <text>
+      <row>4</row><col>0</col>
+      <halign>left</halign>
+      <label>WHIP LIGHT</label>
+    </text>
+    <checkbox>
+      <row>4</row><col>2</col>
+      <halign>left</halign>
+      <name>whip-light</name>
+      <label>ON</label>
+      <live>true</live>
+      <property>/controls/lighting/whip-light</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>whip-light</object-name>
+      </binding>
+    </checkbox>
+
+    <text>
+      <row>5</row><col>0</col>
+      <halign>left</halign>
+      <label>UTILITY LIGHT</label>
+    </text>
+    <text><row>5</row><col>1</col><label>OFF</label></text>
+    <slider>
+      <row>5</row><col>2</col>
+      <name>utility</name>
+      <pref-width>160</pref-width>
+      <min>0</min>
+      <max>1</max>
+      <step>0.05</step>
+      <live>true</live>
+      <property>/controls/lighting/utility-norm</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>utility</object-name>
+      </binding>
+    </slider>
+    <text><row>5</row><col>3</col><label>BRT</label></text>
+
+    <text>
+      <row>6</row><col>0</col>
+      <halign>left</halign>
+      <label>INTERNAL LIGHT</label>
+    </text>
+    <checkbox>
+      <row>6</row><col>2</col>
+      <halign>left</halign>
+      <name>internal-light</name>
+      <label>ON</label>
+      <live>true</live>
+      <property>/controls/lighting/internal-light</property>
+      <binding>
+        <command>dialog-apply</command>
+        <object-name>internal-light</object-name>
+      </binding>
+    </checkbox>
+  </group>
+
+  <hrule/>
+
+  <text>
+    <halign>left</halign>
+    <label>NVG compatible instrument lighting (NVIS Green A). The INSTR LIGHT knob on the panel is the same rheostat.</label>
+  </text>
+
+</PropertyList>

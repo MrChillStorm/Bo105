@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- standby magnetic compass, flight manual fig. 7-3; written by fdm/cockpit/gauges.py -->
+
+<PropertyList>
+
+  <path>compass.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>case</object-name>
+    <object-name>card</object-name>
+    <object-name>lubber</object-name>
+    <object-name>glass</object-name>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/instrument-glass</inherits-from>
+    <object-name>glass</object-name>
+  </effect>
+
+  <animation>
+    <type>material</type>
+    <object-name>card</object-name>
+    <emission>
+      <factor-prop>/instrumentation/bo105/lights/instruments</factor-prop>
+      <red> 0.10 </red>
+      <green> 1.00 </green>
+      <blue> 0.45 </blue>
+    </emission>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Lit/lit</inherits-from>
+    <parameters>
+      <lit-color type="vec3d"> 0.10 1.00 0.45 </lit-color>
+      <lit-level type="float"><use>/instrumentation/bo105/lights/instruments</use></lit-level>
+      <lit-gain type="float"> 1.91 </lit-gain>
+      <lit-reflectance type="float"> 1 </lit-reflectance>
+    </parameters>
+    <object-name>card</object-name>
+  </effect>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-100.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>case</object-name>
+  </effect>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>card</object-name>
+    <property>/instrumentation/magnetic-compass/indicated-heading-deg</property>
+    <factor> 1 </factor>
+    <center>
+      <x-m> -0.0240 </x-m>
+      <y-m> 0 </y-m>
+      <z-m> 0 </z-m>
+    </center>
+    <axis>
+      <x> 0 </x>
+      <y> 0 </y>
+      <z> 1 </z>
+    </axis>
+  </animation>
+
+</PropertyList>

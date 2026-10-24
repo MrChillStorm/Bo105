@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- dual fuel quantity indicator, flight manual fig. 7-3 and 7.6.3: main tank M, supply tank S, kg x 10; written by fdm/cockpit/gauges.py -->
+
+<PropertyList>
+
+  <path>fq.ac</path>
+
+  <animation>
+    <type>noshadow</type>
+    <object-name>case</object-name>
+    <object-name>dial</object-name>
+    <object-name>ptr0</object-name>
+    <object-name>ptr1</object-name>
+    <object-name>glass</object-name>
+  </animation>
+
+  <effect>
+    <inherits-from>Aircraft/MBB_Bo_105/Models/Effects/Glass/instrument-glass</inherits-from>
+    <object-name>glass</object-name>
+  </effect>
+
+  <animation>
+    <type>material</type>
+    <object-name>dial</object-name>
+    <object-name>ptr0</object-name>
+    <object-name>ptr1</object-name>
+    <emission>
+      <factor-prop>/instrumentation/bo105/lights/instruments</factor-prop>
+      <red> 0.10 </red>
+      <green> 1.00 </green>
+      <blue> 0.45 </blue>
+    </emission>
+  </animation>
+
+  <light>
+    <name>bezel-lamp-0</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> 0.0250 </y-m>
+      <z-m> 0.0103 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-1</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> 0.0103 </y-m>
+      <z-m> 0.0250 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-2</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> -0.0103 </y-m>
+      <z-m> 0.0250 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-3</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> -0.0250 </y-m>
+      <z-m> 0.0103 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-4</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> -0.0250 </y-m>
+      <z-m> -0.0103 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-5</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> -0.0103 </y-m>
+      <z-m> -0.0250 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-6</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> 0.0103 </y-m>
+      <z-m> -0.0250 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <light>
+    <name>bezel-lamp-7</name>
+    <type>spot</type>
+    <position>
+      <x-m> 0.0119 </x-m>
+      <y-m> 0.0250 </y-m>
+      <z-m> -0.0103 </z-m>
+    </position>
+    <direction>
+      <lookat-x-m> 0.0083 </lookat-x-m>
+      <lookat-y-m> 0.0000 </lookat-y-m>
+      <lookat-z-m> 0.0000 </lookat-z-m>
+    </direction>
+    <color>
+      <r> 0.10 </r>
+      <g> 1.00 </g>
+      <b> 0.45 </b>
+    </color>
+    <intensity>
+      <property>/instrumentation/bo105/lights/instruments</property>
+      <scale> 3.1583e-06 </scale>
+    </intensity>
+    <spot-exponent> 3 </spot-exponent>
+    <spot-cutoff> 58.5 </spot-cutoff>
+    <range-m> 0.058 </range-m>
+  </light>
+
+  <effect>
+    <inherits-from>Effects/model-pbr</inherits-from>
+    <parameters>
+      <texture n="2">
+        <image>Aircraft/MBB_Bo_105/Models/Textures/case-orm-30.png</image>
+        <type>2d</type>
+        <filter>nearest</filter>
+        <mag-filter>nearest</mag-filter>
+        <wrap-s>repeat</wrap-s>
+        <wrap-t>repeat</wrap-t>
+      </texture>
+      <metallic-factor type="float"> 0 </metallic-factor>
+      <roughness-factor type="float"> 1 </roughness-factor>
+    </parameters>
+    <object-name>case</object-name>
+  </effect>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>ptr0</object-name>
+    <property>/consumables/fuel/tank[0]/level-lbs</property>
+    <interpolation>
+      <entry><ind> -1e+06 </ind><dep> -144 </dep></entry>
+      <entry><ind> 0 </ind><dep> -140 </dep></entry>
+      <entry><ind> 1014.13 </ind><dep> -40 </dep></entry>
+      <entry><ind> 1115.54 </ind><dep> -35 </dep></entry>
+    </interpolation>
+    <center>
+      <x-m> 0 </x-m>
+      <y-m> 0.00658 </y-m>
+      <z-m> -0.00118 </z-m>
+    </center>
+    <axis>
+      <x> -1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+  <animation>
+    <type>rotate</type>
+    <object-name>ptr1</object-name>
+    <property>/consumables/fuel/tank[1]/level-lbs</property>
+    <interpolation>
+      <entry><ind> -1e+06 </ind><dep> 144 </dep></entry>
+      <entry><ind> 0 </ind><dep> 140 </dep></entry>
+      <entry><ind> 176.371 </ind><dep> 40 </dep></entry>
+      <entry><ind> 194.008 </ind><dep> 35 </dep></entry>
+    </interpolation>
+    <center>
+      <x-m> 0 </x-m>
+      <y-m> -0.00658 </y-m>
+      <z-m> -0.00118 </z-m>
+    </center>
+    <axis>
+      <x> -1 </x>
+      <y> 0 </y>
+      <z> 0 </z>
+    </axis>
+  </animation>
+
+</PropertyList>

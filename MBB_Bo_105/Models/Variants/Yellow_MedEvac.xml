@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+
+<PropertyList>
+	<sim>
+		<model>
+			<bo105>
+				<name type="string">Yellow MedEvac</name>
+
+				<wiper type="bool">true</wiper>
+				<wire-cutter type="bool">false</wire-cutter>
+				<miniguns type="bool">false</miniguns>
+				<missiles type="bool">false</missiles>
+
+				<material>
+					<fuselage>
+						<texture type="string">livery.rgb</texture>
+
+						<diffuse>
+							<red>0.838</red>
+							<green>0.762</green>
+							<blue>0.0</blue>
+						</diffuse>
+
+						<ambient>
+							<red>0.707</red>
+							<green>0.628</green>
+							<blue>0.0</blue>
+						</ambient>
+
+						<specular>
+							<red>0.5</red>
+							<green>0.5</green>
+							<blue>0.5</blue>
+						</specular>
+
+						<emission>
+							<red>0.078</red>
+							<green>0.066</green>
+							<blue>0.0</blue>
+						</emission>
+
+						<transparency>
+							<alpha>1.0</alpha>
+						</transparency>
+
+						<shininess>80</shininess>
+
+						<!-- the HDR pipeline's paint (fdm/hdrmodel.py): the diffuse colour, linear; its roughness -->
+						<pbr>
+							<red type="float">0.6703</red>
+							<green type="float">0.5414</green>
+							<blue type="float">0.0000</blue>
+							<roughness type="float">0.35</roughness>
+						</pbr>
+					</fuselage>
+
+					<glass>
+						<diffuse>
+							<red>1.0</red>
+							<green>1.0</green>
+							<blue>1.0</blue>
+						</diffuse>
+
+						<ambient>
+							<red>1.0</red>
+							<green>1.0</green>
+							<blue>1.0</blue>
+						</ambient>
+
+						<specular>
+							<red>1.0</red>
+							<green>1.0</green>
+							<blue>1.0</blue>
+						</specular>
+
+						<emission>
+							<red>0.6</red>
+							<green>0.6</green>
+							<blue>0.6</blue>
+						</emission>
+
+						<transparency>
+							<alpha>0.2</alpha>
+						</transparency>
+
+						<shininess>25</shininess>
+					</glass>
+
+					<rotor>
+						<texture>Textures/Rotor/orange.png</texture>
+						<!-- the blades' paint (Models/Rotor, fdm/rotorvis.py) -->
+						<blade>orange.png</blade>
+						<blur>blur-orange.png</blur>
+					</rotor>
+
+					<emblem>
+						<texture>RED-CROSS</texture>
+
+						<transparency>
+							<alpha>1.0</alpha>
+						</transparency>
+
+						<threshold>0.1</threshold>
+					</emblem>
+
+					<helmet>
+						<diffuse>
+							<red>1</red>
+							<green>1</green>
+							<blue>1</blue>
+						</diffuse>
+
+						<ambient>
+							<red>1</red>
+							<green>1</green>
+							<blue>1</blue>
+						</ambient>
+
+						<specular>
+							<red>0.0</red>
+							<green>0.0</green>
+							<blue>0.0</blue>
+						</specular>
+
+						<emission>
+							<red>0.02</red>
+							<green>0.02</green>
+							<blue>0.02</blue>
+						</emission>
+
+						<shininess>0</shininess>
+
+						<!-- the HDR pipeline's paint (fdm/hdrmodel.py): the diffuse colour, linear -->
+						<pbr>
+							<red type="float">1.0000</red>
+							<green type="float">1.0000</green>
+							<blue type="float">1.0000</blue>
+						</pbr>
+					</helmet>
+
+					<flightsuit>
+						<diffuse>
+							<red>0.85</red>
+							<green>0.36</green>
+							<blue>0.0</blue>
+						</diffuse>
+
+						<ambient>
+							<red>0.85</red>
+							<green>0.36</green>
+							<blue>0.0</blue>
+						</ambient>
+
+						<specular>
+							<red>0.0</red>
+							<green>0.0</green>
+							<blue>0.0</blue>
+						</specular>
+
+						<emission>
+							<red>0.02</red>
+							<green>0.02</green>
+							<blue>0.02</blue>
+						</emission>
+
+						<shininess>0</shininess>
+
+						<!-- the HDR pipeline's paint (fdm/hdrmodel.py): the diffuse colour, linear -->
+						<pbr>
+							<red type="float">0.6921</red>
+							<green type="float">0.1065</green>
+							<blue type="float">0.0000</blue>
+						</pbr>
+					</flightsuit>
+				</material>
+			</bo105>
+		</model>
+	</sim>
+</PropertyList>
