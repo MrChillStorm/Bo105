@@ -45,7 +45,8 @@ def tabular(cols, head, rows, foot=''):
 # ---------------------------------------------------------------- the generated model
 def model_table():
     root = os.path.join(FDM, 'root', 'aircraft', 'bo105', 'Systems')
-    files = [('bo105-aero.xml', 'the aerodynamic functions: rotor segments, wake, fuselage, stabiliser, tail rotor; the six force and moment axes', 'function'),
+    files = [('bo105-aero.xml', 'the aerodynamic functions: rotor segments, wake, tail rotor; the six force and moment axes', 'function'),
+             ('bo105-airframe.xml', 'fuselage, hub and skid drag, stabiliser and end plates, fin blockage, at 240\\,Hz', 'fcs'),
              ('bo105-rotor.xml', 'blade modes, rotor azimuth, Peters--He wake states, tail rotor teeter and inflow, torsion', 'fcs'),
              ('bo105-drive.xml', 'engines, fuel control and governors, rotor speed, freewheels, rotor brake, fuel', 'fcs'),
              ('bo105-controls.xml', 'pilot controls, rigging, boost servos', 'fcs'),

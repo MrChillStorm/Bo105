@@ -143,6 +143,7 @@
   </ground_reactions>
   <system file="bo105-controls"/>
   <system file="bo105-rotor"/>
+  <system file="bo105-airframe"/>
   <system file="bo105-drive"/>
   <system file="bo105-outputs"/>
   <aerodynamics file="Systems/bo105-aero.xml"/>

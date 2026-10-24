@@ -140,7 +140,11 @@ coordinates and their rates, the wake states, the rotor speed, the tail rotor's 
 flight-control-system channels, which JSBSim runs once per frame in a fixed order and which can write properties back. These channels
 integrate the states explicitly at 960\,Hz, the rate FlightGear runs the model at: 2.65$^\circ$ of rotor azimuth per step, about
 0.09\,ms of computation. The rate is set by the rotor's air resonance: at 240 and 480\,Hz the explicit couplings between the lag modes and
-the airframe left that mode under-damped or unstable; from 960\,Hz on it no longer changes (Section~\ref{sec:review}). The same XML runs in
+the airframe left that mode under-damped or unstable; from 960\,Hz on it no longer changes (Section~\ref{sec:review}). The airframe's
+loads, which change slowly against the rotors', are worked out in a channel run every fourth frame, at 240\,Hz; the results here are
+the same to their printed precision. In FlightGear 2024 every property read takes a lock, which makes the reads (about 6\,200 per
+step) the model's cost there, about five times the offline harness's; the segment equations are written to read few, a segment's
+velocity, for one, from four coefficients per blade, since it is linear in the segment's radius and mode shapes. The same XML runs in
 FlightGear and in the offline harness used here.
 
 \begin{table}[t]

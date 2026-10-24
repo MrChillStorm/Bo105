@@ -293,6 +293,11 @@ def fin_tables():
         cl.append(c); cd.append(d)
     return xs, cl, cd
 
+# the airframe's loads (fuselage, hub and skid drag, empennage, fin blockage) are worked out every AIRFRAME_EXECRATE
+# frames of the FDM rate: 4 at 960 Hz is 240 Hz (in FlightGear every property read takes a lock: the model's reads are
+# its cost there)
+AIRFRAME_EXECRATE = 4
+
 # the main rotor's wake on the fuselage, the stabiliser, its end plates, the fin and the tail rotor (ring-vortex tables,
 # mrwake.py)
 WAKE_ON_AIRFRAME = True

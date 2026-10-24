@@ -17,7 +17,7 @@ def MAX(*a): return tag('max', *a)
 def MIN(*a): return tag('min', *a)
 def MOD(a, b): return tag('mod', a, b)
 def NEG(a): return M(v(-1), a)
-def SQR(a): return M(a, a)
+def SQR(a): return tag('pow', a, v(2))       # evaluates a once (M(a, a) reads its properties twice)
 def LT(a, b): return tag('lt', a, b)
 def GT(a, b): return tag('gt', a, b)
 def IFTHEN(c, a, b): return tag('ifthen', c, a, b)
@@ -63,6 +63,19 @@ class Graph:
         return '\n'.join(s.items)
 
 
+class ChannelGraph:
+    """Graph's interface onto an FCS (its fcs_function components): for parts of the aerodynamics run at a channel's rate"""
+
+    def __init__(s, fcs):
+        s.fcs = fcs
+
+    def fn(s, name, body, desc=None):
+        return s.fcs.fn(name, body, desc=desc)
+
+    def has(s, name):
+        return any(i.startswith('<fcs_function name="%s">' % name) for n, c in s.fcs.channels for i in c)
+
+
 class FCS:
     """a JSBSim system made of fcs_function components in one or more channels"""
 
@@ -70,13 +83,17 @@ class FCS:
         s.name = name
         s.decl = []
         s.channels = []
+        s.rates = {}
 
     def declare(s, name, value=0.0):
         s.decl.append('<property value="%.8g">%s</property>' % (value, name))
         return p(name)
 
-    def channel(s, name):
+    def channel(s, name, execrate=None):
+        """a new channel; execrate N runs it every Nth frame (holding its outputs in between)"""
         s.channels.append((name, []))
+        if execrate:
+            s.rates[name] = execrate
 
     def fn(s, name, body, out=None, clip=None, desc=None):
         o = ''.join('<output>%s</output>' % x for x in (out if isinstance(out, (list, tuple)) else [out] if out else []))
@@ -113,5 +130,6 @@ class FCS:
         return s._comp('actuator', name, inp, inner, clip, out)
 
     def xml(s):
-        ch = '\n'.join('<channel name="%s">\n%s\n</channel>' % (n, '\n'.join(c)) for n, c in s.channels)
+        ch = '\n'.join('<channel name="%s"%s>\n%s\n</channel>' % (n, ' execrate="%d"' % s.rates[n] if n in s.rates else '', '\n'.join(c))
+                       for n, c in s.channels)
         return '<system name="%s">\n%s\n%s\n</system>\n' % (s.name, '\n'.join(s.decl), ch)

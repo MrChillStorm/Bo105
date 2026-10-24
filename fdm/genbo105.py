@@ -73,6 +73,8 @@ class Model:
         s.ctl = FCS('Bo 105 controls')
         s.rot = FCS('Bo 105 rotor')
         s.X, s.Y, s.Z, s.L, s.Mm, s.N = [], [], [], [], [], []
+        s.aero = s.g
+        s.air = FCS('Bo 105 airframe')
         segs, s.edges = U.segments()
         s.segs = segs
         s.bc = blademodes.rotor_constants([r for r, dr in segs])
@@ -403,12 +405,12 @@ class Model:
         skew, the direction of the in-plane flight path and the longitudinal flapping: body-axis components to add to
         the target's velocity relative to the air (ft/s; the air moves with the wake, so they are subtracted). mirror:
         the target's mirror image across the plane of symmetry (the left end plate)."""
-        g = s.g
-        if not g.has('aero/rotor/psi-flow-deg'):
+        g, a = s.g, s.aero
+        if not a.has('aero/rotor/psi-flow-deg'):
             ps = ATAN2(p('aero/rotor/uhy'), p('aero/rotor/uhx'))
-            g.fn('aero/rotor/psi-flow-deg', M(v(R2D), IFTHEN(LT(ps, v(0)), S(ps, v(2 * math.pi)), ps)),
+            a.fn('aero/rotor/psi-flow-deg', M(v(R2D), IFTHEN(LT(ps, v(0)), S(ps, v(2 * math.pi)), ps)),
                  'direction of the in-plane flight path at the hub, from the nose to the right')
-            g.fn('aero/rotor/psi-flow-mirror-deg', D(v(360), p('aero/rotor/psi-flow-deg')))
+            a.fn('aero/rotor/psi-flow-mirror-deg', D(v(360), p('aero/rotor/psi-flow-deg')))
         mw = mrwake.load(target)
         psi = 'aero/rotor/psi-flow-mirror-deg' if mirror else 'aero/rotor/psi-flow-deg'
         tag = target + ('-m' if mirror else '')
@@ -490,6 +492,8 @@ class Model:
         bp = U.PRECONE
         ph = math.radians(U.SWASH_PHASE)
         Fsum = {'x': [], 'y': [], 'z': []}; Msum = {'x': [], 'y': [], 'z': []}
+        wrel = g.fn('aero/rotor/w-rel', D(W, rs_a), 'rotor speed less the body\'s yaw rate about the shaft, rad/s')
+        shapes = sorted({st_ for sts in (U.PH_COS, U.PH_SIN) for st_ in sts})
         T_terms, Qa_terms, Qin_terms = [], [], []
         for k in range(U.NB):
             b = 'aero/rotor/b%d' % k
@@ -502,32 +506,43 @@ class Model:
             c, sn = g.fn(b + '/cpsib', COS(psib)), g.fn(b + '/spsib', SIN(psib))
             th0 = g.fn(b + '/theta-deg', D(D(p('ctl/theta0-deg'), M(p('ctl/A1s-deg'), COS(S(psib, v(ph))))),
                                          M(p('ctl/B1s-deg'), SIN(S(psib, v(ph))))), 'rigid blade pitch at the shaft, deg')
-            trig = {1: (c, sn), 2: (g.fn(b + '/ph-c2', D(SQR(c), SQR(sn))), g.fn(b + '/ph-s2', M(v(2), c, sn)))}
+            # the Peters-He states' induced velocity at the blade, by radial shape (jj, rh): the states of one shape (its
+            # cosine and sine) projected on the lagged blade's azimuth and summed, so a segment reads each shape once
+            trig = {1: (c, sn)}
+            if any(rh == 2 for jj, rh in shapes):
+                trig[2] = (g.fn(b + '/ph-c2', D(SQR(c), SQR(sn))), g.fn(b + '/ph-s2', M(v(2), c, sn)))
             tf = lambda tg, rh: v(1) if rh == 0 else trig[rh][0 if tg == 'c' else 1]
-            proj = [(tg, i, jj, rh, g.fn(b + '/ph-%s%d' % (tg, i), M(p('rotor/ph/%s%d' % (tg, i)), tf(tg, rh))) if rh else p('rotor/ph/%s%d' % (tg, i)))
-                    for sts, tg in ((U.PH_COS, 'c'), (U.PH_SIN, 's')) for i, (jj, rh) in enumerate(sts)]
+            vi_shape = {}
+            for (jj, rh) in shapes:
+                lam = S(*[M(p('rotor/ph/%s%d' % (tg, i)), tf(tg, rh)) if rh else p('rotor/ph/%s%d' % (tg, i))
+                          for sts, tg in ((U.PH_COS, 'c'), (U.PH_SIN, 's')) for i, st_ in enumerate(sts) if st_ == (jj, rh)])
+                vi_shape[(jj, rh)] = g.fn(b + '/vi-%d-%d' % (jj, rh), M(p('aero/rotor/kge'), WR, lam),
+                                          'induced velocity of the inflow shape (%d, %d), ft/s' % (jj, rh))
+            # a segment's velocity relative to the air is linear in its radius r and mode shapes phi_l, phi_f: in shaft axes
+            # V = V0 + r V1 + phi_l V2 + phi_f V3 (the hub's motion, the rotation and the body's rates, the lag and flap
+            # motion), so each blade's coefficients are worked out once, its in-plane ones turned onto the lagged blade's
+            # directions (UT along its motion, UR outward), and a segment reads four of them for each component
+            X = (Vhx, S(M(v(-bp), qs_a), M(wrel, sh)), S(M(wrel, ql, ch), M(qld, sh)), NEG(M(qs_a, qf)))
+            Y = (Vhy, S(M(wrel, ch), M(v(bp), ps_a)), D(M(qld, ch), M(wrel, ql, sh)), M(ps_a, qf))
+            UTc = [g.fn(b + '/UT%d' % n, S(M(xn, sn), M(yn, c))) for n, (xn, yn) in enumerate(zip(X, Y))]
+            URc = [g.fn(b + '/UR%d' % n, D(M(yn, sn), M(xn, c))) for n, (xn, yn) in enumerate(zip(X, Y))]
+            Vz1 = g.fn(b + '/Vz1', S(M(ps_a, sh), M(qs_a, ch)))
+            Vz2 = g.fn(b + '/Vz2', M(D(M(ps_a, ch), M(qs_a, sh)), ql))
             qf_terms, ql_terms, qt_terms = [], [], []
             FA, FB, FC, MU, QQ = [], [], [], [], []
             for j, (rr, dr) in enumerate(s.segs):
                 e = b + '/s%d' % j
                 sg = bc['seg'][j]
-                Wj = g.fn(e + '/W', S(v(bp * rr), M(v(sg['phi_f']), qf)), 'height above the plane of rotation, ft')
-                slope = g.fn(e + '/slope', S(v(bp), M(v(sg['dphi_f']), qf)), 'flap slope, rad')
+                fl_, ff_ = sg['phi_l'], sg['phi_f']
+                slope = S(v(bp), M(v(sg['dphi_f']), qf))                  # flap slope, rad
                 cb, sb = g.fn(e + '/cs', COS(slope)), g.fn(e + '/ss', SIN(slope))
-                Vj = M(v(sg['phi_l']), ql)
-                # position (shaft axes) and the segment's velocity relative to the air
-                Px = S(M(v(-rr), ch), M(Vj, sh))
-                Py = S(M(v(rr), sh), M(Vj, ch))
-                Pz = NEG(Wj)
-                lam = S(*[M(v(PH.phi(jj, rh, rr / U.R)), P) for (tg, i, jj, rh, P) in proj])
-                vi = M(p('aero/rotor/kge'), WR, lam)
-                Vx = g.fn(e + '/Vx', S(Vhx, D(M(qs_a, Pz), M(rs_a, Py)), M(W, S(M(v(rr), sh), M(Vj, ch))), M(v(sg['phi_l']), qld, sh)))
-                Vy = g.fn(e + '/Vy', S(Vhy, D(M(rs_a, Px), M(ps_a, Pz)), M(W, D(M(v(rr), ch), M(Vj, sh))), M(v(sg['phi_l']), qld, ch)))
-                Vz = g.fn(e + '/Vz', S(Vhz, D(M(ps_a, Py), M(qs_a, Px)), NEG(M(v(sg['phi_f']), qfd)), NEG(vi)))
-                UT = g.fn(e + '/UT', S(M(Vx, sn), M(Vy, c)))
-                UP = g.fn(e + '/UP', D(M(D(M(Vx, c), M(Vy, sn)), sb), M(Vz, cb)))
-                UR = g.fn(e + '/UR', D(M(Vy, sn), M(Vx, c)), 'spanwise flow (outward), ft/s')
-                V2 = g.fn(e + '/V2', S(SQR(UT), SQR(UP), v(1e-4)))
+                lin = lambda cf: S(cf[0], M(v(rr), cf[1]), M(v(fl_), cf[2]), M(v(ff_), cf[3]))
+                UT = g.fn(e + '/UT', lin(UTc))
+                UR = g.fn(e + '/UR', lin(URc), 'spanwise flow (outward), ft/s')
+                Vz = S(Vhz, M(v(rr), Vz1), M(v(fl_), Vz2), NEG(M(v(ff_), qfd)),
+                       NEG(S(*[M(v(PH.phi(jj, rh, rr / U.R)), vi_shape[(jj, rh)]) for (jj, rh) in shapes])))
+                UP = g.fn(e + '/UP', NEG(S(M(UR, sb), M(Vz, cb))), 'flow up through the blade, ft/s')
+                V2 = g.fn(e + '/V2', S(tag('pow', UT, v(2)), tag('pow', UP, v(2)), v(1e-4)))
                 Vv = g.fn(e + '/V', SQ(V2))
                 th = S(th0, v(U.TWIST * rr / U.R), M(v(R2D * sg['phi_t']), qt))
                 ar = g.fn(e + '/alpha-raw', D(th, M(v(R2D), ATAN2(UP, UT))))
@@ -539,25 +554,30 @@ class Model:
                 r_in, r_out = s.edges[j], s.edges[j + 1]
                 fl = max(0.0, min(1.0, (U.TIP_LOSS * U.R - r_in) / (r_out - r_in)))
                 Lk = g.fn(e + '/Lk', M(v(0.5 * U.CHORD * dr * fl), rho, Vv, cl), 'lift / V')
-                Dk = g.fn(e + '/Dk', M(v(0.5 * U.CHORD * dr), rho, cd, SQ(S(V2, SQR(UR)))), 'drag / V')
+                Dk = g.fn(e + '/Dk', M(v(0.5 * U.CHORD * dr), rho, cd, SQ(S(V2, tag('pow', UR, v(2))))), 'drag / V')
                 Ft = g.fn(e + '/Ft', NEG(S(M(Lk, UP), M(Dk, UT))), 'force along the blade motion, lbf')
                 Fn = g.fn(e + '/Fn', D(M(Lk, UT), M(Dk, UP)), 'force normal to the blade (up), lbf')
                 Fr = g.fn(e + '/Fr', NEG(M(Dk, UR)), 'spanwise drag, outward, lbf')
                 # moment about the elastic axis, nose up: the section's own and its normal force at the aerodynamic centre
                 Mea = g.fn(e + '/Mea', D(M(v(0.5 * U.CHORD ** 2 * dr), rho, V2, cm), M(v(bc['d_ac']), Fn)))
-                A_ = D(M(Fr, cb), M(Fn, sb))           # along the blade's radius in the plane of rotation
-                C_ = S(M(Fn, cb), M(Fr, sb))           # up
+                A_ = g.fn(e + '/A', D(M(Fr, cb), M(Fn, sb)), 'along the blade\'s radius in the plane of rotation, lbf')
+                C_ = g.fn(e + '/C', S(M(Fn, cb), M(Fr, sb)), 'up, lbf')
+                g.fn(e + '/Fnc', M(Fn, cb), 'normal force\'s share along the shaft, for the inflow, lbf')
                 FA.append(A_); FB.append(Ft); FC.append(C_)
-                MU.append(D(M(v(rr), C_), M(Wj, A_)))  # flap moment about the hub, up
-                QQ.append(D(M(v(rr), Ft), M(Vj, A_)))  # moment about the shaft (up), from the in-plane forces
+                MU.append(D(M(v(rr), C_), M(S(v(bp * rr), M(v(ff_), qf)), A_)))  # flap moment about the hub, up
+                QQ.append(D(M(v(rr), Ft), M(v(fl_), ql, A_)))                    # moment about the shaft (up), in-plane forces
                 qf_terms.append(M(v(sg['phi_f']), C_)); ql_terms.append(M(v(sg['phi_l']), Ft)); qt_terms.append(M(v(sg['phi_t']), Mea))
             g.fn(b + '/Qf', S(*qf_terms), 'generalized aerodynamic force, flap mode, lbf ft')
             g.fn(b + '/Ql', S(*ql_terms), 'generalized aerodynamic force, lag mode')
             g.fn(b + '/Qt', S(*qt_terms), 'generalized aerodynamic moment, torsion mode')
-            for (tg, i, jj, rh, P) in proj:
-                sb_ = S(*[M(v(PH.phi(jj, rh, rr / U.R)), p('aero/rotor/b%d/s%d/Fn' % (k, j)), p('aero/rotor/b%d/s%d/cs' % (k, j)))
-                          for j, (rr, dr) in enumerate(s.segs)])
-                ph_tau[(tg, i)].append(M(tf(tg, rh), sb_))
+            # the inflow's forcing: each shape's moment of the normal loads, once, shared by its cosine and sine states
+            for (jj, rh) in shapes:
+                sh_ = g.fn(b + '/Fn-%d-%d' % (jj, rh), S(*[M(v(PH.phi(jj, rh, rr / U.R)), p('aero/rotor/b%d/s%d/Fnc' % (k, j)))
+                                                        for j, (rr, dr) in enumerate(s.segs)]))
+                for sts, tg in ((U.PH_COS, 'c'), (U.PH_SIN, 's')):
+                    for i, st_ in enumerate(sts):
+                        if st_ == (jj, rh):
+                            ph_tau[(tg, i)].append(M(tf(tg, rh), sh_))
             fa = g.fn(b + '/FA', S(*FA)); fb = g.fn(b + '/FB', S(*FB)); fc = g.fn(b + '/FC', S(*FC))
             mu_a = g.fn(b + '/Mflap-aero', S(*MU), 'aerodynamic flap moment about the hub, ft lbf')
             qa = g.fn(b + '/Q', S(*QQ), 'aerodynamic moment about the shaft, in the direction of rotation, ft lbf')
@@ -569,11 +589,13 @@ class Model:
             qfdd = g.fn(b + '/qfdd', s.flap_accel(st, s.flap_forcing(k, ch, sh), qf, qfd, ql, qld))
             qfdd_free = g.fn(b + '/qfdd-free', s.flap_accel(st, s.flap_forcing(k, ch, sh, body=False), qf, qfd, ql, qld))
             qldd = g.fn(b + '/qldd', Q(D(s.lag_free(st, s.lag_forcing(k, ch, sh), ql, qld, qf, qfd), M(v(bc['Srl']), p('rotor/omega-dot-abs'))), v(bc['Ml'])))
-            wr = D(M(qs_a, sh), M(ps_a, ch))
-            fr = S(M(v(bc['Sl']), p('rotor/omega-dot-abs'), ql), M(v(2 * bc['Sl']), W, qld))
-            ft = D(M(v(bc['Sl']), SQR(W), ql), M(v(bc['Sl']), qldd))
+            # (named, as the hub loads read each two or three times)
+            wr = g.fn(b + '/wr', D(M(qs_a, sh), M(ps_a, ch)), 'body rate about the blade\'s in-plane normal, rad/s')
+            fr = g.fn(b + '/fr-inertial', S(M(v(bc['Sl']), p('rotor/omega-dot-abs'), ql), M(v(2 * bc['Sl']), W, qld)))
+            ft = g.fn(b + '/ft-inertial', D(M(v(bc['Sl']), SQR(W), ql), M(v(bc['Sl']), qldd)))
             fn = NEG(S(M(v(bc['Sf']), qfdd), M(v(2 * bc['Sr']), W, wr)))
-            mu_i = NEG(S(M(v(bc['Srf']), qfdd_free), M(v(2 * bc['Ib']), W, wr), M(SQR(W), S(v(bp * bc['Ib']), M(v(bc['Srf']), qf)))))
+            mu_i = g.fn(b + '/Mflap-inertial', NEG(S(M(v(bc['Srf']), qfdd_free), M(v(2 * bc['Ib']), W, wr),
+                                                      M(SQR(W), S(v(bp * bc['Ib']), M(v(bc['Srf']), qf))))))
             Qin_terms.append(NEG(M(v(bc['Srl']), qldd)))
             mflap = g.fn(b + '/Mflap', S(mu_a, mu_i), 'root flap moment on the hub (blade up +), ft lbf')
             # to shaft axes: aero with the lagged azimuth, inertial with the root's
@@ -807,6 +829,23 @@ class Model:
             s.add((Fx, Fy, None), (NEG(M(rz, Fy)), M(rz, Fx), D(M(rx, Fy), M(ry, Fx))))
             FY.append(Fy)
         g.fn('aero/emp/fin/dFy-lbs', S(*FY), 'the fin blockage: side force from the tail rotor\'s flow (right +)')
+
+    def airframe(s):
+        """The fuselage, the hub's and the skids' drag, the empennage and the fin in the tail rotor's flow, in a system
+        channel run every AIRFRAME_EXECRATE frames: their loads change slowly against the rotors', and in FlightGear
+        every property read takes a lock. The channel sums them into six loads for the aerodynamic axes."""
+        s.air.channel('airframe', execrate=U.AIRFRAME_EXECRATE)
+        s.g = ChannelGraph(s.air)
+        axes = (s.X, s.Y, s.Z, s.L, s.Mm, s.N)
+        s.X, s.Y, s.Z, s.L, s.Mm, s.N = [], [], [], [], [], []
+        s.fuselage()
+        s.empennage()
+        s.fin_in_tr_flow()
+        loads = [s.g.fn('aero/airframe/%s' % n, S(*terms) if terms else v(0))
+                 for n, terms in zip(('FX-lbs', 'FY-lbs', 'FZ-lbs', 'ML-ftlb', 'MM-ftlb', 'MN-ftlb'), (s.X, s.Y, s.Z, s.L, s.Mm, s.N))]
+        s.X, s.Y, s.Z, s.L, s.Mm, s.N = axes
+        s.g = s.aero
+        s.add(loads[:3], loads[3:])
 
     # ------------------------------------------------------------ fuselage [TR fig. 14, c81_fuselage]
     def fuselage(s):
@@ -1072,6 +1111,7 @@ def fdm_file(cg=None, weight=None, inertia=None):
   </ground_reactions>
   <system file="bo105-controls"/>
   <system file="bo105-rotor"/>
+  <system file="bo105-airframe"/>
   <system file="bo105-drive"/>
   <system file="bo105-outputs"/>
   <aerodynamics file="Systems/bo105-aero.xml"/>
@@ -1096,13 +1136,12 @@ def build(out, fg=False):
     mdl.controls()
     mdl.rotor_states()
     mdl.main_rotor()
-    mdl.fuselage()
-    mdl.empennage()
     mdl.tail_rotor()
-    mdl.fin_in_tr_flow()
+    mdl.airframe()
     os.makedirs(os.path.join(out, 'Systems'), exist_ok=True)
     open(os.path.join(out, 'Systems', 'bo105-controls.xml'), 'w').write('<?xml version="1.0"?>\n' + mdl.ctl.xml())
     open(os.path.join(out, 'Systems', 'bo105-rotor.xml'), 'w').write('<?xml version="1.0"?>\n' + mdl.rot.xml())
+    open(os.path.join(out, 'Systems', 'bo105-airframe.xml'), 'w').write('<?xml version="1.0"?>\n' + mdl.air.xml())
     open(os.path.join(out, 'Systems', 'bo105-drive.xml'), 'w').write('<?xml version="1.0"?>\n' + engines.build().xml())
     open(os.path.join(out, 'Systems', 'bo105-outputs.xml'), 'w').write('<?xml version="1.0"?>\n' + mdl.outputs().xml())
     open(os.path.join(out, 'Systems', 'bo105-aero.xml'), 'w').write(

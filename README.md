@@ -90,9 +90,11 @@ pointing at it), and pick **MBB Bo 105 CBS (JSBSim)**.
 
 - Needs FlightGear 2024.2 or later. The cockpit, lights, liveries and rotor
   are built for the HDR renderer.
-- The model runs at 960 Hz (about 0.09 ms of CPU per step): its blades'
-  dynamics and the air resonance need it. At lower rates that mode is
-  under-damped or unstable.
+- The model runs at 960 Hz: its blades' dynamics and the air resonance need
+  it, and at lower rates that mode is under-damped or unstable. In
+  FlightGear 2024, which takes a lock for every property read, that costs
+  about half of one CPU core; on an older CPU it, not the graphics, can be
+  what limits the frame rate.
 - The aircraft is in the `MBB_Bo_105` folder with the id `mbb-bo105`, so it
   sits next to the Bo 105 from the hangar without replacing it.
 - In multiplayer, other pilots need this aircraft installed to see yours as
@@ -247,7 +249,8 @@ inside `MBB_Bo_105`:
   the files point to the new name.
 - **Flight model.** The YASim model (kept as `bo105-yasim.xml`) is replaced by
   the generated JSBSim `bo105.xml` and `Systems/bo105-aero.xml`, `-rotor.xml`,
-  `-drive.xml`, `-controls.xml` and `-outputs.xml`, run at 960 Hz, with a
+  `-drive.xml`, `-controls.xml` and `-outputs.xml`, run at 960 Hz, and
+  `-airframe.xml` (the fuselage, empennage and fin loads) at 240 Hz, with a
   blade-element tail rotor. The fuel tanks' capacities are the type's (570 l
   and 93 l).
 - **Nasal.** `Nasal/bo105.nas`: the engines, fuel and rotor speed are the
