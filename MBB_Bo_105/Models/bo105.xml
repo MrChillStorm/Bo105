@@ -2657,6 +2657,71 @@
 			<not><property>sim/model/bo105/debug/hide-lights</property></not>
 		</condition>
 	</animation>
+	<animation>
+		<type>select</type>
+		<object-name>Blade1</object-name>
+		<object-name>Blade2</object-name>
+		<object-name>Blade3</object-name>
+		<object-name>Blade4</object-name>
+		<condition>
+			<not><property>sim/model/bo105/debug/hide-mainblades</property></not>
+		</condition>
+	</animation>
+	<animation>
+		<type>select</type>
+		<object-name>TailBlade1</object-name>
+		<object-name>TailBlade2</object-name>
+		<condition>
+			<not><property>sim/model/bo105/debug/hide-tailblades</property></not>
+		</condition>
+	</animation>
+	<animation>
+		<type>select</type>
+		<object-name>swashplate_L</object-name>
+		<object-name>tailpitchlink_1</object-name>
+		<object-name>tailpitchlink_2</object-name>
+		<object-name>tailrotorgearbox</object-name>
+		<object-name>tailrotorshaft</object-name>
+		<object-name>tailsleevefix</object-name>
+		<object-name>tailsleeverot</object-name>
+		<object-name>pendulum1</object-name>
+		<object-name>pendulum2</object-name>
+		<object-name>pendulum3</object-name>
+		<object-name>pendulum4</object-name>
+		<object-name>absorber1</object-name>
+		<object-name>absorber2</object-name>
+		<object-name>absorber3</object-name>
+		<object-name>absorber4</object-name>
+		<object-name>blade_fitting1</object-name>
+		<object-name>blade_fitting2</object-name>
+		<object-name>blade_fitting3</object-name>
+		<object-name>blade_fitting4</object-name>
+		<object-name>pitch_horn1</object-name>
+		<object-name>pitch_horn2</object-name>
+		<object-name>pitch_horn3</object-name>
+		<object-name>pitch_horn4</object-name>
+		<object-name>blade_mounting_fork1</object-name>
+		<object-name>blade_mounting_fork2</object-name>
+		<object-name>blade_mounting_fork3</object-name>
+		<object-name>blade_mounting_fork4</object-name>
+		<object-name>tailrotor_blade1</object-name>
+		<object-name>tailrotor_blade2</object-name>
+		<object-name>rotoraxis</object-name>
+		<object-name>star_hub</object-name>
+		<object-name>pitch_link1</object-name>
+		<object-name>pitch_link2</object-name>
+		<object-name>pitch_link3</object-name>
+		<object-name>pitch_link4</object-name>
+		<object-name>star_cap1</object-name>
+		<object-name>star_cap2</object-name>
+		<object-name>star_cap3</object-name>
+		<object-name>star_cap4</object-name>
+		<object-name>swashplate_cap</object-name>
+		<object-name>swashplate_rotor</object-name>
+		<condition>
+			<not><property>sim/model/bo105/debug/hide-hub</property></not>
+		</condition>
+	</animation>
 	<!--== end debug ==-->
 
 </PropertyList>
