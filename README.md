@@ -303,8 +303,10 @@ inside `MBB_Bo_105`:
     the emblem decal is blended by its alpha instead of showing as a black box;
     the old fake shadow is hidden, since it has real ones.
 - **Set file.** Description, credits, the flight model and its rate, the
-  minimum FlightGear version (2024.2.0) and the launcher's HDR compatibility
-  flag.
+  minimum FlightGear version (2024.2.0), the launcher's HDR compatibility
+  flag, and the launcher ratings by the FlightGear wiki's criteria: FDM 5,
+  systems 2, cockpit 3, model 4 (the original's were 5, 1, 2, 3), still beta
+  overall, since early-production needs at least 3 in each.
 
 Everything else is as its authors made it; they are credited in
 [MBB_Bo_105/ReadMe.txt](MBB_Bo_105/ReadMe.txt) and in the files themselves.
