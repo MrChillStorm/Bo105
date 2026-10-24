@@ -4,7 +4,6 @@
      instance its blade's properties in params -->
 
 <PropertyList>
-  <!-- TEST: the livery texture swaps taken out, to measure their cost (temporary) -->
 
   <path>blade-rotor.ac</path>
 
@@ -15,8 +14,102 @@
   </params>
 
   <!-- the livery's paint (Models/Variants): the blade, plain, orange-tipped or white-striped -->
+  <animation>
+    <type>pbr</type>
+    <object-name>mr_blade</object-name>
+    <object-name>mr_blade_a</object-name>
+    <object-name>mr_blade_b</object-name>
+    <object-name>mr_blade_c</object-name>
+    <object-name>mr_blade_d</object-name>
+    <object-name>mr_blade_e</object-name>
+    <object-name>tmr_blade</object-name>
+    <object-name>tmr_blade_a</object-name>
+    <object-name>tmr_blade_b</object-name>
+    <object-name>tmr_blade_c</object-name>
+    <object-name>tmr_blade_d</object-name>
+    <object-name>tmr_blade_e</object-name>
+    <property-base>sim/model/bo105/material/rotor</property-base>
+    <base-color-texture-prop>blade</base-color-texture-prop>
+  </animation>
+  <animation>
+    <type>material</type>
+    <object-name>mr_blade</object-name>
+    <object-name>mr_blade_a</object-name>
+    <object-name>mr_blade_b</object-name>
+    <object-name>mr_blade_c</object-name>
+    <object-name>mr_blade_d</object-name>
+    <object-name>mr_blade_e</object-name>
+    <object-name>tmr_blade</object-name>
+    <object-name>tmr_blade_a</object-name>
+    <object-name>tmr_blade_b</object-name>
+    <object-name>tmr_blade_c</object-name>
+    <object-name>tmr_blade_d</object-name>
+    <object-name>tmr_blade_e</object-name>
+    <property-base>sim/model/bo105/material/rotor</property-base>
+    <texture-prop>blade</texture-prop>
+    <texture>black.png</texture>
+  </animation>
 
   <!-- and its blur -->
+  <animation>
+    <type>pbr</type>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <property-base>sim/model/bo105/material/rotor</property-base>
+    <base-color-texture-prop>blur</base-color-texture-prop>
+  </animation>
+  <animation>
+    <type>material</type>
+    <object-name>mr_blur0</object-name>
+    <object-name>mr_blur1</object-name>
+    <object-name>mr_blur2</object-name>
+    <object-name>mr_blur3</object-name>
+    <object-name>mr_blur4</object-name>
+    <object-name>mr_blur5</object-name>
+    <object-name>mr_blur6</object-name>
+    <object-name>mr_blur7</object-name>
+    <object-name>mr_blur8</object-name>
+    <object-name>mr_blur9</object-name>
+    <object-name>mr_blur10</object-name>
+    <object-name>mr_blur11</object-name>
+    <object-name>mr_blur12</object-name>
+    <object-name>mr_blur13</object-name>
+    <object-name>mr_blur14</object-name>
+    <object-name>mr_blur15</object-name>
+    <object-name>mr_blur16</object-name>
+    <object-name>mr_blur17</object-name>
+    <object-name>mr_blur18</object-name>
+    <object-name>mr_blur19</object-name>
+    <object-name>mr_blur20</object-name>
+    <object-name>mr_blur21</object-name>
+    <object-name>mr_blur22</object-name>
+    <object-name>mr_blur23</object-name>
+    <property-base>sim/model/bo105/material/rotor</property-base>
+    <texture-prop>blur</texture-prop>
+    <texture>blur.png</texture>
+  </animation>
 
   <!-- the parts' detail texture and PBR (fdm/materials.py) -->
   <effect>
