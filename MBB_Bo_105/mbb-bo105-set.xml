@@ -239,7 +239,7 @@
 				<x-offset-m archive="y">0.40</x-offset-m><!--right-->
 				<y-offset-m archive="y">0.785</y-offset-m><!--up-->
 				<z-offset-m archive="y">-1.65</z-offset-m><!--back-->
-				<pitch-offset-deg archive="y">-6</pitch-offset-deg>
+				<pitch-offset-deg archive="y">-8</pitch-offset-deg>
 				<default-field-of-view-deg type="double">90</default-field-of-view-deg>
 				<limits>
 					<enabled type="bool">true</enabled>
