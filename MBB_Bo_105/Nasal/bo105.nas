@@ -1144,18 +1144,7 @@ dynamic_view.register(func {
 });
 
 
-# the cockpit view's field of view is its own (90 deg, mbb-bo105-set.xml); the other views keep FlightGear's defaults.
-# At startup something can narrow it while the cockpit view stays selected (seen on Windows with the FGCamera add-on;
-# switching views put it right): once the scenery has loaded and every add-on has started, the cockpit view gets its
-# own field of view again.
-var fov_listener = setlistener("/sim/sceneryloaded", func(n) {
-	if (!n.getBoolValue()) return;
-	removelistener(fov_listener);
-	settimer(func {
-		if (getprop("/sim/current-view/view-number") == 0)
-			view.resetFOV();
-	}, 0.5);
-});
+# the cockpit view's field of view is its own (90 deg, mbb-bo105-set.xml); the other views keep FlightGear's defaults
 
 
 
