@@ -102,7 +102,10 @@ TR_PITCH_RANGE = (-6.0, 22.0)   # deg, full right / full left pedal, positive pu
 S_H = 8.71              # ft^2 (0.809 m^2)
 AR_H = 8.09
 FS_H, BL_H, WL_H = 277.45, 0.0, 25.84   # centre of pressure
-INC_H = 0.0
+# its zero-lift angle, deg: the DLR S123's in Padfield's Helisim data [Padfield, table 4B.2: alpha_tp0 0.0698 rad]; the
+# C-81 deck sets 0 [TR card 71], which gave the model a speed stability Mu above all six identifications at 80 kt and a
+# longitudinal cyclic 23-40 % steeper against speed than both flight tests' (4 deg: within the MBB test's from 78 kt)
+INC_H = 4.0
 # fuselage data reference point (the centre of pressure of the 1/4-scale tests) [TR card 21]
 FS_F, BL_F, WL_F = 100.39, 0.0, -1.86
 

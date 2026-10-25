@@ -58,7 +58,9 @@ How it was built, and the comparisons test by test, are in the report:
   so the effect is small: 1.3 % of the thrust in the hover, 4 % at 30 kt,
   2 % or less in cruise, adding at most 0.2° of tail rotor pitch.
 - **Fuselage and empennage** from the C-81 deck's wind tunnel data, with the
-  hub's and the skids' drag.
+  hub's and the skids' drag. The horizontal stabiliser lifts from +4°, as in
+  Padfield's data for the DLR's aircraft. The deck's 0° gave too much speed
+  stability: the nose rose too hard as the speed built.
 - **Engines and rotor speed.** Two Allison 250-C20B engines with their fuel
   controls, start sequence and power turbine governors, fitted to the DLR's
   flight test. The rotor speed is free, so it droops when you pull hard and the
@@ -151,16 +153,16 @@ Every number comes from the scripted test programme in the report.
 
 | | Reference | This model |
 |---|---|---|
-| Level-flight trim, hover to 118 kt | MBB's V-4 (TR 75-50) | collective within 0.9°, cyclic within 1.2° and 0.9°, pitch within 0.9° |
-| Level-flight trim, hover to 100 kt | DLR's Bo 105-S123 | collective 0.5–1.1° high, cyclic within 1.4°, torque −10 to +3 % |
-| Tail rotor pitch in level flight | DLR's Bo 105-S123 | 1.4° low in the hover, 1.4–2.4° high at 20–40 kt, within 0.5° from 60 kt (Bailey's closed form: within 0.4°, 3.0–3.6°, 1.1°) |
+| Level-flight trim, hover to 118 kt | MBB's V-4 (TR 75-50) | collective within 1.0°, cyclic within 1.2° and 0.9°, pitch within 1.2° |
+| Level-flight trim, hover to 100 kt | DLR's Bo 105-S123 | collective 0.5–1.1° high, cyclic within 1.4° (0.6° from 60 kt), torque −9 to +2 % |
+| Tail rotor pitch in level flight | DLR's Bo 105-S123 | 1.4° low in the hover, 1.4–2.3° high at 20–40 kt, within 0.5° from 60 kt (Bailey's closed form: within 0.4°, 3.0–3.6°, 1.1°) |
 | Blade frequencies (flap, lag, torsion) | NASA's analysis tuned to MBB's measurements: 1.12, 0.66, 3.79 per rev | 1.11, 0.67, 3.80 |
 | Lag damping in hover at C_T/σ = 0.07 | full-scale rotor (TM-85892): −0.97 1/s | −1.01 1/s |
 | Roll response to lateral cyclic at 80 kt, 1–12 rad/s | DLR/AFDD identified transfer function | within 1.1 dB rms, air resonance at the identified frequency |
-| Rate responses to four doublets at 80 kt | AGARD AR-280 flight records | on-axis rms error 2.5 deg/s over 10 s |
+| Rate responses to four doublets at 80 kt | AGARD AR-280 flight records | on-axis rms error 2.6 deg/s over 10 s |
 | Rotor speed after a collective 3-2-1-1 in hover | DLR flight test | rms error 0.17 rad/s (0.37 %) |
-| Dutch roll at 80 kt | six identifications: ζ 0.13–0.22, ω 2.17–2.60 rad/s | ζ 0.21, ω 2.75 rad/s |
-| Derivatives at 80 kt | six identifications | 16 of 36 within their range |
+| Dutch roll at 80 kt | six identifications: ζ 0.13–0.22, ω 2.17–2.60 rad/s | ζ 0.20, ω 2.75 rad/s |
+| Derivatives at 80 kt | six identifications | 17 of 36 within their range |
 
 ## Known gaps
 
@@ -171,7 +173,7 @@ Every number comes from the scripted test programme in the report.
   collective), and the cause is open; the test ran in a wind tunnel's test
   section, where the rotor's own wake recirculates.
 - **Tail rotor pitch.** Between 20 and 40 kt the DLR aircraft's tail rotor
-  pitch falls faster than the model's, which is 1.4–2.4° higher there: the fin
+  pitch falls faster than the model's, which is 1.4–2.3° higher there: the fin
   and tail rotor seem to leave the main rotor's wake earlier than the wake
   model has it. In the hover the model needs 1.4° less than the test. The fin
   blockage moves either by 0.2° at most.
