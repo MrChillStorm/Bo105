@@ -151,7 +151,7 @@
 		<engine>
 			<name>turbine0-loop</name>
 			<mode>looped</mode>
-			<path>Sounds/turbine_loop.wav</path>
+			<path>Aircraft/MBB_Bo_105/Sounds/turbine_loop.wav</path>
 			<condition>
 				<property>engines/engine[0]/running</property>
 			</condition>
@@ -208,7 +208,7 @@
 		<engine>
 			<name>turbine1-loop</name>
 			<mode>looped</mode>
-			<path>Sounds/turbine_loop.wav</path>
+			<path>Aircraft/MBB_Bo_105/Sounds/turbine_loop.wav</path>
 			<condition>
 				<property>engines/engine[1]/running</property>
 			</condition>
@@ -265,7 +265,7 @@
 		<engine>
 			<name>exhaust0-loop</name>
 			<mode>looped</mode>
-			<path>Sounds/exhaust_loop.wav</path>
+			<path>Aircraft/MBB_Bo_105/Sounds/exhaust_loop.wav</path>
 			<condition>
 				<property>engines/engine[0]/running</property>
 			</condition>
@@ -322,7 +322,7 @@
 		<engine>
 			<name>exhaust1-loop</name>
 			<mode>looped</mode>
-			<path>Sounds/exhaust_loop.wav</path>
+			<path>Aircraft/MBB_Bo_105/Sounds/exhaust_loop.wav</path>
 			<condition>
 				<property>engines/engine[1]/running</property>
 			</condition>
@@ -743,7 +743,7 @@
 		<wind>
 			<name>wind</name>
 			<mode>looped</mode>
-			<path>Sounds/wind.wav</path>
+			<path>Aircraft/MBB_Bo_105/Sounds/wind.wav</path>
 			<condition>
 				<and>
 					<property>velocities/airspeed-kt</property>
