@@ -190,6 +190,23 @@ def modes(omega=U.OMEGA):
     return out
 
 
+def droop_residual(pcts, omega=U.OMEGA):
+    """The blade's static droop under its weight (1 g along the shaft) beyond the first flap mode's, tip deflection / R
+    (rad, down -), at the rotor speeds pcts (% of omega): the beam's own solution less the mode's. On the rotating mode's
+    shape the blade is about three times too stiff at rest: its tip sags 0.11 m against the beam's 0.35 m, and the 2.5 deg
+    of precone (0.21 m at the tip) held the parked blades up; the centrifugal stiffening takes over by about 40 %."""
+    r, m, ix, eif, eil, gj = blade()
+    K, Kg, Mm, _ = bending(r, m, eif, omega, False)
+    f = modes(omega)['f']
+    weight = np.zeros(K.shape[0]); weight[0::2] = -np.diag(Mm)[0::2] * U.G0 * 12     # lb at the nodes, down
+    out = []
+    for pct in pcts:
+        W = omega * pct / 100
+        beam = np.linalg.solve(K + W ** 2 * Kg, weight)[-2] / (U.R * 12)
+        out.append(beam + f['S'] * U.G0 / (f['K'] + W ** 2 * f['Kcf']))
+    return out
+
+
 def phi(md, name, r_ft):
     """mode shape value and slope (per ft) at radius r_ft"""
     w, s = shape(md['r_in'], md[name]['V'], 0, r_ft * 12)

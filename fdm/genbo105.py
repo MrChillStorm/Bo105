@@ -954,9 +954,15 @@ class Model:
         o.fn('out/rotor-rpm-pct', M(v(100 / U.OMEGA), W), out='/rotors/main/rpm-pct')
         o.fn('out/tail-rpm', M(v(RPM * U.GEAR_TR), W), out='/rotors/tail/rpm')
         wrap = lambda e: IFTHEN(GT(e, v(360)), D(e, v(360)), e)
+        # the blades' droop under their weight beyond the first flap mode's, quasi-static (blademodes.droop_residual):
+        # at rest the mode alone held the tips up on the precone; above 40 % rotor speed it is under 0.01 deg
+        pcts = [0, 5, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100, 120]
+        droop = o.fn('out/flap-droop-deg', M(v(-R2D / G0), p('rotor/Az'), T1('rotor/omega-rad_sec', [U.OMEGA * x / 100 for x in pcts],
+                                                                             blademodes.droop_residual(pcts))),
+                     desc='the blades\' static droop beyond the flap mode\'s, per the hub\'s load factor along the shaft')
         for k in range(U.NB):
             o.fn('out/b%d-position' % k, wrap(S(M(v(R2D), p('rotor/psi-rad')), v(90.0 * k))), out='/rotors/main/blade[%d]/position-deg' % k)
-            o.fn('out/b%d-flap' % k, M(v(R2D), S(v(U.PRECONE), p('rotor/b%d/qf' % k))), out='/rotors/main/blade[%d]/flap-deg' % k)
+            o.fn('out/b%d-flap' % k, S(M(v(R2D), S(v(U.PRECONE), p('rotor/b%d/qf' % k))), droop), out='/rotors/main/blade[%d]/flap-deg' % k)
             o.fn('out/b%d-lag' % k, M(v(R2D), p('rotor/b%d/ql' % k)), out='/rotors/main/blade[%d]/lag-deg' % k)
             o.fn('out/b%d-pitch' % k, p('aero/rotor/b%d/theta-deg' % k), out='/rotors/main/blade[%d]/incidence-deg' % k)
         for k in range(U.NB_TR):

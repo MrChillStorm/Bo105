@@ -288,7 +288,9 @@ inside `MBB_Bo_105`:
   the type's three-view; the visual rotor stays on the model's mast).
 - **Rotor models** driven blade by blade by the flight model
   (`Models/Rotor/`, `fdm/rotorvis.py`): the hub at the simulated rotor's
-  azimuth, each blade with its own flap and lag bending and pitch. As it speeds
+  azimuth, each blade with its own flap and lag bending and pitch; at rest
+  the blades droop under their weight below the precone, as the beam's static
+  solution has them (the flap mode alone held them up). As it speeds
   up each blade fades out and a faint fan behind it fades in (in the HDR
   renderer; `Models/Effects/RotorBlur`), into a disc as dense as the blades'
   time-averaged coverage, its tip paint a faint ring. The tail rotor likewise.
