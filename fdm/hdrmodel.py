@@ -50,7 +50,14 @@ LIGHTS = [('nav-red', 'RedLight.ac', (0.680, -0.814, 0.150), (0, -1, 0), RED, (2
           ('beacon-top', 'RedLight.ac', (5.883, 0.0, 2.008), (0, 0, 1), RED, (2, 0, 0), 50, -1, 80, 30, L + 'beacon-top/state'),
           ('beacon-bottom', 'RedLight.ac', (-1.313, 0.0, -0.734), (0, 0, -1), RED, (2, 0, 0), 50, -1, 80, 30, L + 'beacon-bottom/state'),
           ('strobe-top', 'WhiteLight.ac', (5.992, 0.0, 1.784), (1, 0, 0), WHITE, (2, 2, 2), 400, 1, 80, 40, L + 'strobe-top/state'),
-          ('strobe-bottom', 'WhiteLight.ac', (-1.787, 0.0, -0.683), (0, 0, -1), WHITE, (2, 2, 2), 400, 1, 80, 40, L + 'strobe-bottom/state')]
+          ('strobe-bottom', 'WhiteLight.ac', (-1.787, 0.0, -0.683), (0, 0, -1), WHITE, (2, 2, 2), 400, 1, 80, 40, L + 'strobe-bottom/state'),
+          # the landing light [FM 7.12; its switches on the collective head, 7.9.2]: its supplement (10-6) is not at hand,
+          # so placed under the chin, ahead of the lower strobe, a warm white beam of 200 000 cd at its centre, about a
+          # halogen landing lamp's, aimed 30 deg below the fuselage's axis: in the hover and on an approach it lights the
+          # ground ahead, and parked its patch lies under the nose (aimed 15 deg down it fell 2 m ahead, in view through the
+          # chin windows, so bright that its bloom spread over the panel)
+          ('landing', 'WhiteLight.ac', (-2.15, 0.0, -0.63), (-1, 0, -0.58), (1.0, 0.92, 0.80), (3, 3, 3), 200000, 20, 12, 400,
+           'controls/lighting/landing-lights')]
 HALO_SCALE = [(0, 0.15), (20, 0.35), (1500, 4.0)]      # m -> the halo's size (m), as the UH-60's a little smaller
 # Interior lights [FM 7.12.3-7.12.5], HDR spot lights (Models/Lights/interior.xml) at their levels (0-1) in
 # /instrumentation/bo105/lights (Nasal/panel.nas): the whip light at the left of the centre console's switch panel,

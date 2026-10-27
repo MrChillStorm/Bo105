@@ -433,6 +433,10 @@
 				<desc>toggle rotor brake</desc>
 			</key>
 			<key>
+				<name>L</name>
+				<desc>toggle the landing light</desc>
+			</key>
+			<key>
 				<name>y/Y</name>
 				<desc>switch to next/previous variant</desc>
 			</key>
@@ -502,6 +506,8 @@
 			<strobe type="bool">true</strobe>
 			<beacon type="bool">true</beacon>
 			<nav-lights type="bool">true</nav-lights>
+			<!-- off at the start: FlightGear's defaults switch it on -->
+			<landing-lights type="bool">false</landing-lights>
 		</lighting>
 	</controls>
 
@@ -551,6 +557,15 @@
 				<binding>
 					<command>nasal</command>
 					<script>bo105.doors.previous()</script>
+				</binding>
+			</key>
+
+			<key n="76">
+				<name>L</name>
+				<desc>Toggle the landing light</desc>
+				<binding>
+					<command>property-toggle</command>
+					<property>/controls/lighting/landing-lights</property>
 				</binding>
 			</key>
 

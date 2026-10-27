@@ -115,6 +115,9 @@ pointing at it), and pick **MBB Bo 105 CBS (JSBSim)**.
   speed up and down, `m`/`M` (or the mixture axis) balances the load between
   the engines.
 - **Rotor brake.** `r` while held, `R` on and off.
+- **Landing light.** `L` on and off, or the configuration dialog (`=`). It
+  sits under the chin, aimed 30° below the fuselage, so in the hover and on an
+  approach it lights the ground ahead (in the HDR renderer). It starts off.
 - **Liveries.** The BO-105CBS menu's Select Livery, or `y`/`Y`, picks one of the
   seven variants: Civilian, Blue and Yellow MedEvac, Island Virtual Airways and
   three military ones (MedEvac, anti-tank with HOT missiles, M134 miniguns).
@@ -303,7 +306,7 @@ inside `MBB_Bo_105`:
     instruments' glass reflects by Fresnel's equations, and the dials' lighting
     emits (`Models/Effects/Lit/`);
   - the exterior lights are spots aimed out through their lenses
-    (`Models/Lights/`), with halos;
+    (`Models/Lights/`), with halos; a landing light under the chin is new;
   - one- and two-channel textures, which it shows as red, are stored as RGB;
     the emblem decal is blended by its alpha instead of showing as a black box;
     the old fake shadow is hidden, since it has real ones.

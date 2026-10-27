@@ -179,6 +179,23 @@
 		<layout>hbox</layout>
 		<empty><pref-width>4</pref-width></empty>
 		<checkbox>
+			<name>landing-light-checkbox</name>
+			<halign>left</halign>
+			<label>landing light (L)</label>
+			<property>/controls/lighting/landing-lights</property>
+			<live>1</live>
+			<binding>
+				<object-name>landing-light-checkbox</object-name>
+				<command>dialog-apply</command>
+			</binding>
+		</checkbox>
+		<empty><stretch>1</stretch></empty>
+	</group>
+
+	<group>
+		<layout>hbox</layout>
+		<empty><pref-width>4</pref-width></empty>
+		<checkbox>
 			<name>vibration-checkbox</name>
 			<halign>left</halign>
 			<label>cockpit vibration shake</label>

@@ -1243,6 +1243,15 @@
 		</offsets>
 	</model>
 	<model>
+		<name>light-landing</name>
+		<path>Aircraft/MBB_Bo_105/Models/Lights/landing.xml</path>
+		<offsets>
+			<x-m>-2.15</x-m>
+			<y-m>0</y-m>
+			<z-m>-0.63</z-m>
+		</offsets>
+	</model>
+	<model>
 		<name>interior-lights</name>
 		<path>Aircraft/MBB_Bo_105/Models/Lights/interior.xml</path>
 	</model>

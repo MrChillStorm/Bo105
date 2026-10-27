@@ -41,6 +41,9 @@ var beacon_switch = props.globals.initNode("controls/lighting/beacon", 1, "BOOL"
 aircraft.light.new("sim/model/bo105/lighting/beacon-top", [0.62, 0.62], beacon_switch);
 aircraft.light.new("sim/model/bo105/lighting/beacon-bottom", [0.63, 0.63], beacon_switch);
 
+# landing light (Models/Lights/landing.xml): its switch, off at the start (mbb-bo105-set.xml) ===========
+var landing_light_switch = props.globals.initNode("controls/lighting/landing-lights", 0, "BOOL");
+
 
 # nav lights ========================================================
 var nav_light_switch = props.globals.initNode("controls/lighting/nav-lights", 1, "BOOL");
@@ -727,6 +730,7 @@ var crash = func {
 		strobe_switch.setValue(0);
 		beacon_switch.setValue(0);
 		nav_light_switch.setValue(0);
+		landing_light_switch.setValue(0);
 		engines.engine[0].n2_pctN.setValue(0);
 		engines.engine[1].n2_pctN.setValue(0);
 		torque_pct.setValue(torque_val = 0);
