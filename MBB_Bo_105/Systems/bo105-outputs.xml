@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <system name="Bo 105 outputs">
 
-<channel name="rotor">
+<channel name="rotor" execrate="4">
 <fcs_function name="out/rotor-rpm"><function><product><value>9.5492966</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/main/rpm</output></fcs_function>
 <fcs_function name="out/rotor-rpm-pct"><function><product><value>2.2522523</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/main/rpm-pct</output></fcs_function>
 <fcs_function name="out/tail-rpm"><function><product><value>50.133807</value><property>rotor/omega-rad_sec</property></product></function><output>/rotors/tail/rpm</output></fcs_function>
@@ -44,7 +44,7 @@
 <fcs_function name="out/total-torque"><function><property>aero/rotor/torque-ftlb</property></function><output>/rotors/gear/total-torque</output></fcs_function>
 <fcs_function name="out/mast-moment-pct"><function><product><value>0.0068545631</value><sqrt><sum><pow><property>aero/rotor/Mx-s</property><value>2</value></pow><pow><property>aero/rotor/My-s</property><value>2</value></pow></sum></sqrt></product></function><output>/rotors/main/mast-moment-pct</output></fcs_function>
 </channel>
-<channel name="engines">
+<channel name="engines" execrate="4">
 <fcs_function name="out/eng[0]/n1"><function><property>eng[0]/ng-pct</property></function><output>/engines/engine[0]/n1-pct</output></fcs_function>
 <fcs_function name="out/eng[0]/n2"><function><property>eng[0]/np-pct</property></function><output>/engines/engine[0]/n2-pct</output></fcs_function>
 <fcs_function name="out/eng[0]/tot"><function><property>eng[0]/tgt-degc</property></function><output>/engines/engine[0]/tot-degc</output></fcs_function>
@@ -60,7 +60,7 @@
 <fcs_function name="out/torque-gauge"><function><product><value>0.5</value><sum><property>eng[0]/torque-pct</property><property>eng[1]/torque-pct</property></sum></product></function><output>/sim/model/bo105/torque-pct</output></fcs_function>
 <fcs_function name="out/engine-rpm"><function><product><value>166.45</value><sum><property>eng[0]/np-pct</property><property>eng[1]/np-pct</property></sum></product></function><output>/engines/engine/rpm</output></fcs_function>
 </channel>
-<channel name="vibration">
+<channel name="vibration" execrate="4">
 <washout_filter name="vib/x-hp1"><input>accelerations/a-pilot-x-ft_sec2</input><c1>37.699112</c1></washout_filter>
 <washout_filter name="vib/x-hp"><input>vib/x-hp1</input><c1>37.699112</c1></washout_filter>
 <washout_filter name="vib/y-hp1"><input>accelerations/a-pilot-y-ft_sec2</input><c1>37.699112</c1></washout_filter>
@@ -69,9 +69,6 @@
 <washout_filter name="vib/z-hp"><input>vib/z-hp1</input><c1>37.699112</c1></washout_filter>
 <fcs_function name="vib/ms"><function><sum><pow><property>vib/x-hp</property><value>2</value></pow><pow><property>vib/y-hp</property><value>2</value></pow><pow><property>vib/z-hp</property><value>2</value></pow></sum></function></fcs_function>
 <lag_filter name="vib/ms-avg"><input>vib/ms</input><c1>4</c1></lag_filter>
-<fcs_function name="vib/rotor-g"><function><quotient><sqrt><max><value>0</value><property>vib/ms-avg</property></max></sqrt><value>32.174</value></quotient></function></fcs_function>
-<fcs_function name="vib/etl"><description>translational lift band</description><function><exp><product><value>-1</value><pow><quotient><difference><quotient><property>aero/rotor/Vinplane-fps</property><max><sqrt><max><value>1</value><quotient><property>aero/rotor/thrust-lbs</property><product><value>1630.6883</value><property>atmosphere/rho-slugs_ft3</property></product></quotient></max></sqrt><value>5</value></max></quotient><value>0.9</value></difference><value>0.5</value></quotient><value>2</value></pow></product></exp></function></fcs_function>
-<fcs_function name="vib/bvi-g"><function><product><value>0.05</value><property>vib/etl</property><max><value>0</value><min><value>1.5</value><quotient><property>aero/rotor/thrust-lbs</property><value>4850.164</value></quotient></min></max><gt><property>rotor/omega-rad_sec</property><value>22.2</value></gt></product></function></fcs_function>
-<fcs_function name="vib/level-g"><function><product><max><value>0</value><min><value>1</value><quotient><difference><property>simulation/sim-time-sec</property><value>1</value></difference><value>3</value></quotient></min></max><difference><value>1</value><property>ctl/init</property></difference><sqrt><sum><pow><property>vib/rotor-g</property><value>2</value></pow><pow><property>vib/bvi-g</property><value>2</value></pow></sum></sqrt></product></function><output>/sim/model/bo105/vibration-g</output></fcs_function>
+<fcs_function name="vib/level-g"><function><product><max><value>0</value><min><value>1</value><quotient><difference><property>simulation/sim-time-sec</property><value>1</value></difference><value>3</value></quotient></min></max><difference><value>1</value><property>ctl/init</property></difference><sqrt><sum><pow><quotient><sqrt><max><value>0</value><property>vib/ms-avg</property></max></sqrt><value>32.174</value></quotient><value>2</value></pow><pow><product><value>0.05</value><exp><product><value>-1</value><pow><quotient><difference><quotient><property>aero/rotor/Vinplane-fps</property><max><sqrt><max><value>1</value><quotient><property>aero/rotor/thrust-lbs</property><product><value>1630.6883</value><property>atmosphere/rho-slugs_ft3</property></product></quotient></max></sqrt><value>5</value></max></quotient><value>0.9</value></difference><value>0.5</value></quotient><value>2</value></pow></product></exp><max><value>0</value><min><value>1.5</value><quotient><property>aero/rotor/thrust-lbs</property><value>4850.164</value></quotient></min></max><gt><property>rotor/omega-rad_sec</property><value>22.2</value></gt></product><value>2</value></pow></sum></sqrt></product></function><output>/sim/model/bo105/vibration-g</output></fcs_function>
 </channel>
 </system>

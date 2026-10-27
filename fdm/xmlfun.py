@@ -1,4 +1,5 @@
 """Helpers for writing JSBSim function XML."""
+import collections, re
 
 
 def v(x): return '<value>%.8g</value>' % x
@@ -133,3 +134,49 @@ class FCS:
         ch = '\n'.join('<channel name="%s"%s>\n%s\n</channel>' % (n, ' execrate="%d"' % s.rates[n] if n in s.rates else '', '\n'.join(c))
                        for n, c in s.channels)
         return '<system name="%s">\n%s\n%s\n</system>\n' % (s.name, '\n'.join(s.decl), ch)
+
+
+_REF = re.compile(r'<property>([^<]+)</property>|<independentVar[^>]*>([^<]+)</independentVar>|<input>([^<]+)</input>'
+                  r'|<output>([^<]+)</output>')
+_DEFS = (re.compile(r'<function name="([^"]+)">(?:<description>.*?</description>)?(.*?)</function>\n?', re.S),
+         re.compile(r'<fcs_function name="([^"]+)">(?:<description>.*?</description>)?<function>((?:(?!</fcs_function>).)*?)'
+                    r'</function></fcs_function>\n?', re.S))
+
+
+def inline_single_use(texts, extra=(), keep=()):
+    """Writes each function that exactly one other function reads into that reader, in place of its property, and
+    drops its definition. In FlightGear every property read takes a lock and every function its own evaluation; the
+    arithmetic and its order stay the same, so the values do too. Only where the one read is a <property> in the same
+    file after the definition (and for systems in the same channel: the same rate and order), and the function has no
+    clip or output. texts: {file: XML}, rewritten; extra: other XML that reads properties (the FDM file); keep: names
+    other programs read. Returns the number of functions written in."""
+    count = collections.Counter()
+    for t in list(texts.values()) + list(extra):
+        for m in _REF.finditer(t):
+            count[next(g for g in m.groups() if g).strip()] += 1
+    n = 0
+    for f in texts:
+        t = texts[f]
+        while True:
+            chans = [(m.start(), m.end()) for m in re.finditer(r'<channel\b.*?</channel>', t, re.S)]
+            for rx in _DEFS:
+                hit = None
+                for m in rx.finditer(t):
+                    name = m.group(1)
+                    if count[name] != 1 or name in keep:
+                        continue
+                    use = '<property>%s</property>' % name
+                    i = t.find(use, m.end())
+                    if i < 0 or (chans and not any(a <= m.start() and i < b for a, b in chans)):
+                        continue
+                    hit = (m, i, use)
+                    break
+                if hit:
+                    break
+            if not hit:
+                break
+            m, i, use = hit
+            t = t[:m.start()] + t[m.end():i] + m.group(2) + t[i + len(use):]
+            n += 1
+        texts[f] = t
+    return n

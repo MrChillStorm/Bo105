@@ -300,6 +300,10 @@ def fin_tables():
 # frames of the FDM rate: 4 at 960 Hz is 240 Hz (in FlightGear every property read takes a lock: the model's reads are
 # its cost there)
 AIRFRAME_EXECRATE = 4
+# so are the engines (gas generator, governor, temperatures), the fuel, the ambient conditions and the outputs to
+# FlightGear (the 3-D rotor, the gauges, the cockpit's vibration), which change slowly or are read once a frame; the
+# rotor speed, the drive train and the power turbines' torque, which damps the drive train mode, stay at the FDM rate
+SLOW_EXECRATE = 4
 
 # the main rotor's wake on the fuselage, the stabiliser, its end plates, the fin and the tail rotor (ring-vortex tables,
 # mrwake.py)

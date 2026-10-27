@@ -109,6 +109,7 @@ def build(fcs_name='Bo 105 drive'):
     f.declare('eng/gov-ti', GOV_TI)
     f.declare('/sim/freeze/fuel', 0)
     dt = p('simulation/dt')
+    cdt = p('simulation/channel-dt')     # the step of a channel run every U.SLOW_EXECRATE frames
     init = p('ctl/init-fast')
     f.channel('start state')
     run0 = f.fn('eng/running-at-start', MAX(p('eng/init-running'), GT(p('position/h-agl-ft'), v(50))))
@@ -118,7 +119,7 @@ def build(fcs_name='Bo 105 drive'):
     f.fn('drive/brake-init', IFTHEN(GT(init, v(0.5)), IFTHEN(run0, v(0), v(1)), p('/controls/rotor/brake')), out='/controls/rotor/brake')
     W = p('rotor/omega-rad_sec')
     clamp = lambda x, lo, hi: MAX(v(lo), MIN(v(hi), x))
-    f.channel('ambient')
+    f.channel('ambient', execrate=U.SLOW_EXECRATE)
     th = f.fn('eng/theta', Q(p('atmosphere/T-R'), v(518.67)))
     dl = f.fn('eng/delta', Q(p('atmosphere/P-psf'), v(2116.22)))
     sth = f.fn('eng/sqrt-theta', SQ(th))
@@ -135,7 +136,7 @@ def build(fcs_name='Bo 105 drive'):
     for n in range(2):
         e = '/controls/engines/engine[%d]' % n
         g = 'eng[%d]' % n
-        f.channel('engine %d' % (n + 1))
+        f.channel('engine %d' % (n + 1), execrate=U.SLOW_EXECRATE)
         ng, np_, tgt = p(g + '/ng-pct'), p(g + '/np-rad_sec'), p(g + '/tgt-degc')
         lit, eng, st = p(g + '/lit'), p(g + '/engaged'), p(g + '/starter-on')
         pl = p(e + '/power')
@@ -169,15 +170,15 @@ def build(fcs_name='Bo 105 drive'):
         governing = M(lit, GT(pl, v(PL_GOVERNED)), GT(npc, v(90)))
         f.fn(g + '/gov-int-next', IFTHEN(GT(init, v(0.5)),
                                          M(run0, D(D(Q(p(g + '/ng-for-load'), sth), M(p('eng/gov-k'), err)), S(v(NG_GOV), p('eng/coll-anticipation')))),
-                                         MAX(v(-15), MIN(v(15), S(gi, M(GT(p('eng/gov-ti'), v(0)), governing, dt, Q(p('eng/gov-k'), MAX(p('eng/gov-ti'), v(1))), err))))),
+                                         MAX(v(-15), MIN(v(15), S(gi, M(GT(p('eng/gov-ti'), v(0)), governing, cdt, Q(p('eng/gov-k'), MAX(p('eng/gov-ti'), v(1))), err))))),
              out=g + '/gov-int')
         gov_ss = f.fn(g + '/ng-gov-ss', M(sth, S(v(NG_GOV), gi, M(p('eng/gov-k'), err), p('eng/coll-anticipation'))),
                       desc='power turbine governor and collective anticipation, steady')
         # the hydromechanical governor's own lag and its rate limit [HG fig. 5: 1 / (tau_gov s + 1) on the speed error and
         # the collective's feed forward, then a rate limiter on the fuel]; the lag also keeps the governor off the coupled
         # collective lag and drive train mode (2.2/rev)
-        step = M(Q(dt, MAX(p('eng/gov-tau'), dt)), D(gov_ss, p(g + '/ng-gov')))
-        lim = M(p('eng/gov-rate'), sth, dt)
+        step = M(Q(cdt, MAX(p('eng/gov-tau'), cdt)), D(gov_ss, p(g + '/ng-gov')))
+        lim = M(p('eng/gov-rate'), sth, cdt)
         gov = f.fn(g + '/ng-gov-next', IFTHEN(GT(init, v(0.5)), gov_ss, S(p(g + '/ng-gov'), MAX(NEG(lim), MIN(lim, step)))),
                    out=g + '/ng-gov')
         flying = GT(pl, v(PL_GOVERNED))
@@ -202,28 +203,32 @@ def build(fcs_name='Bo 105 drive'):
         steady_ng = f.fn(g + '/ng-for-load', M(sth, T1(g + '/q-share-pct', Q_NG, NG_Q)))
         f.fn(g + '/q-share-pct', Q(M(v(50 / Q100), Qload), MAX(dsth, v(0.05))))
         f.fn(g + '/ng-next', IFTHEN(GT(init, v(0.5)), M(run0, MAX(M(v(NG_IDLE), sth), steady_ng)),
-                                    MAX(v(0), S(ng, M(dt, S(Q(D(target, ng), tau_eff), assist))))), out=g + '/ng-pct')
-        # power turbine torque at the rotor: the table at 100 % Np, rising as the turbine slows
-        qtab = M(v(Q100 / 100), T1(g + '/ngc-pct', NG_Q, Q_NG))
-        kq = M(v(0.012), MAX(v(0), S(qtab, v(0.4 * Q100))))
-        q = f.fn(g + '/torque-ftlb', M(lit, dsth, S(qtab, M(kq, D(v(100), npp)))), desc='at the rotor shaft')
-        f.fn(g + '/torque-pct', Q(M(v(100), MAX(v(0), M(q, eng))), v(Q100)))
+                                    MAX(v(0), S(ng, M(cdt, S(Q(D(target, ng), tau_eff), assist))))), out=g + '/ng-pct')
+        # power turbine torque at the rotor: the table at 100 % Np, rising as the turbine slows (the drive train works
+        # it out at the FDM rate from these)
+        qtab = f.fn(g + '/q-table-ftlb', M(lit, dsth, v(Q100 / 100), T1(g + '/ngc-pct', NG_Q, Q_NG)))
+        f.fn(g + '/q-slope-ftlb', M(v(0.012), MAX(v(0), S(qtab, M(lit, dsth, v(0.4 * Q100))))), desc='per % Np below 100 %')
         ratio = clamp(Q(S(p(g + '/wf-c'), v(5)), S(wfss(g + '/ngc-pct'), v(5))), 0.3, 2.5)
         tgt_ss = IFTHEN(lit, MAX(D(Tamb, v(273.15)), D(M(Tamb, T1(g + '/ngc-pct', NG_TGT, TGT_NG), SQ(ratio)), v(273.15))), D(Tamb, v(273.15)))
         f.fn(g + '/tgt-ss', tgt_ss)
-        f.fn(g + '/tgt-next', IFTHEN(GT(init, v(0.5)), p(g + '/tgt-ss'), S(tgt, M(dt, Q(D(p(g + '/tgt-ss'), tgt), IFTHEN(lit, v(1.5), v(20)))))),
+        f.fn(g + '/tgt-next', IFTHEN(GT(init, v(0.5)), p(g + '/tgt-ss'), S(tgt, M(cdt, Q(D(p(g + '/tgt-ss'), tgt), IFTHEN(lit, v(1.5), v(20)))))),
              out=g + '/tgt-degc')
-    f.channel('fuel')
+    f.channel('fuel', execrate=U.SLOW_EXECRATE)
     frozen = GT(p('/sim/freeze/fuel'), v(0.5))
-    burn = M(S(p('eng[0]/fuel-flow-pph'), p('eng[1]/fuel-flow-pph')), dt, v(1 / 3600.0))
+    burn = M(S(p('eng[0]/fuel-flow-pph'), p('eng[1]/fuel-flow-pph')), cdt, v(1 / 3600.0))
     t0, t1 = '/consumables/fuel/tank[0]/level-lbs', '/consumables/fuel/tank[1]/level-lbs'
     # both engines draw from the supply tank; the transfer pumps keep it full from the main tank
     f.fn('fuel/burn-supply', IFTHEN(frozen, p(t1), MAX(v(0), D(p(t1), burn))), out=t1)
-    f.fn('fuel/transfer', IFTHEN(frozen, p(t0), MAX(v(0), D(p(t0), MIN(MAX(v(0), D(v(U.SUPPLY_LBS), p(t1))), M(v(1.2), dt))))), out=t0)
-    f.fn('fuel/fill-supply', IFTHEN(frozen, p(t1), MIN(v(U.SUPPLY_LBS), S(p(t1), IFTHEN(GT(p(t0), v(0.5)), MIN(MAX(v(0), D(v(U.SUPPLY_LBS), p(t1))), M(v(1.2), dt)), v(0))))), out=t1)
+    f.fn('fuel/transfer', IFTHEN(frozen, p(t0), MAX(v(0), D(p(t0), MIN(MAX(v(0), D(v(U.SUPPLY_LBS), p(t1))), M(v(1.2), cdt))))), out=t0)
+    f.fn('fuel/fill-supply', IFTHEN(frozen, p(t1), MIN(v(U.SUPPLY_LBS), S(p(t1), IFTHEN(GT(p(t0), v(0.5)), MIN(MAX(v(0), D(v(U.SUPPLY_LBS), p(t1))), M(v(1.2), cdt)), v(0))))), out=t1)
     f.fn('fuel/mass-main', p(t0), out='inertia/pointmass-weight-lbs[%d]' % U.PM_TANK0)
     f.fn('fuel/mass-supply', p(t1), out='inertia/pointmass-weight-lbs[%d]' % (U.PM_TANK0 + 1))
     f.channel('drive train')
+    for n in range(2):
+        g = 'eng[%d]' % n
+        npp = M(v(100 / OMEGA0), p(g + '/np-rad_sec'))
+        q = f.fn(g + '/torque-ftlb', S(p(g + '/q-table-ftlb'), M(p(g + '/q-slope-ftlb'), D(v(100), npp))), desc='at the rotor shaft')
+        f.fn(g + '/torque-pct', Q(M(v(100), MAX(v(0), M(q, p(g + '/engaged')))), v(Q100)))
     q0, q1 = p('eng[0]/torque-ftlb'), p('eng[1]/torque-ftlb')
     e0, e1 = p('eng[0]/engaged'), p('eng[1]/engaged')
     f.fn('drive/net-torque-ftlb', D(S(M(e0, q0), M(e1, q1)), Qload), desc='engines less the rotors and losses')

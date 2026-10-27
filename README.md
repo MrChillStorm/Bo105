@@ -218,7 +218,9 @@ python3 genbo105.py root-nofin/aircraft/bo105 --no-tr-fin
   (`bo105.xml` and `Systems/bo105-*.xml`), otherwise test versions with the
   test loadings for the scripts below into `root/` (`--tr bailey`: with
   Bailey's closed-form tail rotor, `--no-tr-fin`: without the fin blockage,
-  for the report's comparisons). `engines250.py` writes
+  for the report's comparisons; `--no-inline` keeps every function named,
+  where it otherwise writes those only one other reads into it).
+  `engines250.py` writes
   the engines and drive, `blademodes.py` computes the blade modes,
   `bo105data.py` holds the data with their sources, and `data/` the
   transcribed tables: the C-81 airfoil and fuselage data (`c81_0012.py`: the
@@ -255,7 +257,8 @@ inside `MBB_Bo_105`:
 - **Flight model.** The YASim model (kept as `bo105-yasim.xml`) is replaced by
   the generated JSBSim `bo105.xml` and `Systems/bo105-aero.xml`, `-rotor.xml`,
   `-drive.xml`, `-controls.xml` and `-outputs.xml`, run at 960 Hz, and
-  `-airframe.xml` (the fuselage, empennage and fin loads) at 240 Hz, with a
+  `-airframe.xml` (the fuselage, empennage and fin loads), the engines, the
+  fuel and the outputs to FlightGear at 240 Hz, with a
   blade-element tail rotor. The fuel tanks' capacities are the type's (570 l
   and 93 l).
 - **Nasal.** `Nasal/bo105.nas`: the engines, fuel and rotor speed are the
