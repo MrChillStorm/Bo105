@@ -39,7 +39,8 @@ How it was built, and the comparisons test by test, are in the report:
   15 rad/s, where the DLR identified them in flight. The blades have no lag
   dampers; their damping is their aerodynamics plus a structural damping fitted
   to the full-scale rotor's measured decay.
-- **Inflow.** A dynamic wake (Peters–He) with ground effect; translational
+- **Inflow.** A dynamic wake (Peters–He) with ground effect, as strong as
+  the Bo 105 flight manual's hover ceilings have it; translational
   lift comes out of it, not out of a special case. A
   ring-vortex wake model carries the rotor's downwash to the fuselage, the
   stabiliser and its end plates, the fin and the tail rotor, for any speed and
@@ -191,7 +192,9 @@ Every number comes from the scripted test programme in the report.
   published test checks it in strong crosswinds or near its stall, and its
   section comes from C-81's equations rather than measured tables. Its
   shaft's 4° toe is left out.
-- **Ground effect** uses the UH-60's hover chart; no Bo 105 one is public.
+- **Ground effect** has the strength the Bo 105 flight manual's hover
+  ceilings give it at 3 ft skid height (9 % more mass on the same power),
+  but the UH-60's shape with height: the manual gives no other height.
 - **Not modelled:** blade torsion dynamics beyond the quasi-static mode,
   dynamic stall, failures, an electrical system (the panel is always
   powered). The governor's rate limit is not identified.

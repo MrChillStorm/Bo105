@@ -108,7 +108,8 @@ AGARD AR-280~\cite{ar} & DLR Bo 105-S123: loading and inertias; derivatives and 
 23rd ERF, paper 91~\cite{hg} & 250-C20B engine and governor structure; collective 3-2-1-1 in hover with rotor speed and torque \\
 Padfield~\cite{pad}, via~\cite{metu} & DLR S123 trims against airspeed (figs.~4.6, 4.10, 4.11) \\
 EASA TCDS R.011~\cite{ea} & engine ratings, speeds and limits \\
-Flight manual CB-5/CBS-5~\cite{fm} & stations, loading, cockpit, instrument markings, warning lights \\
+Flight manual CB-5/CBS-5~\cite{fm} & stations, loading, cockpit, instrument markings, warning lights; hover ceilings in and out of
+ground effect \\
 METU thesis~\cite{metu} & Peters--He finite-state wake equations \\
 NASA TN D-234, NACA TR 1319~\cite{heyson,hk} & ground effect in forward flight; ring-vortex wake \\
 \bottomrule
@@ -180,9 +181,12 @@ accelerations are solved together in each step, as in the DLR's own simulation~\
 
 \subsection{Inflow and wake}
 The induced velocity comes from the Peters--He generalised dynamic wake~\cite{metu} with three axisymmetric states and the first harmonic
-pair, as in the UH-60 model. Ground effect scales the induced velocity: in hover by $(1+0.3(R/Z)^2)^{-1/2}$ with $Z$ the hub height, the UH-60
-operator's manual hover chart's fit (no Bo 105 hover chart is public), carried into forward flight with the interference ratios of
-TN D-234~\cite{heyson}. The main rotor's downwash at the fuselage, the horizontal stabiliser, its end plates and the tail rotor comes from a
+pair, as in the UH-60 model. Ground effect scales the induced velocity: in hover by $(1+0.174(R/Z)^2)^{-1/2}$ with $Z$ the hub height,
+carried into forward flight with the interference ratios of TN D-234~\cite{heyson}. Its shape with height is the UH-60 operator's manual hover
+chart's fit, $(1+0.3(R/Z)^2)^{-1/2}$; its strength is the Bo 105 flight manual's, whose hover ceilings in ground effect (3\,ft skid height,
+$Z/R=0.76$) and out of it, at the same power, give 1.093 times the gross mass at every altitude~\cite{fm}. The UH-60's fit gave 1.14--1.15;
+with 0.174 the trimmed model gives 1.091--1.095 at 1000\,ft and, for the main rotor, 1.086--1.088 at the charts' 12\,000\,ft and
+$-37.5\,^\circ$C. All the trims of Section~\ref{sec:results} are out of ground effect. The main rotor's downwash at the fuselage, the horizontal stabiliser, its end plates and the tail rotor comes from a
 skewed cylinder of ring vortices leaving the tip-path plane~\cite{hk}, averaged over each surface and tabulated against the wake's skew and
 direction and the disc's longitudinal tilt.
 
@@ -485,8 +489,8 @@ Table~\ref{tab:score} summarises. The model reproduces what distinguishes the Bo
 together with the trims of MBB's prototype. Its open items are the isolated rotor's thrust and power against NASA's hover test, which the flight trims do not
 confirm and whose cause is open, the tail rotor's pitch through the transition, the cross-couplings, where the model shares the C-81 analysis's difficulty,
 and the long-term response of the free aircraft. The tail rotor's blade elements have a stall and reversed flow, but no published test checks them at the tail rotor's
-limits, in strong crosswinds or near its stall, and its section is C-81's equations rather than measured tables. Ground effect uses the UH-60's chart for want of the
-Bo 105's.
+limits, in strong crosswinds or near its stall, and its section is C-81's equations rather than measured tables. Ground effect has the Bo 105 flight manual's
+strength at 3\,ft skid height, but the UH-60's shape with height, for want of the Bo 105's at other heights.
 
 % =====================================================================================================================
 \section{Conclusions}\label{sec:concl}

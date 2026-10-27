@@ -459,8 +459,8 @@ class Model:
         g.fn('aero/rotor/Vprime-fps', SQ(S(SQR(Vip), SQR(Vn), v(25.0))), 'mass flow velocity (5 ft/s floor)')
         chi = g.fn('aero/rotor/chi-rad', ATAN2(Vip, MAX(Vn, v(0.5))), 'wake skew angle')
         g.fn('aero/rotor/chi-deg', M(v(R2D), chi))
-        # ground effect on the induced velocity [as the UH-60 model]: hover value against the hub height, carried into
-        # forward flight with Heyson's ratio [NASA TN D-234]
+        # ground effect on the induced velocity [as the UH-60 model]: hover value against the hub height (U.GE_K: scaled
+        # to the Bo 105 flight manual's hover ceilings), carried into forward flight with Heyson's ratio [NASA TN D-234]
         hh = g.fn('aero/rotor/hub-agl-ft', S(p('position/h-agl-ft'), Q(D(v(U.WL_MR), p('inertia/cg-z-in')), v(12))))
         zr = g.fn('aero/rotor/ge-z-r', MAX(v(U.GE_ZR_MIN), Q(hh, v(U.R))))
         th_, ph_ = p('attitude/theta-rad'), p('attitude/phi-rad')

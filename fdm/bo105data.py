@@ -7,8 +7,8 @@
   [PT]  NASA TM-103867 (Peterson 1991): blade frequencies (table 2), section axes (table 3), control stiffness
   [EA]  EASA TCDS R.011 issue 3 (2017), section 3: Bo 105 CBS, CBS-4, CBS-5 limits
   [HG]  Hamers and von Gruenhagen, ERF 1997 paper 91: Allison 250-C20B engine and governor in DLR's SIMH
-  [FM]  Eurocopter BO 105 CB-5/CBS-5 flight manual: three-view (fig. 1-1), loading data and station diagram (section
-        6.3, fig. 6-1), cockpit (figs. 7-2, 7-3)
+  [FM]  Eurocopter BO 105 CB-5/CBS-5 flight manual: three-view (fig. 1-1), hover ceilings in and out of ground effect
+        (figs. 5-8, 5-10), loading data and station diagram (section 6.3, fig. 6-1), cockpit (figs. 7-2, 7-3)
 
 Frames: the stations of [TR] and [HF] in inches are the JSBSim structural frame: SL (FS) from the fuselage nose,
 aft +; BL right +; WL up + from MBB's reference datum. MBB's stations in mm [FM fig. 6-1] start 745 mm ahead of the
@@ -158,10 +158,12 @@ def segments(n=NSEG, r0=R_ROOT, r1=R):
 # Peters-He states (j, r) as the UH-60 model: three axisymmetric (the hover's radial distribution) and the first harmonic
 PH_COS = [(1, 0), (3, 0), (5, 0), (2, 1)]
 PH_SIN = [(2, 1)]
-# ground effect in hover on the induced velocity, (1 + GE_K (R/Z)^2)^GE_EXP, Z the hub height: no Bo 105 hover chart
-# in the public sources; the UH-60 flight manual's (fitted in the UH-60 model; flight test, 0.80-0.97 of the OGE
-# torque at 5-40 ft) is used, as a lightly loaded four-blade rotor's
-GE_K, GE_EXP = 0.3, -0.5
+# ground effect in hover on the induced velocity, (1 + GE_K (R/Z)^2)^GE_EXP, Z the hub height: the shape of the UH-60
+# flight manual's (fitted in the UH-60 model, GE_K 0.3; flight test, 0.80-0.97 of the OGE torque at 5-40 ft), scaled to
+# the Bo 105's flight manual [FM figs. 5-8, 5-10]: its hover ceilings in ground effect (3 ft skid height, Z/R 0.76) and
+# out of it, at the same power, give 1.093 times the gross mass at every altitude; GE_K 0.174 gives 1.091-1.095 at
+# 1000 ft and, for the main rotor, 1.086-1.088 at the charts' 12 000 ft and -37.5 C (the UH-60's 0.3 gave 1.14-1.15)
+GE_K, GE_EXP = 0.174, -0.5
 GE_ZR_MIN = 0.3
 
 # ---------------------------------------------------------------- tail rotor aerodynamics
