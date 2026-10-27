@@ -389,8 +389,8 @@ AFDD identified from the flight frequency response (Kaletka et al.~\cite{kal}, w
 \end{figure}
 The frequency response (Fig.~\ref{fig:freq}) is the test that sees the rotor's dynamics directly. From 1 to 12\,rad/s the model's magnitude is within
 \NFmagRms\,dB (rms, \NFmagMax{} at most) of the identified transfer function and its phase within \NFphRms$^\circ$ (rms); the model has a little less phase lag
-between 3 and 12\,rad/s. The lag/air resonance appears at the identified frequency near 15\,rad/s with a similar notch and peak. Above it the model's phase lags
-the identified by about \NFphHi$^\circ$ less; the identified function includes a 17\,ms time delay, which accounts for 15--25$^\circ$ there.
+between 3 and 6\,rad/s. The lag/air resonance appears at the identified frequency near 15\,rad/s with a similar notch and peak. Above it the model's phase lags
+the identified by about \NFphHi$^\circ$ less, about what the identified function's 17\,ms time delay accounts for there (15--25$^\circ$).
 
 \subsection{Verification doublets}\label{sec:doublets}
 \begin{figure*}[t]
@@ -447,6 +447,10 @@ the strong aerodynamic damping.
 \item \emph{Governor at flat pitch.} The collective feed forward fitted about the hover, held down to flat pitch, left the governor an 11\,\% droop there; the
 rotor overshot to 107.5\,\% after a start. Below 35\,\% collective it now runs linearly to the gas generator speed the rotor needs at flat pitch, as a
 compensator cam would; the start peaks at about 101\,\%, and the hover and forward flight stay on the fitted slope.
+\item \emph{The boost servos' step offline.} JSBSim's filters take their channel's step when they are built. The offline harness set the step after
+loading the model, so its boost servos were built for JSBSim's default 1/120\,s and, run at 960\,Hz, answered eight times too fast (63\,\% in 3\,ms instead
+of 25\,ms); FlightGear, which sets the step first, was not affected. With the step set first the roll frequency response's phase follows the identified one
+within a few degrees from 6 to 15\,rad/s, and the doublets' errors are slightly smaller; the other results move little.
 \item \emph{The 3-D model's rotor.} The FlightGear model's rotor stands 0.24\,m further aft of its nose than the flight manual's three-view shows; the
 airframe's stations (skids, end plates, eye point, contacts) are taken from the manual's station diagram, and the visual rotor stays on the 3-D model's
 mast. The trims, derivatives and responses were rerun after the change and did not move.

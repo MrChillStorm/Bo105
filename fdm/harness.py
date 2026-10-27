@@ -14,12 +14,14 @@ def load(root=None, dt=1 / 960.0, model='bo105', hold_rpm=True):     # the rate 
     f.set_debug_level(0)
     f['/controls/engines/engine[0]/throttle'] = 0.5
     f['/sim/freeze/fuel'] = 1.0
+    # the step before the model, as FlightGear does: the filters (the boost servos, the cockpit vibration's) take
+    # their channel's step when they are built
+    f.set_dt(dt)
     if model == 'bo105':
         f.load_model(model)
     else:                                  # a loading variant in the same aircraft directory
         f.set_aircraft_path('aircraft/bo105')
         f.load_model(model, False)
-    f.set_dt(dt)
     f['drive/hold-rpm'] = 1.0 if hold_rpm else 0.0
     return f
 

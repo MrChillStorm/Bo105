@@ -161,9 +161,9 @@ Every number comes from the scripted test programme in the report.
 | Tail rotor pitch in level flight | DLR's Bo 105-S123 | 1.4° low in the hover, 1.4–2.3° high at 20–40 kt, within 0.5° from 60 kt (Bailey's closed form: within 0.4°, 3.0–3.6°, 1.1°) |
 | Blade frequencies (flap, lag, torsion) | NASA's analysis tuned to MBB's measurements: 1.12, 0.66, 3.79 per rev | 1.11, 0.67, 3.80 |
 | Lag damping in hover at C_T/σ = 0.07 | full-scale rotor (TM-85892): −0.97 1/s | −1.01 1/s |
-| Roll response to lateral cyclic at 80 kt, 1–12 rad/s | DLR/AFDD identified transfer function | within 1.1 dB rms, air resonance at the identified frequency |
+| Roll response to lateral cyclic at 80 kt, 1–12 rad/s | DLR/AFDD identified transfer function | within 1.1 dB and 7° rms, air resonance at the identified frequency |
 | Rate responses to four doublets at 80 kt | AGARD AR-280 flight records | on-axis rms error 2.6 deg/s over 10 s |
-| Rotor speed after a collective 3-2-1-1 in hover | DLR flight test | rms error 0.17 rad/s (0.37 %) |
+| Rotor speed after a collective 3-2-1-1 in hover | DLR flight test | rms error 0.17 rad/s (0.39 %) |
 | Dutch roll at 80 kt | six identifications: ζ 0.13–0.22, ω 2.17–2.60 rad/s | ζ 0.20, ω 2.75 rad/s |
 | Derivatives at 80 kt | six identifications | 17 of 36 within their range |
 
