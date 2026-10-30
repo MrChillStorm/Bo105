@@ -214,6 +214,18 @@ def phi(md, name, r_ft):
 
 
 
+def torsion_damping(r_in, phi_t):
+    """The torsion mode's aerodynamic damping per unit rho Omega (ft lb s/rad per slug/ft^3 rad/s): a section pitching at
+    theta' about its elastic axis, a semichords aft of mid-chord, meets the quasi-steady thin-airfoil moment
+    -(pi (1/2 - a) - 2 pi (1/4 - a^2)) rho U b^3 theta' (Theodorsen, C(k) = 1: the non-circulatory and the circulatory
+    part); with U = Omega r and theta' = phi_t qt', summed over the aerodynamic blade"""
+    a = 2 * U.X_EA - 1
+    coef = (math.pi * (0.5 - a) - 2 * math.pi * (0.25 - a * a)) * (U.CHORD / 2) ** 3
+    rr = np.linspace(U.R_ROOT, U.R, 400)
+    ph = np.interp(rr * 12, r_in, phi_t)
+    return float(coef * np.trapezoid(rr * ph ** 2, rr))
+
+
 def rotor_constants(seg_r, omega=U.OMEGA):
     """Everything the flight model needs from the modes, ft-slug-s: the generalized properties, the coupling integrals
     and the mode shapes at the aerodynamic segments' radii seg_r (ft)."""
@@ -248,6 +260,7 @@ def rotor_constants(seg_r, omega=U.OMEGA):
                               np.array([x * 1e6 for x in U.Y71_GJ[::-1][:-1]]) * np.diff(phi_t) / np.diff(r_in))),
         P1=float((ix * phi_t).sum()), P2=float((ix * phi_t * rf / U.R).sum()),
         d_cg=(U.X_CG - U.X_EA) * c, d_ac=(U.X_AC - U.X_EA) * c,
+        Ct_aero=torsion_damping(r_in, phi_t),
         seg=seg, freq=md['freq'], lag_root_scale=md['lag_root_scale'])
 
 

@@ -65,7 +65,10 @@ ZETA_STRUCT = 0.01      # structural damping ratio of every mode [TR deck, cards
 # the first lag mode's: fitted to the isolated rotor's measured in-plane decay in the hover [TM-85892 fig. 6, 425 rpm:
 # -0.97 1/s at CT/sigma 0.07; the model gives -0.77 with 0.01] (fdm/lag_damping.py)
 ZETA_LAG = 0.017
-# blade modes kept: first flap and first lag bending (integrated), first torsion (quasi-static)
+# the first torsion mode's structural damping [TR deck, cards 16D]; its aerodynamic damping, which is most of it (about
+# 20 % of critical at flight rpm), comes from the blade (blademodes.rotor_constants: Ct_aero)
+ZETA_TORSION = 0.01
+# blade modes kept: first flap, first lag and first torsion (integrated)
 LAG_TARGET = 0.66       # /rev: the lag frequency the root's in-plane stiffness is tuned to (None: table 4 as it stands)
 # first torsion frequency, /rev at 425 rpm with the control system's stiffness: Boeing's Y-71 had 3.18 [TR fig. 9] and table
 # 4 gives 3.32 here, where NASA's analyses with MBB/DLR's structural data found 3.56 [TM-85990 table 1] and 3.79

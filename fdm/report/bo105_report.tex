@@ -44,7 +44,7 @@ A flight-dynamics model of the MBB Bo 105 for the FlightGear simulator has been 
 parametric YASim model the aircraft used before. The Bo 105's hingeless, soft in-plane rotor is what sets it apart, and the
 model is built around it: the four blades are simulated individually as elastic beams cantilevered from the hub with
 2.5$^\circ$ of precone, each with its first flap and lag bending modes, computed from the blade's mass and stiffness
-distribution, and a quasi-static first torsion mode; eight segments per blade use the NACA 23012 tables of Boeing Vertol's
+distribution, and its first torsion mode; eight segments per blade use the NACA 23012 tables of Boeing Vertol's
 C-81 analysis at their own angle of attack and Mach number, under a Peters--He finite-state dynamic wake. The hub moments come
 from the blades' root bending, the rotor speed and the four lag accelerations are solved together, and a ring-vortex wake
 carries the rotor's downwash to the fuselage, stabiliser, end plates and tail rotor. A blade-element teetering tail rotor and two Allison
@@ -167,9 +167,11 @@ stiffness is scaled (by \NBlagScale) to give it. The torsion stiffness is scaled
 modal equations carry the aerodynamic forcing, the hub's specific force and the airframe's angular rates and accelerations, the centrifugal
 force on the coned blade, the Coriolis coupling between flap and lag through the blade's coning and its own bending, and the structural
 flap--lag coupling outboard of the pitch bearing, where the blade's principal axes turn with its pitch. Structural damping is 1\,\% of critical
-in flap~\cite{tr}; in lag 1.7\,\%, fitted to the full-scale rotor's decay (Section~\ref{sec:blades}). The first torsion mode is quasi-static: the
+in flap~\cite{tr}; in lag 1.7\,\%, fitted to the full-scale rotor's decay (Section~\ref{sec:blades}). The first torsion mode carries the
 aerodynamic moment about the elastic axis, the inertial forces at the section's centre of gravity aft of it and the propeller moments,
-against the torsion and control system stiffness. The modal accelerations take a second-order explicit step.
+against the torsion and control system stiffness; besides 1\,\% structural damping it is damped by the sections pitching about their
+elastic axes, with the quasi-steady thin-airfoil moment (Theodorsen's with $C(k)=1$), about 20\,\% of critical at flight rotor speed. The
+segments' aerodynamics have no such moment for the blades' rigid pitch rate. The modal accelerations take a second-order explicit step.
 
 Eight segments of equal annulus area from 0.2\,$R$ outboard see the air velocity at their mid-point from the full kinematics: the
 aircraft's translation and rotation, the rotor speed, the blades' bending velocities and the induced velocity. Lift and drag come from the
@@ -328,7 +330,7 @@ power, and its figure of merit peaks at \NHfmMod{} against the test's \NHfmTest.
 \NHtorsMod{} against \NHtorsTest\,in\,lb at $C_T/\sigma=0.07$. In the flight trims the same rotor needs \emph{more} collective than the DLR aircraft
 (above), so a collective offset in the model's rigging would not explain both. Possible causes, none verified: the tunnel test section in which
 the rotor hovered recirculates part of the wake, which raises the inflow and the power at a given thrust; the test's collective was measured at
-the blade's root, inboard of the control system's and the blade's elastic twist under the torsion moment, which the model's quasi-static torsion
+the blade's root, inboard of the control system's and the blade's elastic twist under the torsion moment, which the model's torsion
 mode represents with a lower moment; and the model's section drag is that of the smooth C-81 tables, without the increment for a tripped boundary
 layer used for the UH-60. The tunnel's recirculation, if it is the cause, would put the model closer to free-air hover than the test.
 
@@ -495,7 +497,7 @@ strength at 3\,ft skid height, but the UH-60's shape with height, for want of th
 % =====================================================================================================================
 \section{Conclusions}\label{sec:concl}
 \begin{itemize}
-\item An elastic-blade model of the Bo 105's hingeless rotor, with individual blades, their first flap and lag bending modes and a quasi-static torsion mode, a
+\item An elastic-blade model of the Bo 105's hingeless rotor, with individual blades, their first flap and lag bending modes and first torsion mode, a
 finite-state dynamic wake, the C-81 airframe and two 250-C20B engines, runs in plain JSBSim, generated from data. It is the flight model of the FlightGear Bo 105.
 \item The blade frequencies from the published structural data, with the lag stiffness tuned to MBB's measured frequency, and the lag damping fitted at one
 point, give the roll response at 80\,kt with the air resonance where the DLR identified it.

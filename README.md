@@ -28,8 +28,9 @@ How it was built, and the comparisons test by test, are in the report:
 - **Main rotor.** The four blades are simulated one by one as elastic beams
   cantilevered from the hub with its 2.5° of precone. Each has its first flap
   and lag bending modes, computed from the blade's mass and stiffness
-  distribution (1.11 and 0.67 per revolution), and a quasi-static first torsion
-  mode. Eight aerodynamic segments per blade use the NACA 23012 tables of the
+  distribution (1.11 and 0.67 per revolution), and its first torsion mode
+  (3.80 per revolution, damped mostly by its own aerodynamics). Eight
+  aerodynamic segments per blade use the NACA 23012 tables of the
   C-81 analysis at their own angle of attack and Mach number, in reverse flow
   too. The hub moments come from the blades' root bending, not from a hinge
   offset, and the rotor speed and the four blades' lag accelerations are solved
@@ -195,7 +196,7 @@ Every number comes from the scripted test programme in the report.
 - **Ground effect** has the strength the Bo 105 flight manual's hover
   ceilings give it at 3 ft skid height (9 % more mass on the same power),
   but the UH-60's shape with height: the manual gives no other height.
-- **Not modelled:** blade torsion dynamics beyond the quasi-static mode,
+- **Not modelled:** blade modes beyond the first flap, lag and torsion ones,
   dynamic stall, failures, an electrical system (the panel is always
   powered). The governor's rate limit is not identified.
 - **HDR renderer:** it has no particles (FlightGear says so in its log), so the

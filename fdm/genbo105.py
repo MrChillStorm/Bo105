@@ -4,9 +4,9 @@
   python3 genbo105.py OUTDIR [--fg]   writes OUTDIR/bo105-jsb.xml (or bo105.xml) and OUTDIR/Systems/bo105-*.xml
 
 Main rotor: the 4 blades of the hingeless, soft in-plane rotor are simulated individually as elastic beams
-cantilevered from the hub with 2.5 deg of precone. Each blade has its first flap and first lag bending modes,
-computed from the blade's mass and stiffness distribution [TR-75-50 table 4] by fdm/blademodes.py, integrated in the
-FCS at the FDM rate, and its first torsion mode, quasi-static. The blade is cut into 8 segments of equal annulus area
+cantilevered from the hub with 2.5 deg of precone. Each blade has its first flap and first lag bending modes and its
+first torsion mode, computed from the blade's mass and stiffness distribution [TR-75-50 table 4] by fdm/blademodes.py,
+integrated in the FCS at the FDM rate. The blade is cut into 8 segments of equal annulus area
 with the NACA 23012 C-81 tables [TR-75-50 table A-1], at their own angle of attack and Mach number, in the air
 the full kinematics give them: the aircraft's motion, the rotor's rotation, the blade's bending velocities and the
 induced inflow (Peters-He finite-state wake). The hub loads are summed from the blades' aerodynamic and inertial
@@ -159,7 +159,7 @@ class Model:
         r.declare('rotor/psi-rad', 0.0)
         r.declare('rotor/tr/psi-rad', 0.0)
         for k in range(U.NB):
-            for st in ('qf', 'qfd', 'ql', 'qld', 'qt', 'qfdd', 'qldd'):
+            for st in ('qf', 'qfd', 'ql', 'qld', 'qt', 'qfdd', 'qldd', 'qtd', 'qtdd'):
                 r.declare('rotor/b%d/%s' % (k, st), 0.0)
         r.declare('rotor/v0-fps', 0.0)
         for st, tg in ((U.PH_COS, 'c'), (U.PH_SIN, 's')):
@@ -262,10 +262,16 @@ class Model:
             r.fn(b + '/qld-next', IFTHEN(init, v(0), S(qld, M(acc, dt))), out=b + '/qld')
             r.fn(b + '/qldd-next', IFTHEN(init, v(0), qldd), out=b + '/qldd')
         r.channel('blade torsion')
-        # first torsion mode (3.3/rev), quasi-static: the aerodynamic moment about the elastic axis, the inertial forces
-        # at the CG (aft of the elastic axis) and the propeller moment of the blade's rigid pitch, against the
-        # torsional and control system stiffness and the propeller moment of the twist itself; relaxed by half a step
-        kt = S(v(bc['Kt']), M(v(bc['Kprop_t']), SQR(W)))
+        # first torsion mode (3.8/rev), stepped as the flap and lag modes:
+        #   It qt'' = Qt + qin + qcf + qprop - (Kt + W^2 Kprop) qt - (2 z wt It + Ct_aero rho W) qt'
+        # the aerodynamic moment about the elastic axis, the inertial forces at the CG (aft of the elastic axis) and the
+        # propeller moment of the blade's rigid pitch, against the torsional and control system stiffness and the
+        # propeller moment of the twist itself; damped by the structure and by the sections' pitching about their elastic
+        # axis (blademodes.torsion_damping: about 20 % of critical at flight rpm, most of the damping). The blade's rigid
+        # pitch rate (cyclic) gets no such moment: the segments' aerodynamics are quasi-steady in it
+        kt = r.fn('rotor/kt', S(v(bc['Kt']), M(v(bc['Kprop_t']), SQR(W))), desc='torsion stiffness, structural + propeller')
+        ct = r.fn('rotor/ct', S(M(v(2 * U.ZETA_TORSION * bc['It']), SQ(Q(kt, v(bc['It'])))),
+                                M(v(bc['Ct_aero']), p('atmosphere/rho-slugs_ft3'), W)), desc='torsion damping, structural + aerodynamic')
         for k in range(U.NB):
             b = 'rotor/b%d' % k
             psi = S(p('rotor/psi-rad'), v(k * math.pi / 2))
@@ -278,9 +284,13 @@ class Model:
             qcf = M(v(bc['d_cg']), SQR(W), S(v(U.PRECONE * bc['T3']), M(v(bc['T4']), p(b + '/qf'))))
             th_rig = M(v(1 / R2D), S(M(v(bc['P1']), p('aero/rotor/b%d/theta-deg' % k)), v(bc['P2'] * U.TWIST)))
             qprop = NEG(M(SQR(W), th_rig))
-            target = Q(S(p('aero/rotor/b%d/Qt' % k), qin, qcf, qprop), kt)
-            r.fn(b + '/qt-next', IFTHEN(init, target, S(p(b + '/qt'), M(v(0.5), D(target, p(b + '/qt'))))),
-                 clip=('-0.3', '0.3'), out=b + '/qt')
+            Ft = r.fn(b + '/Ft', S(p('aero/rotor/b%d/Qt' % k), qin, qcf, qprop), desc='torsion mode forcing')
+            qt, qtd = p(b + '/qt'), p(b + '/qtd')
+            qtdd = r.fn(b + '/qtdd-calc', Q(D(Ft, S(M(kt, qt), M(ct, qtd))), v(bc['It'])), desc='torsion mode acceleration')
+            acc = r.fn(b + '/qtdd-ab', IFTHEN(init, qtdd, D(M(v(1.5), qtdd), M(v(0.5), p(b + '/qtdd')))))
+            r.fn(b + '/qt-next', IFTHEN(init, Q(Ft, kt), S(qt, M(dt, qtd), M(v(0.5), dt, dt, acc))), clip=('-0.3', '0.3'), out=b + '/qt')
+            r.fn(b + '/qtd-next', IFTHEN(init, v(0), S(qtd, M(acc, dt))), out=b + '/qtd')
+            r.fn(b + '/qtdd-next', IFTHEN(init, v(0), qtdd), out=b + '/qtdd')
             r.fn(b + '/torsion-034-inlb', M(v(bc['Mt034']), p(b + '/qt')), desc='internal torsion moment at 0.34 R, in lb (nose up +)')
         s.inflow_states()
         s.tail_rotor_states()
