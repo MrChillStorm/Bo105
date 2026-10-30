@@ -315,8 +315,8 @@ The model trims with \NDrollMax{} to \NDrollMin$^\circ$ of roll, left side down;
 \subsection{The isolated rotor in hover}\label{sec:hover}
 \begin{figure*}[t]
 \centering\includegraphics[width=\textwidth]{hover.pdf}
-\caption{The isolated rotor in hover at 425\,rpm against NASA's full-scale test (TM-85892; torsion TM-103867): (a) thrust against collective at 0.7\,$R$,
-(b) power against thrust, (c) figure of merit, (d) steady blade torsion moment at 0.34\,$R$.}\label{fig:hover}
+\caption{The isolated rotor in hover at 425\,rpm against NASA's full-scale test (TM-85892; torsion TM-103867), each point at the tunnel speed recorded
+with it and the shaft tilted 10$^\circ$ forward: (a) thrust against collective at 0.7\,$R$, (b) power against thrust, (c) figure of merit, (d) steady blade torsion moment at 0.34\,$R$.}\label{fig:hover}
 \end{figure*}
 \begin{table}[t]
 \centering\small
@@ -328,11 +328,15 @@ Here the model departs most clearly from a test (Fig.~\ref{fig:hover}, Table~\re
 are offset by \NHthMin--\NHthMax$^\circ$ of collective at equal $C_T/\sigma$, with nearly the same slope. At the test's thrust it needs \NHcpMin--\NHcpMax\,\% less
 power, and its figure of merit peaks at \NHfmMod{} against the test's \NHfmTest. The steady torsion moment at 0.34\,$R$ has the test's trend but
 \NHtorsMod{} against \NHtorsTest\,in\,lb at $C_T/\sigma=0.07$. In the flight trims the same rotor needs \emph{more} collective than the DLR aircraft
-(above), so a collective offset in the model's rigging would not explain both. Possible causes, none verified: the tunnel test section in which
-the rotor hovered recirculates part of the wake, which raises the inflow and the power at a given thrust; the test's collective was measured at
+(above), so a collective offset in the model's rigging would not explain both. The rotor hovered in the tunnel's test section with the access
+doors open, yet drove some air through it: the tunnel speed recorded with each point is 0--11\,kt~\cite{pw}. The model runs each point at it, with
+the shaft tilted 10$^\circ$ forward into it as in the test; against still air this moves its collective by under 0.1$^\circ$ and its power by under
+1\,\%, and the two points recorded at no tunnel speed show the same offset, so the air driven through the test section does not explain the
+difference. Possible causes, none verified: the wake's recirculation within the test section, which was not recorded and would raise the inflow
+and the power at a given thrust; the test's collective was measured at
 the blade's root, inboard of the control system's and the blade's elastic twist under the torsion moment, which the model's torsion
 mode represents with a lower moment; and the model's section drag is that of the smooth C-81 tables, without the increment for a tripped boundary
-layer used for the UH-60. The tunnel's recirculation, if it is the cause, would put the model closer to free-air hover than the test.
+layer used for the UH-60. The recirculation, if it is the cause, would put the model closer to free-air hover than the test.
 
 \subsection{Blade dynamics}\label{sec:blades}
 \begin{figure}[t]

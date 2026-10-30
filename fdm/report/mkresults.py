@@ -108,9 +108,9 @@ def hover():
     H.freeze(f)
     f['drive/hold-rpm'] = 1
     rows = []
-    for th, ct_t, cp_t in NH.HOVER:
-        cts, cps, mt, a1, b1 = HR.point(f, th)
-        rows.append(dict(th07=th, ct=cts, cp=cps, torsion=mt, a1=a1, b1=b1, ct_test=ct_t, cp_test=cp_t))
+    for (th, ct_t, cp_t), V in zip(NH.HOVER, NH.TUNNEL_KT):
+        cts, cps, mt, a1, b1 = HR.point(f, th, V)
+        rows.append(dict(th07=th, tunnel_kt=V, ct=cts, cp=cps, torsion=mt, a1=a1, b1=b1, ct_test=ct_t, cp_test=cp_t))
     dump('hover', dict(rows=rows, sigma=NH.SIGMA, torsion_test=NH.TORSION_034))
 
 

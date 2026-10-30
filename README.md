@@ -172,11 +172,13 @@ Every number comes from the scripted test programme in the report.
 ## Known gaps
 
 - **Rotor in hover.** Against NASA's full-scale hover test the rotor makes
-  more thrust per degree of collective (2.6–3.1° less collective for the same
+  more thrust per degree of collective (2.5–3.1° less collective for the same
   thrust) and needs 3–11 % less power for the same thrust. The flight trims
   don't confirm it (against the DLR's aircraft the model needs *more*
-  collective), and the cause is open; the test ran in a wind tunnel's test
-  section, where the rotor's own wake recirculates.
+  collective), and the cause is open. The test ran in a wind tunnel's test
+  section, where the rotor's own wake recirculates; the air speed the tunnel
+  recorded at each point (0–11 kt), which the comparison includes, accounts
+  for under 0.1° and 1 % of it.
 - **Tail rotor pitch.** Between 20 and 40 kt the DLR aircraft's tail rotor
   pitch falls faster than the model's, which is 1.4–2.3° higher there: the fin
   and tail rotor seem to leave the main rotor's wake earlier than the wake
