@@ -449,7 +449,8 @@ def alt():
     D.text(0, -R * 0.26, 'hPa', 0.0030)
     g.dial(D.done())
     tex = digit_strip(os.path.join(_mk('alt'), 'alt-hpa.png'), 64, 96, WHITE, font(70))
-    for o in digit_cells(tex, 'hpa', 4, wy0, wy1, wz0, wz1, g.dd - 0.0012):
+    # on the dial's window, in front of it (the dial is solid: behind it the cells were hidden) and under the needles
+    for o in digit_cells(tex, 'hpa', 4, wy0, wy1, wz0, wz1, g.dd + 0.0003):
         g.objs[o.name] = o; g.lit.append(o.name)
     g.needle('ptr10k', R * 0.95, 0.0009, 0.0, g.dd + 0.0006, hub=0.0018)
     o = g.obj('ptr10k')                                              # its triangle tip
