@@ -43,7 +43,8 @@
 		<!-- the JSBSim model's rate: its blade modes and their coupling with the airframe (air resonance) need it
 		     (240 and 480 Hz leave that mode under-damped: README); about 0.09 ms a step -->
 		<model-hz type="int">960</model-hz>
-		<fuel-fraction>1.0</fuel-fraction>
+		<!-- only the YASim model (bo105-yasim.xml) reads it; the JSBSim one starts with the tanks' levels below -->
+		<fuel-fraction>0.5</fuel-fraction>
 
 		<startup>
 			<splash-texture>Aircraft/MBB_Bo_105/splash.png</splash-texture>
@@ -464,7 +465,8 @@
 			<tank>
 				<name>Main</name>
 				<capacity-gal_us type="double">150.6</capacity-gal_us><!-- 570 l -->
-				<level-lbs type="double">1005</level-lbs>
+				<!-- half full at the start (285 l, 228 kg); the supply tank, which the transfer pumps keep full, is full -->
+				<level-lbs type="double">502.5</level-lbs>
 				<selected type="bool" write="n">1</selected>
 				<density-ppg type="double" write="n">6.682</density-ppg>
 			</tank>

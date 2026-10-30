@@ -270,7 +270,7 @@ inside `MBB_Bo_105`:
   `-airframe.xml` (the fuselage, empennage and fin loads), the engines, the
   fuel and the outputs to FlightGear at 240 Hz, with a
   blade-element tail rotor. The fuel tanks' capacities are the type's (570 l
-  and 93 l).
+  and 93 l); a flight starts with the main tank half full.
 - **Nasal.** `Nasal/bo105.nas`: the engines, fuel and rotor speed are the
   JSBSim model's; the Nasal keeps the start sequence, the gauges' side and the
   cockpit. `Nasal/panel.nas` runs the instrument panel's systems (oil and fuel
