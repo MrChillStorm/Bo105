@@ -313,3 +313,15 @@ SLOW_EXECRATE = 4
 # the main rotor's wake on the fuselage, the stabiliser, its end plates, the fin and the tail rotor (ring-vortex tables,
 # mrwake.py)
 WAKE_ON_AIRFRAME = True
+# FITTED: the wake's skew in the tail rotor's and the fin's tables, the disc's momentum value x (1 + WAKE_SKEW_A x a bump
+# in the advance ratio: 0 below 0.02, 1 from 0.05 to 0.12, 0 again from 0.17, about 10, 20-50 and 72 kt). Through the
+# transition the DLR aircraft's tail rotor pitch falls faster than the model's, as if its fin and tail rotor left the
+# wake sooner [Padfield fig. 4.10d]. Fitted to its 20-60 kt pitch: the rms falls from 1.62 to 1.35-1.39 deg for any
+# WAKE_SKEW_A from 0.15 to 0.3, of which 0.15, the smallest, has the smallest largest error (1.8 against 2.3 deg); it
+# takes 0.2-0.6 deg off at 20-40 kt and puts up to 0.2 deg on at 50-60 kt, so a faster sweep explains part of the gap only.
+# The fuselage, stabiliser and end plates keep the disc's skew: on them it moved the pitch attitude 0.1 deg (rms) away
+# from the test's. At 80 kt and above it is out (the identification flights, the doublets)
+WAKE_SKEW_MU = [0.0, 0.02, 0.05, 0.12, 0.17, 1.0]
+WAKE_SKEW_BUMP = [0.0, 0.0, 1.0, 1.0, 0.0, 0.0]
+WAKE_SKEW_A = 0.15
+WAKE_SKEW_TARGETS = ('tr', 'fin')     # the tables that see it

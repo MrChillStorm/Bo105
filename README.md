@@ -45,7 +45,8 @@ How it was built, and the comparisons test by test, are in the report:
   lift comes out of it, not out of a special case. A
   ring-vortex wake model carries the rotor's downwash to the fuselage, the
   stabiliser and its end plates, the fin and the tail rotor, for any speed and
-  wind direction.
+  wind direction; its sweep past the tail rotor and fin through the
+  transition is fitted to the DLR's tail rotor pitch.
 - **Tail rotor** built like the main rotor, as in the UH-60: two blades
   teetering on the hub, on the left of the fin and pushing, each blade's
   pitch coupled to the teeter (δ3 = 45°), six NACA 0012 segments per blade at
@@ -160,7 +161,7 @@ Every number comes from the scripted test programme in the report.
 |---|---|---|
 | Level-flight trim, hover to 118 kt | MBB's V-4 (TR 75-50) | collective within 1.0°, cyclic within 1.2° and 0.9°, pitch within 1.2° |
 | Level-flight trim, hover to 100 kt | DLR's Bo 105-S123 | collective 0.5–1.1° high, cyclic within 1.4° (0.6° from 60 kt), torque −9 to +2 % |
-| Tail rotor pitch in level flight | DLR's Bo 105-S123 | 1.4° low in the hover, 1.4–2.3° high at 20–40 kt, within 0.5° from 60 kt (Bailey's closed form: within 0.4°, 3.0–3.6°, 1.1°) |
+| Tail rotor pitch in level flight | DLR's Bo 105-S123 | 1.4° low in the hover, 1.2–1.8° high at 20–40 kt with a fitted wake sweep (1.4–2.3° without), within 0.5° from 60 kt (Bailey's closed form: within 0.4°, 2.6–2.9°, 1.1°) |
 | Blade frequencies (flap, lag, torsion) | NASA's analysis tuned to MBB's measurements: 1.12, 0.66, 3.79 per rev | 1.11, 0.67, 3.80 |
 | Lag damping in hover at C_T/σ = 0.07 | full-scale rotor (TM-85892): −0.97 1/s | −1.01 1/s |
 | Roll response to lateral cyclic at 80 kt, 1–12 rad/s | DLR/AFDD identified transfer function | within 1.1 dB and 7° rms, air resonance at the identified frequency |
@@ -180,9 +181,12 @@ Every number comes from the scripted test programme in the report.
   recorded at each point (0–11 kt), which the comparison includes, accounts
   for under 0.1° and 1 % of it.
 - **Tail rotor pitch.** Between 20 and 40 kt the DLR aircraft's tail rotor
-  pitch falls faster than the model's, which is 1.4–2.3° higher there: the fin
+  pitch falls faster than the model's, which is 1.2–1.8° higher there: the fin
   and tail rotor seem to leave the main rotor's wake earlier than the wake
-  model has it. In the hover the model needs 1.4° less than the test. The fin
+  model has it. A faster sweep of the wake past them, fitted to this test,
+  takes 0.2–0.6° off (it was 1.4–2.3°), but at 40–50 kt the wake is already
+  near flat and can't sweep off them any faster, so it explains part of the
+  difference only. In the hover the model needs 1.4° less than the test. The fin
   blockage moves either by 0.2° at most.
 - **Cross-couplings.** Several of the 80 kt cross-coupling derivatives (roll
   due to longitudinal cyclic and collective, yaw due to roll rate, pitch due to

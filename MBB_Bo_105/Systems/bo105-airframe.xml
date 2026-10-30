@@ -957,7 +957,7 @@
 <fcs_function name="aero/emp/epr/qS"><function><product><value>1.184029</value><property>atmosphere/rho-slugs_ft3</property><pow><property>aero/emp/epr/V-fps</property><value>2</value></pow></product></function></fcs_function>
 <fcs_function name="aero/emp/epr/Fx-lbs"><function><product><property>aero/emp/epr/qS</property><quotient><difference><product><property>aero/emp/epr/cl</property><property>aero/emp/epr/Vy-fps</property></product><product><property>aero/emp/epr/cd</property><property>aero/emp/epr/Vx-fps</property></product></difference><property>aero/emp/epr/V-fps</property></quotient></product></function></fcs_function>
 <fcs_function name="aero/emp/epr/Fy-lbs"><function><product><property>aero/emp/epr/qS</property><quotient><product><value>-1</value><sum><product><property>aero/emp/epr/cl</property><property>aero/emp/epr/Vx-fps</property></product><product><property>aero/emp/epr/cd</property><property>aero/emp/epr/Vy-fps</property></product></sum></product><property>aero/emp/epr/V-fps</property></quotient></product></function></fcs_function>
-<fcs_function name="aero/wake/fin/kx"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
+<fcs_function name="aero/wake/fin/kx"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/wake-chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
         0 30 60 90 120 150 180 210 240 270 300 330 360
 0 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538 0.232538
 10 0.303807 0.292792 0.264303 0.229757 0.200335 0.181779 0.175559 0.181779 0.200335 0.229757 0.264303 0.292792 0.303807
@@ -997,7 +997,7 @@
 85 -0.556754 -0.0393928 0.73149 -0.00367187 -0.00941046 -0.0092221 -0.00898341 -0.0092221 -0.00941046 -0.00367187 0.73149 -0.0393928 -0.556754
 90 -0.0749656 0.0767416 -0.553348 -0.130438 -0.0590663 -0.0421646 -0.0381745 -0.0421646 -0.0590663 -0.130438 -0.553348 0.0767416 -0.0749656
 </tableData></table></function></fcs_function>
-<fcs_function name="aero/wake/fin/ky"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
+<fcs_function name="aero/wake/fin/ky"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/wake-chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
         0 30 60 90 120 150 180 210 240 270 300 330 360
 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 10 0 -0.038759 -0.058041 -0.0552518 -0.0397902 -0.0201939 -4.72429e-18 0.0201939 0.0397902 0.0552518 0.058041 0.038759 2.0036e-17
@@ -1037,7 +1037,7 @@
 85 0 -1.05309 -0.959397 -0.0593134 -0.017183 -0.00579408 -1.20272e-18 0.00579408 0.017183 0.0593134 0.959397 1.05309 4.96365e-16
 90 0 -0.129178 0.179288 0.0133699 0.0020577 0.000545069 1.05843e-19 -0.000545069 -0.0020577 -0.0133699 -0.179288 0.129178 1.06485e-16
 </tableData></table></function></fcs_function>
-<fcs_function name="aero/wake/fin/kz"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
+<fcs_function name="aero/wake/fin/kz"><description>main rotor induced air velocity over the fin, over its mean inflow</description><function><table><independentVar lookup="row">aero/rotor/wake-chi-deg</independentVar><independentVar lookup="column">aero/rotor/psi-flow-deg</independentVar><independentVar lookup="table">aero/rotor/a1-deg</independentVar><tableData breakPoint="-6">
         0 30 60 90 120 150 180 210 240 270 300 330 360
 0 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007 -0.117007
 10 -0.0550742 -0.069191 -0.100412 -0.129269 -0.146829 -0.154722 -0.156819 -0.154722 -0.146829 -0.129269 -0.100412 -0.069191 -0.0550742

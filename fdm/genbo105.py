@@ -433,7 +433,8 @@ class Model:
         out = []
         for i, a in enumerate('xyz'):
             tab = [[[c[i] for c in row] for row in t] for t in mw['k']]
-            k = g.fn('aero/wake/%s/k%s' % (tag, a), T3('aero/rotor/chi-deg', psi, 'aero/rotor/a1-deg', mw['chi'], mw['psi'], mw['a1'], tab),
+            chi = 'aero/rotor/wake-chi-deg' if target in U.WAKE_SKEW_TARGETS else 'aero/rotor/chi-deg'
+            k = g.fn('aero/wake/%s/k%s' % (tag, a), T3(chi, psi, 'aero/rotor/a1-deg', mw['chi'], mw['psi'], mw['a1'], tab),
                      'main rotor induced air velocity over the %s, over its mean inflow' % target)
             sign = -1 if (mirror and a == 'y') else 1
             out.append(M(v(-sign), k, p('aero/rotor/vi-fps')))
@@ -469,6 +470,12 @@ class Model:
         g.fn('aero/rotor/Vprime-fps', SQ(S(SQR(Vip), SQR(Vn), v(25.0))), 'mass flow velocity (5 ft/s floor)')
         chi = g.fn('aero/rotor/chi-rad', ATAN2(Vip, MAX(Vn, v(0.5))), 'wake skew angle')
         g.fn('aero/rotor/chi-deg', M(v(R2D), chi))
+        # the skew the tail rotor's and the fin's ring-wake tables see (wake(), U.WAKE_SKEW_TARGETS), FITTED (U.WAKE_SKEW_A);
+        # the Peters-He wake and the other tables keep the disc's own
+        g.fn('aero/rotor/mu', Q(Vip, MAX(M(p('rotor/omega-rad_sec'), v(U.R)), v(30))), 'advance ratio')
+        g.fn('aero/rotor/wake-chi-deg', MIN(v(90), M(p('aero/rotor/chi-deg'), T1('aero/rotor/mu', U.WAKE_SKEW_MU,
+                                                                                  [1 + U.WAKE_SKEW_A * b for b in U.WAKE_SKEW_BUMP]))),
+             'wake skew for the ring-wake tables')
         # ground effect on the induced velocity [as the UH-60 model]: hover value against the hub height (U.GE_K: scaled
         # to the Bo 105 flight manual's hover ceilings), carried into forward flight with Heyson's ratio [NASA TN D-234]
         hh = g.fn('aero/rotor/hub-agl-ft', S(p('position/h-agl-ft'), Q(D(v(U.WL_MR), p('inertia/cg-z-in')), v(12))))
